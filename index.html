@@ -161,6 +161,22 @@
 
     <!-- MODALS SECTION -->
     
+    <!-- Auth Code Modal -->
+    <div id="authCodeModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
+        <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transition-all">
+            <h3 class="text-xl font-bold text-slate-800 mb-4">Código de Autenticación</h3>
+            <p class="text-sm text-slate-500 mb-4">Ingrese el código de autorización para crear un nuevo usuario.</p>
+            <form id="authCodeForm">
+                <input type="text" id="authCodeInput" placeholder="Código de Autorización" class="w-full p-2 border rounded-lg mb-4 uppercase text-center tracking-widest" required autocomplete="off">
+                <p id="authCodeError" class="text-red-500 text-center mb-4 text-sm font-semibold hidden"></p>
+                <div class="flex justify-end gap-3">
+                    <button type="button" id="cancelAuthCode" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold">Validar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Create User Modal -->
     <div id="createUserModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transition-all">
@@ -524,12 +540,37 @@
             toggleIcon.classList.toggle('fa-eye-slash');
         });
 
+        // --- NEW USER FLOW WITH AUTH CODE ---
         document.getElementById('showCreateUserModalBtn').addEventListener('click', () => {
-            toggleModal(document.getElementById('createUserModal'), true);
+            document.getElementById('authCodeForm').reset();
+            document.getElementById('authCodeError').classList.add('hidden');
+            toggleModal(document.getElementById('authCodeModal'), true);
         });
+
+        document.getElementById('cancelAuthCode').addEventListener('click', () => {
+            toggleModal(document.getElementById('authCodeModal'), false);
+        });
+
+        document.getElementById('authCodeForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputCode = document.getElementById('authCodeInput').value;
+            const errorEl = document.getElementById('authCodeError');
+            const AUTH_CODE = "JGM2025"; // Master authorization code
+
+            if (inputCode.toUpperCase() === AUTH_CODE) {
+                toggleModal(document.getElementById('authCodeModal'), false);
+                toggleModal(document.getElementById('createUserModal'), true);
+                errorEl.classList.add('hidden');
+            } else {
+                errorEl.textContent = 'Código de autorización incorrecto.';
+                errorEl.classList.remove('hidden');
+            }
+        });
+        
         document.getElementById('cancelCreateUser').addEventListener('click', () => {
             toggleModal(document.getElementById('createUserModal'), false);
         });
+
         document.getElementById('createUserForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('newUserEmail').value;
