@@ -18,6 +18,7 @@
         /* Custom styles for better UX */
         body, html {
             height: 100%;
+            overflow-x: hidden;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -37,8 +38,9 @@
             color: #4f46e5;
             font-weight: 600;
         }
-        #login-screen {
-             height: 100vh;
+        #login-screen, #landing-screen {
+             min-height: 100vh;
+             width: 100vw;
         }
         /* Sync/Logout Button Animation */
         #logoutBtn i, #syncDataBtn i {
@@ -54,13 +56,117 @@
         [data-table-search]::-webkit-search-cancel-button {
             display: none;
         }
+        .option-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .option-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        /* Animated Gradient Background */
+        .animated-gradient {
+            background: linear-gradient(-45deg, #8b5cf6, #f97316, #ec4899, #14b8a6);
+            background-size: 400% 400%;
+            animation: gradient-wave 15s ease infinite;
+        }
+        @keyframes gradient-wave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Bouncing and Spinning Icon Animation */
+        .icon-animated {
+             animation: bounce-and-spin 2.5s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
+             margin-bottom: 1.5rem;
+        }
+       
+        @keyframes bounce-and-spin {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+             75% { transform: rotate(-5deg); }
+        }
+
+        /* Odisea IA Custom Animation */
+        .odisea-icon-wrapper {
+            position: relative;
+            width: 80px;
+            height: 70px;
+            margin: 0 auto 1.5rem auto;
+        }
+        .odisea-icon-wrapper > svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        .bow-arrow-icon .arrow-group {
+            animation: odisea-shoot-loop 2.5s infinite ease-in-out;
+        }
+       
+        @keyframes odisea-shoot-loop {
+            0%   { transform: translateX(0); opacity: 1; }
+            20%  { transform: translateX(-20px); opacity: 1; } /* Pull back */
+            50%  { transform: translateX(100px); opacity: 0; } /* Shoot */
+            51%  { transform: translateX(0); opacity: 0; } /* Instantly reset position off-screen */
+            80%  { opacity: 1; } /* Fade in at original position */
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
     </style>
 </head>
 <body class="bg-slate-100">
 
+    <!-- Landing Screen -->
+    <div id="landing-screen" class="animated-gradient relative flex flex-col p-4">
+        <div class="flex-grow flex flex-col items-center justify-center py-8">
+            <div class="text-center mb-12">
+                <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">Bienvenido a JGM Apps</h1>
+                <p class="text-indigo-200 text-lg">Seleccione la aplicación que desea utilizar</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Inventory App Card -->
+                <div id="goToInventoryBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                    <i class="fas fa-boxes-stacked fa-4x text-white icon-animated"></i>
+                    <h2 class="text-3xl font-bold text-white">Inventario</h2>
+                </div>
+                <!-- Appointments App Card -->
+                <div id="goToAppointmentsBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                    <i class="fas fa-calendar-alt fa-4x text-white icon-animated"></i>
+                    <h2 class="text-3xl font-bold text-white">App Citas</h2>
+                </div>
+                <!-- Muse IA Card -->
+                 <div id="goToMuseIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                    <i class="fas fa-magic fa-4x text-white icon-animated"></i>
+                    <h2 class="text-3xl font-bold text-white">Muse IA</h2>
+                </div>
+                 <!-- Odisea IA Card -->
+                <div id="goToOdiseaIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                     <div class="odisea-icon-wrapper">
+                        <svg class="bow-arrow-icon" viewBox="0 0 100 100">
+                            <path d="M70,10 C40,30 40,70 70,90" stroke="white" stroke-width="5" fill="none"></path>
+                            <g class="arrow-group">
+                                <line x1="0" y1="50" x2="80" y2="50" stroke="white" stroke-width="5"></line>
+                                <path d="M75 40 L 95 50 L 75 60 Z" fill="white"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Odisea IA</h2>
+                </div>
+            </div>
+        </div>
+         <footer class="w-full text-center p-4 text-white text-sm shrink-0">
+            JGM Studios © 2025. Todos los derechos reservados.
+        </footer>
+    </div>
+
+
     <!-- Login Screen -->
-    <div id="login-screen" class="relative flex items-center justify-center bg-gradient-to-br from-blue-600 via-purple-600 to-orange-500 p-4">
+    <div id="login-screen" class="hidden relative items-center justify-center animated-gradient p-4">
         <div class="w-full max-w-sm mx-auto">
+            <button id="backToLandingBtn" class="absolute top-5 left-5 text-white bg-white/20 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
+                <i class="fas fa-arrow-left"></i>
+            </button>
             <div class="bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8">
                 <div class="text-center mb-8">
                     <i class="fas fa-boxes-stacked fa-3x text-white mb-4"></i>
@@ -93,9 +199,6 @@
                 </div>
             </div>
         </div>
-        <footer class="absolute bottom-0 w-full text-center p-4 text-white text-sm">
-            JGM Studios © 2025. Todos los derechos reservados.
-        </footer>
     </div>
 
 
@@ -389,6 +492,7 @@
     let unsubInitial, unsubEntries, unsubExits, unsubReports;
 
     // --- DOM Elements ---
+    const landingScreen = document.getElementById('landing-screen');
     const loginScreen = document.getElementById('login-screen');
     const appContainer = document.getElementById('app');
     const syncBtn = document.getElementById('syncDataBtn');
@@ -511,7 +615,7 @@
                 initializeAppState();
             } else {
                 currentUser = null;
-                showLogin();
+                showLanding();
                 cleanupListeners();
             }
         });
@@ -540,7 +644,7 @@
             toggleIcon.classList.toggle('fa-eye-slash');
         });
 
-        // --- NEW USER FLOW WITH AUTH CODE ---
+        // --- NEW USER REGISTRATION FLOW ---
         document.getElementById('showCreateUserModalBtn').addEventListener('click', () => {
             document.getElementById('authCodeForm').reset();
             document.getElementById('authCodeError').classList.add('hidden');
@@ -559,6 +663,8 @@
 
             if (inputCode.toUpperCase() === AUTH_CODE) {
                 toggleModal(document.getElementById('authCodeModal'), false);
+                document.getElementById('createUserForm').reset();
+                document.getElementById('createUserError').classList.add('hidden');
                 toggleModal(document.getElementById('createUserModal'), true);
                 errorEl.classList.add('hidden');
             } else {
@@ -599,18 +705,26 @@
     }
 
     function showApp() {
-        loginScreen.classList.add('opacity-0');
-        setTimeout(() => {
-            loginScreen.style.display = 'none';
-            appContainer.classList.remove('hidden');
-        }, 300);
+        landingScreen.style.display = 'none';
+        loginScreen.classList.remove('flex');
+        loginScreen.classList.add('hidden');
+        appContainer.classList.remove('hidden');
     }
 
     function showLogin() {
+        landingScreen.style.display = 'none';
         appContainer.classList.add('hidden');
-        loginScreen.style.display = 'flex';
-        loginScreen.classList.remove('opacity-0');
+        loginScreen.classList.remove('hidden');
+        loginScreen.classList.add('flex');
     }
+
+    function showLanding() {
+        appContainer.classList.add('hidden');
+        loginScreen.classList.remove('flex');
+        loginScreen.classList.add('hidden');
+        landingScreen.style.display = 'flex';
+    }
+
 
     // --- FIRESTORE DATA HANDLING ---
     function initializeAppState() {
@@ -1266,6 +1380,24 @@
                 case 'export-report': handleExportReport(); break;
             }
         });
+
+        document.getElementById('goToInventoryBtn').addEventListener('click', () => {
+            showLogin();
+        });
+
+        document.getElementById('goToAppointmentsBtn').addEventListener('click', () => {
+            showNotification({title: "Próximamente", message: "La aplicación de citas estará disponible pronto."});
+        });
+        document.getElementById('goToMuseIABtn').addEventListener('click', () => {
+            showNotification({title: "Próximamente", message: "Muse IA estará disponible pronto."});
+        });
+        document.getElementById('goToOdiseaIABtn').addEventListener('click', () => {
+            showNotification({title: "Próximamente", message: "Odisea IA estará disponible pronto."});
+        });
+
+        document.getElementById('backToLandingBtn').addEventListener('click', () => {
+            showLanding();
+        });
     }
     
     // --- Initial Load ---
@@ -1277,3 +1409,4 @@
 
 </body>
 </html>
+
