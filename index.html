@@ -87,12 +87,12 @@
         /* Anubis Scales Animation */
         .anubis-scales-wrapper {
              animation: scales-tilt 3s ease-in-out infinite;
-             transform-origin: 50% 60%;
+             transform-origin: 50% 50%;
         }
         @keyframes scales-tilt {
             0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            75% { transform: rotate(10deg); }
+            25% { transform: rotate(-7deg); }
+            75% { transform: rotate(7deg); }
         }
 
         /* Horus Eye Pulse Animation */
@@ -163,20 +163,21 @@
                 <!-- Inventory App Card -->
                 <div id="goToInventoryBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
                     <div class="icon-wrapper anubis-scales-wrapper">
-                         <svg viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M10 30 H 90"/>
-                            <path d="M50 30 V 10"/>
-                             <path d="M50 85 V 90"/>
-                            <path d="M30 85 H 70"/>
-                            <g>
-                                <path d="M25 30 V 45" />
-                                <path d="M15 45 A 10 10 0 0 0 35 45 Z" fill="white"/>
+                         <svg viewBox="0 0 100 90" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M50 85 V 75" />
+                            <path d="M30 75 H 70" />
+                            <path d="M50 75 V 15" />
+                            <circle cx="50" cy="15" r="5" />
+                            <path d="M5 20 H 95" />
+                            <g class="left-scale">
+                                <path d="M25 20 L 15 35" />
+                                <path d="M5 55 C 5 40, 45 40, 45 55" />
                             </g>
-                            <g>
-                                <path d="M75 30 V 45" />
-                                <path d="M65 45 A 10 10 0 0 0 85 45 Z" fill="white"/>
+                             <g class="right-scale">
+                                <path d="M75 20 L 85 35" />
+                                <path d="M55 55 C 55 40, 95 40, 95 55" />
                             </g>
-                         </svg>
+                        </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-white">NemeSync Stock</h2>
                     <p class="text-indigo-200 text-md mt-2">Control de Inventario</p>
@@ -184,13 +185,22 @@
                 <!-- Appointments App Card -->
                 <div id="goToAppointmentsBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
                      <div class="icon-wrapper horus-eye-wrapper">
-                         <svg viewBox="0 0 100 70" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                         <svg viewBox="0 0 100 65" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
                            <g transform="translate(0, 5)">
-                             <path d="M5,30 C20,5 80,5 95,30 C80,55 20,55 5,30 Z" />
+                             <path d="M5 30 C 20 5, 80 5, 95 30 C 80 55, 20 55, 5 30Z" />
                              <circle cx="50" cy="30" r="12" fill="white"/>
-                             <path d="M50,30 L70,55 L75,60"/>
-                             <path d="M45,15 Q50,20 55,15"/>
-                           </g>
+                             <path d="M50 42 C 55 55, 65 62, 75 58" />
+                             <path d="M75 58 L 70 65" />
+                            
+                            <g stroke-width="3">
+                                <path d="M50 12 L 50 5" />
+                                <path d="M25 20 L 18 13" />
+                                <path d="M75 20 L 82 13" />
+                                <path d="M8 30 L 0 30" />
+                                <path d="M92 30 L 100 30" />
+                                <path d="M25 40 L 18 47" />
+                                <path d="M75 40 L 82 47" />
+                            </g>
                         </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-white">Horus Date</h2>
@@ -1490,3 +1500,4 @@
 
 </body>
 </html>
+
