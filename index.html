@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Inventario Avanzado</title>
+    <title>NemeSync Stock</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
@@ -75,42 +75,77 @@
             100% { background-position: 0% 50%; }
         }
         
-        /* Bouncing and Spinning Icon Animation */
-        .icon-animated {
-             animation: bounce-and-spin 2.5s infinite cubic-bezier(0.68, -0.55, 0.27, 1.55);
-             margin-bottom: 1.5rem;
-        }
-       
-        @keyframes bounce-and-spin {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            25% { transform: rotate(-10deg); }
-            50% { transform: translateY(-20px) rotate(10deg); }
-             75% { transform: rotate(-5deg); }
-        }
-
-        /* Odisea IA Custom Animation */
-        .odisea-icon-wrapper {
-            position: relative;
+       .icon-wrapper {
             width: 80px;
             height: 70px;
             margin: 0 auto 1.5rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+       }
+
+        /* Anubis Scales Animation */
+        .anubis-scales-wrapper {
+             animation: scales-tilt 3s ease-in-out infinite;
+             transform-origin: 50% 60%;
         }
-        .odisea-icon-wrapper > svg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+        @keyframes scales-tilt {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            75% { transform: rotate(10deg); }
         }
-        .bow-arrow-icon .arrow-group {
-            animation: odisea-shoot-loop 2.5s infinite ease-in-out;
+
+        /* Horus Eye Pulse Animation */
+        .horus-eye-wrapper {
+            animation: pulse-eye 2.5s infinite;
         }
-       
-        @keyframes odisea-shoot-loop {
-            0%   { transform: translateX(0); opacity: 1; }
-            20%  { transform: translateX(-20px); opacity: 1; } /* Pull back */
-            50%  { transform: translateX(100px); opacity: 0; } /* Shoot */
-            51%  { transform: translateX(0); opacity: 0; } /* Instantly reset position off-screen */
-            80%  { opacity: 1; } /* Fade in at original position */
-            100% { transform: translateX(0); opacity: 1; }
+        @keyframes pulse-eye {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 0 #fff);
+            }
+            50% {
+                transform: scale(1.1);
+                filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 15px #8b5cf6);
+            }
+        }
+
+        /* Muse IA (Medusa) Icon Animation */
+         .muse-icon-wrapper .snake {
+            transform-origin: 50% 50%;
+            animation: snake-sway 3s infinite ease-in-out;
+        }
+        .muse-icon-wrapper .snake:nth-child(even) {
+            animation-duration: 2.5s;
+            animation-delay: 0.2s;
+        }
+         .muse-icon-wrapper .snake:nth-child(3n) {
+            animation-duration: 3.5s;
+            animation-delay: 0.5s;
+        }
+        @keyframes snake-sway {
+            0%, 100% { transform: rotate(0deg) translateX(0); }
+            50% { transform: rotate(5deg) translateX(5px); }
+        }
+
+
+        /* Odisea IA Custom Animation */
+        .greek-ship {
+            animation: ship-rock 4s ease-in-out infinite;
+            transform-origin: bottom center;
+        }
+        .wave {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 0;
+            animation: wave-flow 4s linear infinite;
+        }
+        @keyframes ship-rock {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(-8deg); }
+        }
+        @keyframes wave-flow {
+            from { stroke-dashoffset: 200; }
+            to { stroke-dashoffset: 0; }
         }
 
     </style>
@@ -127,31 +162,77 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Inventory App Card -->
                 <div id="goToInventoryBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                    <i class="fas fa-boxes-stacked fa-4x text-white icon-animated"></i>
-                    <h2 class="text-3xl font-bold text-white">Inventario</h2>
+                    <div class="icon-wrapper anubis-scales-wrapper">
+                         <svg viewBox="0 0 100 100" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M10 30 H 90"/>
+                            <path d="M50 30 V 10"/>
+                             <path d="M50 85 V 90"/>
+                            <path d="M30 85 H 70"/>
+                            <g>
+                                <path d="M25 30 V 45" />
+                                <path d="M15 45 A 10 10 0 0 0 35 45 Z" fill="white"/>
+                            </g>
+                            <g>
+                                <path d="M75 30 V 45" />
+                                <path d="M65 45 A 10 10 0 0 0 85 45 Z" fill="white"/>
+                            </g>
+                         </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">NemeSync Stock</h2>
+                    <p class="text-indigo-200 text-md mt-2">Control de Inventario</p>
                 </div>
                 <!-- Appointments App Card -->
                 <div id="goToAppointmentsBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                    <i class="fas fa-calendar-alt fa-4x text-white icon-animated"></i>
-                    <h2 class="text-3xl font-bold text-white">App Citas</h2>
+                     <div class="icon-wrapper horus-eye-wrapper">
+                         <svg viewBox="0 0 100 70" stroke="white" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                           <g transform="translate(0, 5)">
+                             <path d="M5,30 C20,5 80,5 95,30 C80,55 20,55 5,30 Z" />
+                             <circle cx="50" cy="30" r="12" fill="white"/>
+                             <path d="M50,30 L70,55 L75,60"/>
+                             <path d="M45,15 Q50,20 55,15"/>
+                           </g>
+                        </svg>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white">Horus Date</h2>
+                    <p class="text-indigo-200 text-md mt-2">El Ojo que todo lo Agenda</p>
                 </div>
                 <!-- Muse IA Card -->
                  <div id="goToMuseIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                    <i class="fas fa-magic fa-4x text-white icon-animated"></i>
-                    <h2 class="text-3xl font-bold text-white">Muse IA</h2>
-                </div>
-                 <!-- Odisea IA Card -->
-                <div id="goToOdiseaIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                     <div class="odisea-icon-wrapper">
-                        <svg class="bow-arrow-icon" viewBox="0 0 100 100">
-                            <path d="M70,10 C40,30 40,70 70,90" stroke="white" stroke-width="5" fill="none"></path>
-                            <g class="arrow-group">
-                                <line x1="0" y1="50" x2="80" y2="50" stroke="white" stroke-width="5"></line>
-                                <path d="M75 40 L 95 50 L 75 60 Z" fill="white"></path>
+                    <div class="icon-wrapper muse-icon-wrapper">
+                        <svg viewBox="0 0 100 100" fill="white" stroke-linecap="round" stroke-linejoin="round">
+                             <g transform="scale(1.2) translate(-8, -10)">
+                                <path d="M49.5,75.5 C49.5,75.5 45.5,85.5 49.5,90.5 C53.5,85.5 49.5,75.5 49.5,75.5 M49.5,58.5 C49.5,58.5 41.5,58.5 41.5,66.5 C41.5,74.5 57.5,74.5 57.5,66.5 C57.5,58.5 49.5,58.5 49.5,58.5 " stroke="white" stroke-width="2.5" fill="none" />
+                                <path class="snake" d="M34.5,46.5 C19.5,41.5 28.5,19.5 40.5,19.5 C52.5,19.5 48.5,35.5 46.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M64.5,46.5 C79.5,41.5 70.5,19.5 58.5,19.5 C46.5,19.5 50.5,35.5 52.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M29.5,58.5 C14.5,53.5 14.5,30.5 28.5,27.5 C42.5,24.5 41.5,44.5 41.5,52.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M69.5,58.5 C84.5,53.5 84.5,30.5 70.5,27.5 C56.5,24.5 57.5,44.5 57.5,52.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 41.5,5.5 C33.5,0.5 24.5,12.5 32.5,24.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 57.5,5.5 C65.5,0.5 74.5,12.5 66.5,24.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M22.5,67.5 C2.5,67.5 10.5,46.5 25.5,44.5 C40.5,42.5 38.5,59.5 36.5,64.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M76.5,67.5 C96.5,67.5 88.5,46.5 73.5,44.5 C58.5,42.5 60.5,59.5 62.5,64.5 " stroke="white" stroke-width="3" fill="none"/>
+                                <path class="snake" d="M49.5,58.5 C34.5,53.5 29.5,41.5 29.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
                             </g>
                         </svg>
                     </div>
+                    <h2 class="text-3xl font-bold text-white">Muse IA</h2>
+                    <p class="text-indigo-200 text-md mt-2">Inspiracion de las 9 Musas</p>
+                </div>
+                 <!-- Odisea IA Card -->
+                <div id="goToOdiseaIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                     <div class="icon-wrapper">
+                        <svg class="greek-ship" viewBox="0 0 100 80">
+                           <g transform="scale(1.2) translate(-10, -10)">
+                            <path d="M 20 60 L 80 60 L 75 40 L 25 40 Z" fill="white" stroke="white" stroke-width="2" />
+                             <path d="M 20 60 C 10 60 10 40 20 40" stroke="white" stroke-width="2" fill="none" />
+                             <path d="M 80 60 C 90 60 90 40 80 40" stroke="white" stroke-width="2" fill="none" />
+                            <rect x="48" y="10" width="4" height="30" fill="white" />
+                            <path d="M 50 15 L 75 25 L 50 35 Z" fill="white" />
+                            <path class="wave" d="M -10 70 Q 15 60, 40 70 T 90 70 T 140 70" stroke="white" stroke-width="4" fill="none" />
+                           </g>
+                        </svg>
+                    </div>
                     <h2 class="text-3xl font-bold text-white">Odisea IA</h2>
+                    <p class="text-indigo-200 text-md mt-2">Viaja y Crea Sin Limites</p>
                 </div>
             </div>
         </div>
@@ -170,7 +251,7 @@
             <div class="bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8">
                 <div class="text-center mb-8">
                     <i class="fas fa-boxes-stacked fa-3x text-white mb-4"></i>
-                    <h1 class="text-3xl font-bold text-white">Inventario JGM</h1>
+                    <h1 class="text-3xl font-bold text-white">NemeSync Stock</h1>
                     <p class="text-indigo-200">Por favor, inicie sesión</p>
                 </div>
                 <form id="loginForm">
@@ -208,7 +289,7 @@
         <header class="bg-white p-6 rounded-xl shadow-md mb-6">
             <div class="flex flex-col-reverse sm:flex-row justify-between items-start gap-4">
                  <div class="text-left">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent">Control de Inventario</h1>
+                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent">NemeSync Stock</h1>
                     <p class="text-sm text-slate-500 mt-1">Gestione sus productos, entradas y salidas de forma eficiente.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
@@ -1386,7 +1467,7 @@
         });
 
         document.getElementById('goToAppointmentsBtn').addEventListener('click', () => {
-            showNotification({title: "Próximamente", message: "La aplicación de citas estará disponible pronto."});
+            showNotification({title: "Próximamente", message: "Horus Date estará disponible pronto."});
         });
         document.getElementById('goToMuseIABtn').addEventListener('click', () => {
             showNotification({title: "Próximamente", message: "Muse IA estará disponible pronto."});
@@ -1409,4 +1490,3 @@
 
 </body>
 </html>
-
