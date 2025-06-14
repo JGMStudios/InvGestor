@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NemeSync Stock</title>
+    <title>JGM Apps</title>
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
@@ -14,11 +14,19 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- SheetJS (XLSX) for Excel export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
+    <!-- React & Babel for Horus Date App -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
         /* Custom styles for better UX */
         body, html {
             height: 100%;
             overflow-x: hidden;
+            margin: 0;
+            padding: 0;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -38,9 +46,14 @@
             color: #4f46e5;
             font-weight: 600;
         }
-        #login-screen, #landing-screen {
+        #login-screen, #landing-screen, #app-welcome, #horus-date-container {
              min-height: 100vh;
              width: 100vw;
+        }
+         #horus-date-container, #horus-date-react-root {
+            height: 100%;
+            width: 100%;
+            border: none;
         }
         /* Sync/Logout Button Animation */
         #logoutBtn i, #syncDataBtn i {
@@ -153,7 +166,7 @@
 <body class="bg-slate-100">
 
     <!-- Landing Screen -->
-    <div id="landing-screen" class="animated-gradient relative flex flex-col p-4">
+    <div id="landing-screen" class="animated-gradient relative flex flex-col p-4 items-center justify-center">
         <div class="flex-grow flex flex-col items-center justify-center py-8">
             <div class="text-center mb-12">
                 <h1 class="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">Bienvenido a JGM Apps</h1>
@@ -242,7 +255,7 @@
                         </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-white">Odisea IA</h2>
-                    <p class="text-indigo-200 text-md mt-2">Viaja y Crea Sin Limites</p>
+                    <p class="text-indigo-200 text-md mt-2">Crea y Viaja Sin Límites</p>
                 </div>
             </div>
         </div>
@@ -252,7 +265,7 @@
     </div>
 
 
-    <!-- Login Screen -->
+    <!-- Unified Login Screen -->
     <div id="login-screen" class="hidden relative items-center justify-center animated-gradient p-4">
         <div class="w-full max-w-sm mx-auto">
             <button id="backToLandingBtn" class="absolute top-5 left-5 text-white bg-white/20 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
@@ -260,8 +273,10 @@
             </button>
             <div class="bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8">
                 <div class="text-center mb-8">
-                    <i class="fas fa-boxes-stacked fa-3x text-white mb-4"></i>
-                    <h1 class="text-3xl font-bold text-white">NemeSync Stock</h1>
+                    <div id="loginIconWrapper" class="icon-wrapper mb-4">
+                        <!-- Icon will be injected here by JS -->
+                    </div>
+                    <h1 id="loginTitle" class="text-3xl font-bold text-white"></h1>
                     <p class="text-indigo-200">Por favor, inicie sesión</p>
                 </div>
                 <form id="loginForm">
@@ -293,7 +308,7 @@
     </div>
 
 
-    <!-- Main App Container -->
+    <!-- Main App Container (NemeSync Stock) -->
     <div id="app" class="p-4 md:p-8 max-w-7xl mx-auto hidden">
         <!-- Main Header -->
         <header class="bg-white p-6 rounded-xl shadow-md mb-6">
@@ -352,8 +367,28 @@
 
     <!-- Hidden input for file uploads -->
     <input type="file" id="upload-csv-input" class="hidden" accept=".csv">
+    
+    <!-- Horus Date App Container -->
+    <div id="horus-date-container" class="hidden w-full h-screen relative">
+        <button id="backToLandingFromHorus" class="absolute top-5 left-5 z-20 bg-white/20 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div id="horus-date-react-root" class="h-full w-full"></div>
+    </div>
 
-    <!-- MODALS SECTION -->
+    <!-- App Welcome Template for other apps -->
+    <div id="app-welcome" class="hidden flex-col items-center justify-center text-white text-center p-8 animated-gradient">
+        <button id="backToLandingFromWelcome" class="absolute top-5 left-5 text-white bg-white/20 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="max-w-xl mx-auto mt-20">
+            <div id="appWelcomeIcon" class="mb-6 w-24 h-24 mx-auto flex items-center justify-center [&>svg]:w-full [&>svg]:h-full"></div>
+            <h1 id="appWelcomeTitle" class="text-5xl font-bold mb-2"></h1>
+            <p id="appWelcomeDesc" class="text-indigo-200 text-lg"></p>
+        </div>
+    </div>
+    
+    <!-- MODALS SECTION for NemeSync Stock -->
     
     <!-- Auth Code Modal -->
     <div id="authCodeModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
@@ -526,38 +561,22 @@
         </div>
     </div>
 
-<!-- Firebase SDKs -->
+<!-- Main App Logic (Vanilla JS) -->
 <script type="module">
-    // Import SDKs
+    // Import Firebase SDKs
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { 
-        getAuth, 
-        onAuthStateChanged,
-        signInWithEmailAndPassword,
-        createUserWithEmailAndPassword,
-        signOut
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { 
-        getFirestore, 
-        collection, 
-        doc,
-        setDoc,
-        deleteDoc,
-        onSnapshot,
-        writeBatch,
-        getDocs,
-        query
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch, getDocs, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Your web app's Firebase configuration
+    // Firebase Configuration
     const firebaseConfig = {
-      apiKey: "AIzaSyDRAPx_THFmyDNagZgVuhtWhUZdB8LHKLE",
-      authDomain: "databasejgm-900ec.firebaseapp.com",
-      projectId: "databasejgm-900ec",
-      storageBucket: "databasejgm-900ec.firebasestorage.app",
-      messagingSenderId: "385826567780",
-      appId: "1:385826567780:web:89b41e6aa2b1a6a78e5171",
-      measurementId: "G-JFYRC53F07"
+        apiKey: "AIzaSyDRAPx_THFmyDNagZgVuhtWhUZdB8LHKLE",
+        authDomain: "databasejgm-900ec.firebaseapp.com",
+        projectId: "databasejgm-900ec",
+        storageBucket: "databasejgm-900ec.firebasestorage.app",
+        messagingSenderId: "385826567780",
+        appId: "1:385826567780:web:89b41e6aa2b1a6a78e5171",
+        measurementId: "G-JFYRC53F07"
     };
 
     // Initialize Firebase
@@ -565,47 +584,53 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    // --- GLOBAL APP STATE ---
+    // --- GLOBAL APP STATE & DOM Elements ---
     let currentUser = null;
-    let allInitial = [];
-    let allEntries = [];
-    let allExits = [];
-    let monthlyReports = [];
-    let currentStock = [];
-    
-    let currentTab = 'stock';
-    let selectedProductForEntry = null;
-    let currentReportData = null;
-    let annualChart = null;
-    let confirmCallback = null;
-    
-    // Unsubscribe functions for Firestore listeners
+    let targetApp = null;
+    let horusDateRoot = null;
+    let allInitial = [], allEntries = [], allExits = [], monthlyReports = [], currentStock = [];
+    let currentTab = 'stock', selectedProductForEntry = null, currentReportData = null, annualChart = null, confirmCallback = null;
     let unsubInitial, unsubEntries, unsubExits, unsubReports;
-
-    // --- DOM Elements ---
+    
     const landingScreen = document.getElementById('landing-screen');
     const loginScreen = document.getElementById('login-screen');
     const appContainer = document.getElementById('app');
+    const welcomeScreen = document.getElementById('app-welcome');
+    const horusDateContainer = document.getElementById('horus-date-container');
     const syncBtn = document.getElementById('syncDataBtn');
+    const allScreens = [landingScreen, loginScreen, appContainer, welcomeScreen, horusDateContainer];
 
-    // --- UTILITY & UI FUNCTIONS ---
-    function toggleModal(modal, show) {
+    // --- FUNCTION DEFINITIONS (Moved to top level) ---
+
+    const showScreen = (screenToShow) => {
+        allScreens.forEach(screen => screen?.classList.add('hidden'));
+        screenToShow?.classList.remove('hidden');
+    };
+
+    const showWelcomeApp = ({ iconHTML, title, desc }) => {
+        document.getElementById('appWelcomeIcon').innerHTML = iconHTML;
+        document.getElementById('appWelcomeTitle').textContent = title;
+        document.getElementById('appWelcomeDesc').textContent = desc;
+        showScreen(welcomeScreen);
+    };
+
+    const toggleModal = (modal, show) => {
         if (!modal) return;
         const transformTarget = modal.querySelector('.transform');
         if (show) {
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modal.classList.remove('opacity-0');
-                if (transformTarget) transformTarget.classList.remove('scale-95');
+                transformTarget?.classList.remove('scale-95');
             }, 10);
         } else {
             modal.classList.add('opacity-0');
-            if (transformTarget) transformTarget.classList.add('scale-95');
+            transformTarget?.classList.add('scale-95');
             setTimeout(() => modal.classList.add('hidden'), 300);
         }
-    }
-
-    function showNotification({ title, message, isError = false, duration = 3000 }) {
+    };
+    
+    const showNotification = ({ title, message, isError = false, duration = 3000 }) => {
         const confirmModal = document.getElementById('confirmModal');
         if (!confirmModal) return;
         document.getElementById('confirmModalTitle').textContent = title;
@@ -619,9 +644,9 @@
             toggleModal(confirmModal, false);
             setTimeout(()=> document.getElementById('confirmModalButtons').style.display = 'flex', 300);
         }, duration);
-    }
-    
-    function showConfirmModal({ title, message, onConfirm }) {
+    };
+
+    const showConfirmModal = ({ title, message, onConfirm }) => {
         const confirmModal = document.getElementById('confirmModal');
         if (!confirmModal) return;
         document.getElementById('confirmModalTitle').textContent = title;
@@ -630,22 +655,35 @@
         document.getElementById('confirmModalButtons').style.display = 'flex';
         confirmCallback = onConfirm;
         toggleModal(confirmModal, true);
-    }
+    };
     
-    function updateSyncStatus(isSyncing) {
-        if (isSyncing) {
-            syncBtn.classList.add('syncing');
-            syncBtn.title = 'Sincronizando...';
-        } else {
-            syncBtn.classList.remove('syncing');
-            syncBtn.title = 'Sincronizado';
+    const updateSyncStatus = (isSyncing) => {
+        if (syncBtn) {
+            if (isSyncing) {
+                syncBtn.classList.add('syncing');
+                syncBtn.title = 'Sincronizando...';
+            } else {
+                syncBtn.classList.remove('syncing');
+                syncBtn.title = 'Sincronizado';
+            }
         }
-    }
+    };
     
     const sortProductsByCode = (a, b) => (a.code || '').localeCompare(b.code || '');
-
-    // --- CORE LOGIC ---
-    function calculateCurrentStock() {
+    const safeCalculate = (expression) => {
+        if (typeof expression !== 'string' || !expression.trim()) return 0;
+        let sanitized = expression.trim().replace(/x/gi, '*').replace(/[^0-9\.\+\-\*\/]/g, '');
+        if (!sanitized) return 0;
+        const lastChar = sanitized.slice(-1);
+        if (['+', '-', '*', '/'].includes(lastChar)) sanitized = sanitized.slice(0, -1);
+        if (!sanitized) return 0;
+        try {
+            const result = new Function('return ' + sanitized)();
+            return isNaN(result) || !isFinite(result) ? 0 : result;
+        } catch (e) { return 0; }
+    };
+    
+    const calculateCurrentStock = () => {
         const stockMap = new Map();
         allInitial.forEach(item => {
             stockMap.set(item.code, { ...item, quantity: Number(item.quantity) });
@@ -661,9 +699,9 @@
             }
         });
         currentStock = Array.from(stockMap.values());
-    }
+    };
 
-    function calculateFinalInventory() {
+    const calculateFinalInventory = () => {
         const inventoryMap = new Map();
         allInitial.forEach(item => {
             inventoryMap.set(item.code, {
@@ -689,373 +727,9 @@
             }
         });
         return Array.from(inventoryMap.values());
-    }
-
-    function calculateAndRenderAll() {
-        calculateCurrentStock();
-        updateExitModalProductList();
-        renderCurrentTab();
-    }
+    };
     
-    // --- AUTHENTICATION ---
-    function setupAuth() {
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                currentUser = user;
-                showApp();
-                initializeAppState();
-            } else {
-                currentUser = null;
-                showLanding();
-                cleanupListeners();
-            }
-        });
-
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorEl = document.getElementById('loginError');
-            try {
-                errorEl.classList.add('hidden');
-                await signInWithEmailAndPassword(auth, email, password);
-            } catch (error) {
-                errorEl.textContent = 'Email o contraseña incorrectos.';
-                errorEl.classList.remove('hidden');
-            }
-        });
-        
-        const togglePasswordBtn = document.getElementById('togglePassword');
-        togglePasswordBtn.addEventListener('click', () => {
-            const passwordInput = document.getElementById('password');
-            const toggleIcon = togglePasswordBtn.querySelector('i');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            toggleIcon.classList.toggle('fa-eye');
-            toggleIcon.classList.toggle('fa-eye-slash');
-        });
-
-        // --- NEW USER REGISTRATION FLOW ---
-        document.getElementById('showCreateUserModalBtn').addEventListener('click', () => {
-            document.getElementById('authCodeForm').reset();
-            document.getElementById('authCodeError').classList.add('hidden');
-            toggleModal(document.getElementById('authCodeModal'), true);
-        });
-
-        document.getElementById('cancelAuthCode').addEventListener('click', () => {
-            toggleModal(document.getElementById('authCodeModal'), false);
-        });
-
-        document.getElementById('authCodeForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const inputCode = document.getElementById('authCodeInput').value;
-            const errorEl = document.getElementById('authCodeError');
-            const AUTH_CODE = "JGM2025"; // Master authorization code
-
-            if (inputCode.toUpperCase() === AUTH_CODE) {
-                toggleModal(document.getElementById('authCodeModal'), false);
-                document.getElementById('createUserForm').reset();
-                document.getElementById('createUserError').classList.add('hidden');
-                toggleModal(document.getElementById('createUserModal'), true);
-                errorEl.classList.add('hidden');
-            } else {
-                errorEl.textContent = 'Código de autorización incorrecto.';
-                errorEl.classList.remove('hidden');
-            }
-        });
-        
-        document.getElementById('cancelCreateUser').addEventListener('click', () => {
-            toggleModal(document.getElementById('createUserModal'), false);
-        });
-
-        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('newUserEmail').value;
-            const password = document.getElementById('newUserPassword').value;
-            const errorEl = document.getElementById('createUserError');
-            try {
-                errorEl.classList.add('hidden');
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                toggleModal(document.getElementById('createUserModal'), false);
-                showNotification({title: "¡Éxito!", message: `Usuario ${userCredential.user.email} creado.`});
-            } catch (error) {
-                if (error.code === 'auth/weak-password') {
-                   errorEl.textContent = 'La contraseña debe tener al menos 6 caracteres.';
-                } else if (error.code === 'auth/email-already-in-use') {
-                    errorEl.textContent = 'Este email ya está en uso.';
-                } else {
-                    errorEl.textContent = 'Ocurrió un error al crear el usuario.';
-                }
-                errorEl.classList.remove('hidden');
-            }
-        });
-    }
-
-    function handleLogout() {
-        signOut(auth).catch(error => console.error("Logout error", error));
-    }
-
-    function showApp() {
-        landingScreen.style.display = 'none';
-        loginScreen.classList.remove('flex');
-        loginScreen.classList.add('hidden');
-        appContainer.classList.remove('hidden');
-    }
-
-    function showLogin() {
-        landingScreen.style.display = 'none';
-        appContainer.classList.add('hidden');
-        loginScreen.classList.remove('hidden');
-        loginScreen.classList.add('flex');
-    }
-
-    function showLanding() {
-        appContainer.classList.add('hidden');
-        loginScreen.classList.remove('flex');
-        loginScreen.classList.add('hidden');
-        landingScreen.style.display = 'flex';
-    }
-
-
-    // --- FIRESTORE DATA HANDLING ---
-    function initializeAppState() {
-        if (!currentUser) return;
-        updateSyncStatus(true);
-        
-        const initialRef = collection(db, "users", currentUser.uid, "initial_inventory");
-        unsubInitial = onSnapshot(initialRef, (snapshot) => {
-            allInitial = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            calculateAndRenderAll();
-            updateSyncStatus(false);
-        }, err => { console.error(err); updateSyncStatus(false); });
-
-        const entriesRef = collection(db, "users", currentUser.uid, "entries");
-        unsubEntries = onSnapshot(entriesRef, (snapshot) => {
-            allEntries = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            calculateAndRenderAll();
-        });
-
-        const exitsRef = collection(db, "users", currentUser.uid, "exits");
-        unsubExits = onSnapshot(exitsRef, (snapshot) => {
-            allExits = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            calculateAndRenderAll();
-        });
-
-        const reportsRef = collection(db, "users", currentUser.uid, "monthly_reports");
-        unsubReports = onSnapshot(query(reportsRef), (snapshot) => {
-            monthlyReports = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        });
-    }
-
-    function cleanupListeners() {
-        if (unsubInitial) unsubInitial();
-        if (unsubEntries) unsubEntries();
-        if (unsubExits) unsubExits();
-        if (unsubReports) unsubReports();
-    }
-
-    async function addOrUpdateDoc(collectionName, data, docId) {
-        if (!currentUser) return;
-        const id = docId || crypto.randomUUID();
-        const docRef = doc(db, "users", currentUser.uid, collectionName, id);
-        await setDoc(docRef, { ...data, id });
-        return id;
-    }
-
-    async function deleteDocument(collectionName, docId) {
-        if (!currentUser) return;
-        const docRef = doc(db, "users", currentUser.uid, collectionName, docId);
-        await deleteDoc(docRef);
-    }
-
-    async function clearCollection(collectionName) {
-        if (!currentUser) return;
-        const collRef = collection(db, "users", currentUser.uid, collectionName);
-        const snapshot = await getDocs(collRef);
-        const batch = writeBatch(db);
-        snapshot.docs.forEach(doc => {
-            batch.delete(doc.ref);
-        });
-        await batch.commit();
-    }
-    
-    // --- IMPORT / EXPORT & MONTHLY CLOSING ---
-    function downloadCSVTemplate() {
-        const headers = "CODIGO;CATEGORIA;PRODUCTO;U/M;INICIAL";
-        const blob = new Blob(["\uFEFF" + headers], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement("a");
-        const url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", "plantilla_inventario.csv");
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    function handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            delimiter: ";",
-            complete: (results) => {
-                if (results.errors.length > 0) {
-                    showNotification({ title: 'Error de Lectura', message: 'El archivo CSV tiene un formato incorrecto.', isError: true });
-                    return;
-                }
-                processAndSaveProducts(results.data);
-            }
-        });
-        event.target.value = ''; // Reset file input
-    }
-    
-    function handlePasteData() {
-        const text = document.getElementById('pasteData').value;
-        if (!text.trim()) return;
-        Papa.parse(text, {
-            header: true,
-            skipEmptyLines: true,
-            complete: (results) => {
-                if (results.errors.length > 0) {
-                    showNotification({ title: 'Error de Pegado', message: 'El formato es incorrecto.', isError: true });
-                    return;
-                }
-                processAndSaveProducts(results.data);
-                toggleModal(document.getElementById('pasteModal'), false);
-            }
-        });
-    }
-
-    async function processAndSaveProducts(products) {
-        if (!currentUser) return;
-        const validProducts = [];
-        const errors = [];
-
-        for (const row of products) {
-            const isRowEmpty = Object.values(row).every(val => typeof val !== 'string' || !val.trim());
-            if (isRowEmpty) continue;
-
-            const code = (row.CODIGO || row.code)?.trim().toUpperCase();
-            const category = (row.CATEGORIA || row.category)?.trim();
-            const prodName = (row.PRODUCTO || row.product)?.trim();
-            const unit = (row['U/M'] || row.unit)?.trim();
-            const quantity = Number((row.INICIAL || row.quantity)?.toString().trim());
-            
-            if (code && category && prodName && unit && !isNaN(quantity) && quantity >= 0) {
-                validProducts.push({ code, category, product: prodName, unit, quantity });
-            } else {
-                errors.push(prodName || `Fila #${products.indexOf(row) + 1}`);
-            }
-        }
-
-        if (errors.length > 0) {
-            showNotification({ title: 'Errores de Validación', message: `Se ignoraron ${errors.length} filas por datos incompletos.`, isError: true, duration: 5000 });
-        }
-
-        if (validProducts.length > 0) {
-            const batch = writeBatch(db);
-            validProducts.forEach(product => {
-                const docRef = doc(collection(db, "users", currentUser.uid, "initial_inventory"));
-                batch.set(docRef, { ...product, id: docRef.id });
-            });
-            await batch.commit();
-            showNotification({ title: 'Éxito', message: `${validProducts.length} productos importados correctamente.` });
-        }
-    }
-
-    async function handleSaveMonth() {
-        toggleModal(document.getElementById('saveMonthModal'), false);
-        const monthIndex = document.getElementById('saveMonthSelect').value;
-        const year = document.getElementById('saveYearInput').value;
-        if (!monthIndex || !year || year.length < 4) {
-            showNotification({title: "Datos Incompletos", message: "Debe seleccionar un mes y un año válido.", isError: true});
-            return;
-        }
-        const monthName = document.getElementById('saveMonthSelect').options[document.getElementById('saveMonthSelect').selectedIndex].text;
-        
-        showConfirmModal({
-            title: `Archivar ${monthName} ${year}`,
-            message: 'Esta acción guardará un reporte, reiniciará el inventario con el stock final y borrará las entradas/salidas actuales. ¿Continuar?',
-            onConfirm: async () => {
-                if(!currentUser) return;
-                const finalInventory = calculateFinalInventory();
-                const reportId = `${year}-${String(Number(monthIndex) + 1).padStart(2, '0')}`;
-                
-                const reportData = {
-                    year: Number(year),
-                    month: Number(monthIndex) + 1,
-                    entries: [...allEntries],
-                    exits: [...allExits],
-                    finalInventory: finalInventory
-                };
-
-                const batch = writeBatch(db);
-
-                // 1. Save the monthly report
-                const reportRef = doc(db, "users", currentUser.uid, "monthly_reports", reportId);
-                batch.set(reportRef, { ...reportData, id: reportId });
-
-                // 2. Clear old initial inventory
-                const initialSnapshot = await getDocs(collection(db, "users", currentUser.uid, "initial_inventory"));
-                initialSnapshot.forEach(doc => batch.delete(doc.ref));
-
-                // 3. Set new initial inventory from final stock
-                finalInventory.forEach(item => {
-                    const newInitialData = { code: item.code, category: item.category, product: item.product, unit: item.unit, quantity: item.final };
-                    const newDocRef = doc(collection(db, "users", currentUser.uid, "initial_inventory"));
-                    batch.set(newDocRef, { ...newInitialData, id: newDocRef.id });
-                });
-                
-                // 4. Clear entries and exits
-                const entriesSnapshot = await getDocs(collection(db, "users", currentUser.uid, "entries"));
-                entriesSnapshot.forEach(doc => batch.delete(doc.ref));
-                const exitsSnapshot = await getDocs(collection(db, "users", currentUser.uid, "exits"));
-                exitsSnapshot.forEach(doc => batch.delete(doc.ref));
-
-                try {
-                    await batch.commit();
-                    showNotification({ title: "Éxito", message: `Inventario de ${monthName} ${year} archivado y reiniciado.` });
-                } catch (error) {
-                    console.error("Monthly closing error:", error);
-                    showNotification({ title: "Error", message: "No se pudo completar el cierre mensual.", isError: true });
-                }
-            }
-        });
-    }
-
-    // --- RENDERING & REPORTS ---
-    function renderCurrentTab() {
-        if (currentTab === 'annual_report') {
-            renderAnnualReport();
-            return;
-        }
-
-        const headers = {
-            stock: ['Código', 'Categoría', 'Producto', 'U/M', 'Stock'],
-            movements: ['Fecha', 'Código', 'Categoría', 'Producto', 'U/M', 'Cantidad', 'Acciones'],
-            initial: ['Código', 'Categoría', 'Producto', 'U/M', 'Cantidad Inicial', 'Acciones'],
-            final: ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final']
-        };
-        const rowTemplates = {
-            stock: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="font-bold">${item.quantity}</td>`,
-            entries: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-green-600 font-bold">+${item.quantity}</td><td><button data-action="delete-row" data-collection="entries" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            exits: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-red-600 font-bold">-${item.quantity}</td><td><button data-action="delete-row" data-collection="exits" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            initial: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.quantity}</td><td class="flex gap-2"><button data-action="edit-stock" data-id="${item.id}" class="action-btn text-gray-400 hover:text-indigo-600 p-2"><i class="fas fa-pencil-alt"></i></button><button data-action="delete-row" data-collection="initial_inventory" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            final: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600">+${item.entries}</td><td class="text-red-600">-${item.exits}</td><td class="font-bold">${item.final}</td>`
-        };
-        
-        switch (currentTab) {
-            case 'stock': renderTable('Stock Actual', headers.stock, [...currentStock].sort(sortProductsByCode), rowTemplates.stock, { showSearch: true }); break;
-            case 'entries': renderTable('Entradas', headers.movements, [...allEntries].sort(sortProductsByCode), rowTemplates.entries, { showClear: true, collectionName: "Entradas", collectionId: "entries" }); break;
-            case 'exits': renderTable('Salidas', headers.movements, [...allExits].sort(sortProductsByCode), rowTemplates.exits, { showClear: true, collectionName: "Salidas", collectionId: "exits" }); break;
-            case 'initial': renderTable('Inv. Inicial', headers.initial, [...allInitial].sort(sortProductsByCode), rowTemplates.initial, { showClear: true, showAdd: true, showImportExport: true, collectionName: "Inventario Inicial", collectionId: "initial_inventory" }); break;
-            case 'final': renderTable('Inv. Final', headers.final, calculateFinalInventory().sort(sortProductsByCode), rowTemplates.final, { showSearch: true }); break;
-        }
-    }
-    
-    function renderTable(title, headers, data, rowTemplate, options = {}) {
+    const renderTable = (title, headers, data, rowTemplate, options = {}) => {
         const tableHeaders = headers.map(h => `<th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">${h}</th>`).join('');
         const tableRows = data.map(item => `<tr class="hover:bg-slate-50 even:bg-white">${rowTemplate(item).replace(/<td>/g, '<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">')}</tr>`).join('');
         
@@ -1103,9 +777,9 @@
                 });
             });
         }
-    }
-
-    function renderAnnualReport() {
+    };
+    
+    const renderAnnualReport = () => {
         const tabContent = document.getElementById('tab-content');
         const categories = ['Todas', ...new Set(allInitial.map(p => p.category).sort())];
         
@@ -1156,348 +830,554 @@
         document.getElementById('reportYear').addEventListener('change', renderChart);
         document.getElementById('reportCategory').addEventListener('change', renderChart);
         renderChart();
-    }
-    
-    function handleViewArchives() {
-        const container = document.getElementById('archivesListContainer');
-        if (monthlyReports.length === 0) {
-            container.innerHTML = '<p class="text-gray-500 text-center py-4">No hay inventarios archivados.</p>';
-        } else {
-            const reports = [...monthlyReports].sort((a,b) => b.id.localeCompare(a.id));
-            const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            container.innerHTML = reports.map(report => `
-                <button data-action="view-report" data-id="${report.id}" class="w-full text-left p-4 hover:bg-gray-100 flex justify-between items-center">
-                    <span class="font-semibold text-indigo-600">${months[report.month - 1]} ${report.year}</span>
-                    <i class="fas fa-chevron-right text-gray-400"></i>
-                </button>
-            `).join('');
-        }
-        toggleModal(document.getElementById('archivesListModal'), true);
-    }
+    };
 
-    function handleViewReportDetail(reportId) {
-        const report = monthlyReports.find(r => r.id === reportId);
-        if (!report) return;
-        currentReportData = report; // Store for export
-        const { finalInventory, entries, exits, month, year } = report;
-        const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-        document.getElementById('reportDetailTitle').textContent = `Detalle de ${months[month - 1]} ${year}`;
-        
-        const createTableHTML = (title, headers, data, rowTemplate) => {
-            const tableHeaders = headers.map(h => `<th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">${h}</th>`).join('');
-            const tableRows = data.map(item => `<tr class="bg-white hover:bg-slate-50">${rowTemplate(item).replace(/<td>/g, '<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">')}</tr>`).join('');
-            return `<h3 class="text-lg font-semibold text-slate-800 mt-6 mb-2">${title}</h3>
-                    <div class="border border-slate-200 rounded-lg max-h-64 overflow-y-auto">
-                        <table class="min-w-full divide-y divide-slate-200">
-                            <thead class="bg-slate-50 sticky top-0"><tr>${tableHeaders}</tr></thead>
-                            <tbody class="divide-y divide-slate-200">${tableRows || `<tr><td colspan="${headers.length}" class="text-center py-10">No hay datos.</td></tr>`}</tbody>
-                        </table>
-                    </div>`;
-        };
-        
-        const finalInvHeaders = ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final'];
-        const movementHeaders = ['Fecha', 'Código', 'Categoría', 'Producto', 'U/M', 'Cantidad'];
-        const finalRow = item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600">+${item.entries}</td><td class="text-red-600">-${item.exits}</td><td class="font-bold">${item.final}</td>`;
-        const entryRow = item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-green-600 font-bold">+${item.quantity}</td>`;
-        const exitRow = item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-red-600 font-bold">-${item.quantity}</td>`;
+    const renderCurrentTab = () => {
+        if (appContainer.classList.contains('hidden')) return;
 
-        document.getElementById('reportDetailContent').innerHTML = 
-            createTableHTML('Inventario Final', finalInvHeaders, [...finalInventory].sort(sortProductsByCode), finalRow) +
-            createTableHTML('Entradas del Mes', movementHeaders, [...entries].sort(sortProductsByCode), entryRow) +
-            createTableHTML('Salidas del Mes', movementHeaders, [...exits].sort(sortProductsByCode), exitRow);
-            
-        toggleModal(document.getElementById('reportDetailModal'), true);
-    }
-    
-    function handleExportReport() {
-        if (!currentReportData) return;
-        const { finalInventory, entries, exits, month, year } = currentReportData;
-        const months = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-        const reportName = `Reporte_${months[month - 1]}_${year}.xlsx`;
-
-        const wsFinal = XLSX.utils.json_to_sheet([...finalInventory].sort(sortProductsByCode).map(item => ({ 'Código': item.code, 'Categoría': item.category, 'Producto': item.product, 'U/M': item.unit, 'Inv. Inicial': item.initial, 'Entradas': item.entries, 'Salidas': item.exits, 'Stock Final': item.final })));
-        const wsEntries = XLSX.utils.json_to_sheet([...entries].sort(sortProductsByCode).map(item => ({ 'Fecha': item.date, 'Código': item.code, 'Categoría': item.category, 'Producto': item.product, 'U/M': item.unit, 'Cantidad': item.quantity })));
-        const wsExits = XLSX.utils.json_to_sheet([...exits].sort(sortProductsByCode).map(item => ({ 'Fecha': item.date, 'Código': item.code, 'Categoría': item.category, 'Producto': item.product, 'U/M': item.unit, 'Cantidad': item.quantity })));
-
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, wsFinal, "Inventario Final");
-        XLSX.utils.book_append_sheet(wb, wsEntries, "Entradas del Mes");
-        XLSX.utils.book_append_sheet(wb, wsExits, "Salidas del Mes");
-        XLSX.writeFile(wb, reportName);
-    }
-
-    // --- EVENT HANDLERS ---
-    function handleStockFormSubmit(e) {
-        e.preventDefault();
-        const docId = document.getElementById('stockDocId').value;
-        const productData = {
-            code: document.getElementById('stockCode').value.trim().toUpperCase(),
-            category: document.getElementById('stockCategory').value.trim(),
-            product: document.getElementById('stockProduct').value.trim(),
-            unit: document.getElementById('stockUnit').value.trim(),
-            quantity: Number(document.getElementById('stockQuantity').value)
-        };
-        addOrUpdateDoc('initial_inventory', productData, docId || null);
-        toggleModal(document.getElementById('stockModal'), false);
-    }
-    
-    function handleEntrySubmit(e) {
-        e.preventDefault();
-        if (!selectedProductForEntry) { 
-            showNotification({title: "Error", message: "Por favor, seleccione un producto de la lista.", isError: true}); 
-            return; 
-        }
-        const newEntry = {
-            date: document.getElementById('entryDate').value,
-            quantity: Number(document.getElementById('entryQuantity').value),
-            code: selectedProductForEntry.code,
-            product: selectedProductForEntry.product,
-            category: selectedProductForEntry.category,
-            unit: selectedProductForEntry.unit
-        };
-        if (!newEntry.date || !newEntry.code || newEntry.quantity <= 0) {
-             showNotification({title: "Error", message: "Fecha y cantidad son requeridos.", isError: true});
-             return;
-        }
-        addOrUpdateDoc('entries', newEntry);
-        toggleModal(document.getElementById('entryModal'), false);
-        document.getElementById('entryForm').reset();
-        selectedProductForEntry = null;
-    }
-    
-    function handleExitSubmit(e) {
-        e.preventDefault();
-        const productCode = document.getElementById('exitProductSelect').value;
-        const date = document.getElementById('exitDate').value;
-        const totalQuantity = Number(document.getElementById('exitTotalDisplay').textContent);
-        const productInStock = currentStock.find(p => p.code === productCode);
-
-        if (!date || !productInStock || totalQuantity <= 0) {
-            showNotification({title:"Error de Salida", message: "Datos incorrectos.", isError: true});
+        if (currentTab === 'annual_report') {
+            renderAnnualReport();
             return;
         }
-        if (totalQuantity > productInStock.quantity) {
-            showNotification({title:"Stock Insuficiente", message: `Solo hay ${productInStock.quantity} en stock.`, isError: true});
-            return;
-        }
-        const exitData = { date, quantity: totalQuantity, code: productInStock.code, product: productInStock.product, category: productInStock.category, unit: productInStock.unit };
-        addOrUpdateDoc('exits', exitData);
-        toggleModal(document.getElementById('exitModal'), false);
-        document.getElementById('exitForm').reset();
-    }
-    
-    function openStockModal(docId = null) {
-        const form = document.getElementById('stockForm');
-        form.reset();
-        document.getElementById('stockDocId').value = '';
-        
-        document.getElementById('category-list').innerHTML = [...new Set(allInitial.map(p => p.category))].map(c => `<option value="${c}">`).join('');
-        document.getElementById('unit-list').innerHTML = [...new Set(allInitial.map(p => p.unit))].map(u => `<option value="${u}">`).join('');
 
-        if(docId) {
-            const product = allInitial.find(p => p.id === docId);
-            if(product) {
-                document.getElementById('stockModalTitle').textContent = 'Editar Producto';
-                document.getElementById('stockDocId').value = product.id;
-                document.getElementById('stockCode').value = product.code;
-                document.getElementById('stockCategory').value = product.category;
-                document.getElementById('stockProduct').value = product.product;
-                document.getElementById('stockUnit').value = product.unit;
-                document.getElementById('stockQuantity').value = product.quantity;
-            }
-        } else {
-            document.getElementById('stockModalTitle').textContent = 'Añadir Nuevo Producto';
-        }
-        toggleModal(document.getElementById('stockModal'), true);
-    }
+        const headers = {
+            stock: ['Código', 'Categoría', 'Producto', 'U/M', 'Stock'],
+            movements: ['Fecha', 'Código', 'Categoría', 'Producto', 'U/M', 'Cantidad', 'Acciones'],
+            initial: ['Código', 'Categoría', 'Producto', 'U/M', 'Cantidad Inicial', 'Acciones'],
+            final: ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final']
+        };
+        const rowTemplates = {
+            stock: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="font-bold">${item.quantity}</td>`,
+            entries: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-green-600 font-bold">+${item.quantity}</td><td><button data-action="delete-row" data-collection="entries" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+            exits: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-red-600 font-bold">-${item.quantity}</td><td><button data-action="delete-row" data-collection="exits" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+            initial: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.quantity}</td><td class="flex gap-2"><button data-action="edit-stock" data-id="${item.id}" class="action-btn text-gray-400 hover:text-indigo-600 p-2"><i class="fas fa-pencil-alt"></i></button><button data-action="delete-row" data-collection="initial_inventory" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+            final: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600">+${item.entries}</td><td class="text-red-600">-${item.exits}</td><td class="font-bold">${item.final}</td>`
+        };
+        
+        const dataMap = {
+            stock: [...currentStock].sort(sortProductsByCode),
+            entries: [...allEntries].sort((a,b) => b.date.localeCompare(a.date)),
+            exits: [...allExits].sort((a,b) => b.date.localeCompare(a.date)),
+            initial: [...allInitial].sort(sortProductsByCode),
+            final: calculateFinalInventory().sort(sortProductsByCode),
+        };
+
+        const optionsMap = {
+            stock: { showSearch: true },
+            entries: { showClear: true, collectionName: "Entradas", collectionId: "entries" },
+            exits: { showClear: true, collectionName: "Salidas", collectionId: "exits" },
+            initial: { showClear: true, showAdd: true, showImportExport: true, collectionName: "Inventario Inicial", collectionId: "initial_inventory" },
+            final: { showSearch: true },
+        };
+        
+        const tabKey = currentTab in headers ? currentTab : 'stock';
+        const titleMap = { stock: 'Stock Actual', entries: 'Entradas', exits: 'Salidas', initial: 'Inventario Inicial', final: 'Inventario Final' };
+
+        renderTable(titleMap[tabKey], headers[tabKey] || headers.movements, dataMap[tabKey], rowTemplates[tabKey], optionsMap[tabKey]);
+    };
     
-    function updateExitModalProductList() {
+    const updateExitModalProductList = () => {
         const select = document.getElementById('exitProductSelect');
+        if (!select) return;
         const sortedProducts = [...currentStock].filter(p => p.quantity > 0).sort(sortProductsByCode);
         select.innerHTML = '<option value="" disabled selected>Seleccione un producto</option>';
         sortedProducts.forEach(item => {
             select.innerHTML += `<option value="${item.code}">${item.product} - ${item.code} (Stock: ${item.quantity})</option>`;
         });
-    }
+    };
 
-    function safeCalculate(expression) {
-        if (typeof expression !== 'string' || !expression.trim()) return 0;
-        let sanitized = expression.trim().replace(/x/gi, '*').replace(/[^0-9\.\+\-\*\/]/g, '');
-        if (!sanitized) return 0;
-        const lastChar = sanitized.slice(-1);
-        if (['+', '-', '*', '/'].includes(lastChar)) sanitized = sanitized.slice(0, -1);
-        if (!sanitized) return 0;
-        try {
-            const result = new Function('return ' + sanitized)();
-            return isNaN(result) || !isFinite(result) ? 0 : result;
-        } catch (e) { return 0; }
-    }
+    const calculateAndRenderAll = () => {
+        calculateCurrentStock();
+        updateExitModalProductList();
+        renderCurrentTab();
+    };
+
+    const cleanupListeners = () => {
+        if (unsubInitial) unsubInitial();
+        if (unsubEntries) unsubEntries();
+        if (unsubExits) unsubExits();
+        if (unsubReports) unsubReports();
+        unsubInitial = null;
+    };
+
+    const initializeAppState = () => {
+        if (!currentUser || (unsubInitial && !unsubInitial.closed)) return;
+        updateSyncStatus(true);
+        const onDataChange = (snapshot, targetArray) => {
+            targetArray.length = 0;
+            snapshot.docs.forEach(doc => targetArray.push({ id: doc.id, ...doc.data() }));
+            if (typeof calculateAndRenderAll === 'function') {
+                 calculateAndRenderAll();
+            }
+        };
+
+        unsubInitial = onSnapshot(collection(db, "users", currentUser.uid, "initial_inventory"), s => onDataChange(s, allInitial), console.error);
+        unsubEntries = onSnapshot(collection(db, "users", currentUser.uid, "entries"), s => onDataChange(s, allEntries), console.error);
+        unsubExits = onSnapshot(collection(db, "users", currentUser.uid, "exits"), s => onDataChange(s, allExits), console.error);
+        unsubReports = onSnapshot(query(collection(db, "users", currentUser.uid, "monthly_reports")), s => onDataChange(s, monthlyReports), console.error);
+        
+        updateSyncStatus(false);
+    };
+    
+    // --- ROUTING & AUTH ---
+    const handleLogout = () => {
+        signOut(auth);
+        localStorage.removeItem('lastApp');
+        targetApp = null;
+    };
+    
+    const showLoginScreenFor = (appName) => {
+        const iconWrapperEl = document.getElementById('loginIconWrapper');
+        const titleEl = document.getElementById('loginTitle');
+        iconWrapperEl.className = 'icon-wrapper mb-4';
+
+        if (appName === 'horus') {
+            const horusIconHTML = document.querySelector('#goToAppointmentsBtn .icon-wrapper').innerHTML;
+            iconWrapperEl.innerHTML = horusIconHTML;
+            iconWrapperEl.classList.add('horus-eye-wrapper');
+            titleEl.textContent = 'Horus Date';
+        } else {
+            const nemeSyncIconHTML = document.querySelector('#goToInventoryBtn .icon-wrapper').innerHTML;
+            iconWrapperEl.innerHTML = nemeSyncIconHTML;
+            iconWrapperEl.classList.add('anubis-scales-wrapper');
+            titleEl.textContent = 'NemeSync Stock';
+        }
+        showScreen(loginScreen);
+    };
+
+    const showNemeSyncApp = () => {
+        showScreen(appContainer);
+        initializeAppState();
+    };
+
+    const showHorusDateApp = () => {
+        showScreen(horusDateContainer);
+        if (!horusDateRoot) {
+            horusDateRoot = ReactDOM.createRoot(document.getElementById('horus-date-react-root'));
+        }
+        horusDateRoot.render(React.createElement(window.HorusDateApp));
+    };
+
+    const routeToApp = (appName, user) => {
+        currentUser = user;
+        localStorage.setItem('lastApp', appName);
+        if (appName === 'horus') {
+            showHorusDateApp();
+        } else {
+            showNemeSyncApp();
+        }
+    };
+    
+    const handleAppSelection = (appName) => {
+        targetApp = appName;
+        if (auth.currentUser) {
+            routeToApp(appName, auth.currentUser);
+        } else {
+            showLoginScreenFor(appName);
+        }
+    };
     
     // --- EVENT LISTENER SETUP ---
-    function setupEventListeners() {
-        document.getElementById('logoutBtn').addEventListener('click', handleLogout);
-        
-        document.getElementById('tabs').addEventListener('click', (e) => {
-            e.preventDefault();
-            const tabLink = e.target.closest('.tab');
-            if (tabLink && !tabLink.classList.contains('tab-active')) {
-                document.querySelector('.tab-active').classList.remove('tab-active');
-                tabLink.classList.add('tab-active');
-                currentTab = tabLink.dataset.tab;
-                calculateAndRenderAll();
-            }
-        });
-        
-        document.getElementById('openEntryModalBtn').addEventListener('click', () => {
-            document.getElementById('entryForm').reset();
-            document.getElementById('entryDate').valueAsDate = new Date();
-            toggleModal(document.getElementById('entryModal'), true);
-        });
-        document.getElementById('openExitModalBtn').addEventListener('click', () => {
-            document.getElementById('exitForm').reset();
-            document.getElementById('exitDate').valueAsDate = new Date();
-            document.getElementById('exitTotalDisplay').textContent = '0';
-            toggleModal(document.getElementById('exitModal'), true);
-        });
-        document.getElementById('saveMonthBtn').addEventListener('click', () => {
-            const monthSelect = document.getElementById('saveMonthSelect');
-            const yearInput = document.getElementById('saveYearInput');
-            const now = new Date();
-            const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            monthSelect.innerHTML = months.map((m, i) => `<option value="${i}">${m}</option>`).join('');
-            monthSelect.value = now.getMonth();
-            yearInput.value = now.getFullYear();
-            toggleModal(document.getElementById('saveMonthModal'), true);
-        });
-        
-        document.getElementById('stockForm').addEventListener('submit', handleStockFormSubmit);
-        document.getElementById('entryForm').addEventListener('submit', handleEntrySubmit);
-        document.getElementById('exitForm').addEventListener('submit', handleExitSubmit);
-        
-        document.getElementById('cancelStock').addEventListener('click', () => toggleModal(document.getElementById('stockModal'), false));
-        document.getElementById('cancelEntry').addEventListener('click', () => toggleModal(document.getElementById('entryModal'), false));
-        document.getElementById('cancelExit').addEventListener('click', () => toggleModal(document.getElementById('exitModal'), false));
-        document.getElementById('cancelPaste').addEventListener('click', () => toggleModal(document.getElementById('pasteModal'), false));
-        document.getElementById('processPasteBtn').addEventListener('click', handlePasteData);
-        document.getElementById('cancelSaveMonth').addEventListener('click', () => toggleModal(document.getElementById('saveMonthModal'), false));
-        document.getElementById('archiveAndFinalizeBtn').addEventListener('click', handleSaveMonth);
-
-        document.getElementById('entryProduct').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const suggestionsContainer = document.getElementById('entryProductSuggestions');
-            selectedProductForEntry = null;
-            if (searchTerm.length < 1) {
-                suggestionsContainer.classList.add('hidden');
-                return;
-            }
-            const suggestions = [...allInitial]
-                .filter(item => item.product.toLowerCase().includes(searchTerm) || item.code.toLowerCase().includes(searchTerm))
-                .sort(sortProductsByCode);
-            
-            if (suggestions.length > 0) {
-                suggestionsContainer.innerHTML = suggestions.map(item => 
-                    `<div class="p-3 hover:bg-indigo-100 cursor-pointer" data-product-id="${item.id}">
-                        ${item.product} <span class="text-xs text-gray-500">(${item.code})</span>
-                       </div>`
-                ).join('');
-                suggestionsContainer.classList.remove('hidden');
-            } else {
-                suggestionsContainer.classList.add('hidden');
-            }
-        });
-
-        document.getElementById('entryProductSuggestions').addEventListener('click', (e) => {
-            const target = e.target.closest('[data-product-id]');
-            if (target) {
-                selectedProductForEntry = allInitial.find(p => p.id === target.dataset.productId);
-                if (selectedProductForEntry) {
-                    document.getElementById('entryProduct').value = selectedProductForEntry.product;
-                }
-                document.getElementById('entryProductSuggestions').classList.add('hidden');
-            }
-        });
-
-        const updateTotalExitDisplay = () => {
-            const qty1 = Number(document.getElementById('exitQuantity').value) || 0;
-            const qty2 = safeCalculate(document.getElementById('exitQuantity2').value || '0');
-            document.getElementById('exitTotalDisplay').textContent = qty1 + qty2;
-        };
-        document.getElementById('exitQuantity').addEventListener('input', updateTotalExitDisplay);
-        document.getElementById('exitQuantity2').addEventListener('input', updateTotalExitDisplay);
-
-        document.getElementById('confirmAcceptBtn').addEventListener('click', () => {
-            if (confirmCallback) confirmCallback();
-            toggleModal(document.getElementById('confirmModal'), false);
-            confirmCallback = null;
-        });
-        document.getElementById('confirmCancelBtn').addEventListener('click', () => {
-            toggleModal(document.getElementById('confirmModal'), false);
-            confirmCallback = null;
-        });
-        
-        document.getElementById('upload-csv-input').addEventListener('change', handleFileUpload);
-        
-        document.getElementById('viewArchivesBtn').addEventListener('click', handleViewArchives);
-        document.getElementById('closeArchivesList').addEventListener('click', () => toggleModal(document.getElementById('archivesListModal'), false));
-        document.getElementById('closeReportDetailIcon').addEventListener('click', () => toggleModal(document.getElementById('reportDetailModal'), false));
-        document.getElementById('closeReportDetailBtn').addEventListener('click', () => toggleModal(document.getElementById('reportDetailModal'), false));
-
-        document.body.addEventListener('click', (e) => {
-            const target = e.target.closest('button[data-action]');
-            if (!target) return;
-
-            const action = target.dataset.action;
-            const id = target.dataset.id;
-            
-            switch(action) {
-                case 'add-stock': openStockModal(); break;
-                case 'edit-stock': openStockModal(id); break;
-                case 'delete-row':
-                    showConfirmModal({
-                        title: '¿Eliminar Fila?', message: 'Esta acción es irreversible.',
-                        onConfirm: () => deleteDocument(target.dataset.collection, id)
-                    });
-                    break;
-                case 'clear-collection':
-                    showConfirmModal({
-                        title: `¿Limpiar ${target.dataset.name}?`, message: `Se borrarán todos los registros de ${target.dataset.name}.`,
-                        onConfirm: () => clearCollection(target.dataset.collection)
-                    });
-                    break;
-                case 'download-template': downloadCSVTemplate(); break;
-                case 'upload-template': document.getElementById('upload-csv-input').click(); break;
-                case 'paste-template': toggleModal(document.getElementById('pasteModal'), true); break;
-                case 'view-report': handleViewReportDetail(id); break;
-                case 'export-report': handleExportReport(); break;
-            }
-        });
-
-        document.getElementById('goToInventoryBtn').addEventListener('click', () => {
-            showLogin();
-        });
-
-        document.getElementById('goToAppointmentsBtn').addEventListener('click', () => {
-            showNotification({title: "Próximamente", message: "Horus Date estará disponible pronto."});
-        });
-        document.getElementById('goToMuseIABtn').addEventListener('click', () => {
-            showNotification({title: "Próximamente", message: "Muse IA estará disponible pronto."});
-        });
-        document.getElementById('goToOdiseaIABtn').addEventListener('click', () => {
-            showNotification({title: "Próximamente", message: "Odisea IA estará disponible pronto."});
-        });
-
-        document.getElementById('backToLandingBtn').addEventListener('click', () => {
-            showLanding();
-        });
-    }
-    
-    // --- Initial Load ---
     document.addEventListener('DOMContentLoaded', () => {
-        setupAuth();
-        setupEventListeners();
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                const appToRoute = targetApp || localStorage.getItem('lastApp');
+                if (appToRoute) {
+                    routeToApp(appToRoute, user);
+                } else {
+                    showScreen(landingScreen);
+                }
+            } else {
+                currentUser = null;
+                cleanupListeners();
+                showScreen(landingScreen);
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('loginError');
+            try {
+                errorEl.classList.add('hidden');
+                await signInWithEmailAndPassword(auth, email, password);
+            } catch (error) {
+                errorEl.textContent = 'Email o contraseña incorrectos.';
+                errorEl.classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('goToInventoryBtn').addEventListener('click', () => handleAppSelection('nemesync'));
+        document.getElementById('goToAppointmentsBtn').addEventListener('click', () => handleAppSelection('horus'));
+        
+        document.getElementById('goToMuseIABtn').addEventListener('click', () => {
+             showWelcomeApp({
+                iconHTML: document.querySelector('#goToMuseIABtn .icon-wrapper').innerHTML,
+                title: 'Muse IA',
+                desc: 'Inspiracion de las 9 Musas'
+            });
+        });
+        
+        document.getElementById('goToOdiseaIABtn').addEventListener('click', () => {
+            showWelcomeApp({
+                iconHTML: document.querySelector('#goToOdiseaIABtn .icon-wrapper').innerHTML,
+                title: 'Odisea IA',
+                desc: 'Crea y Viaja Sin Límites'
+            });
+        });
+
+        document.getElementById('backToLandingBtn').addEventListener('click', () => showScreen(landingScreen));
+        document.getElementById('backToLandingFromWelcome').addEventListener('click', () => showScreen(landingScreen));
+        document.getElementById('backToLandingFromHorus').addEventListener('click', handleLogout);
+        document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
     });
+</script>
+
+<!-- Horus Date React App (Transpiled by Babel) -->
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+
+// --- Constantes y Tipos ---
+
+const packageDetails = {
+ 'Pack 1': '7 Digitales', 'Pack 2': '10 Digitales', 'Pack 3': '15 Digitales',
+ 'Pack 4': '24 Digitales', 'Pack 5': '36 Digitales',
+};
+
+// SVG Paths para inyección directa
+const iconPaths = {
+ package: `<path d="M16.5 9.4a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"/><path d="M19 12.2l-7-4-7 4"/><path d="M19 16.2l-7-4-7 4"/><path d="m12 22 7-4-7-4-7 4 7 4Z"/>`,
+ palette: `<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><path d="M2 16.5A4.5 4.5 0 0 1 6.5 12H8c2.5 0 4.5-2.5 4.5-5.5a4.5 4.5 0 1 1 3.5 8.5L2 22Z"/>`,
+ layers: `<polygon points="12 2 2 7 12 12 22 7 12 2"/><polygon points="2 17 12 22 22 17"/><polygon points="2 12 12 17 22 12"/>`,
+ droplets: `<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-3.5-4-1.5 2.5-3.5 4-3 3.5-3 5.5a7 7 0 0 0 7 7z"/>`,
+ gift: `<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 5a4.8 8 0 0 1 4.5-2 2.5 2.5 0 0 1 0 5"/>`,
+};
+
+const INITIAL_FORM_STATE = {
+    client: '', service: 'Cumpleaños Glamorous', time: '10:30am',
+    date: new Date().toISOString().split('T')[0], packageNo: 'Pack 1',
+    balloonColor: '', birthdayNo: '', price: '', advance: '',
+    backgroundCount: '1', backgroundColor1: 'Blanco', backgroundColor2: 'Blanco',
+};
+
+
+// --- Función de Utilidad: Generación de Recibo ---
+
+const downloadInvoiceAsPNG = (app) => {
+ const { client, service, packageNo, price, advance, date, time, balloonColor, birthdayNo, backgroundColor1, backgroundColor2, backgroundCount } = app;
+ const balance = (parseFloat(price || 0) - parseFloat(advance || 0)).toFixed(2);
+ const fullDateText = new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+ const details = [
+   { icon: iconPaths.package, text: `${packageNo} (${packageDetails[packageNo]})`, condition: true },
+   { icon: iconPaths.palette, text: `Fondo 1: ${backgroundColor1}`, condition: true },
+   { icon: iconPaths.layers, text: `Fondo 2: ${backgroundColor2}`, condition: backgroundCount === '2' },
+   { icon: iconPaths.droplets, text: `Globos: ${balloonColor}`, condition: balloonColor !== 'N/U' },
+   { icon: iconPaths.gift, text: `Cumple: ${birthdayNo}`, condition: birthdayNo !== 'N/U' },
+ ].filter(item => item.condition);
+
+ let detailY = 380;
+ const detailItemsSVG = details.map(item => {
+   const svg = `<g transform="translate(40, ${detailY - 12})">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>
+                    </g>
+                    <text x="65" y="${detailY}" font-family="sans-serif" font-size="12" fill="#d1d5db">${item.text}</text>`;
+   detailY += 25;
+   return svg;
+ }).join('');
+
+ const dynamicDetailsHeight = detailY - 350 + 95;
+ const totalHeight = 540 + dynamicDetailsHeight;
+
+ const svgString = `
+    <svg width="500" height="${totalHeight}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color:#a855f7;" />
+                <stop offset="100%" style="stop-color:#ec4899;" />
+            </linearGradient>
+        </defs>
+        <style>.sans-serif { font-family: sans-serif; }</style>
+        <rect width="100%" height="100%" fill="#1f2937"/>
+        <text x="20" y="75" class="sans-serif" font-size="52" font-weight="bold" fill="url(#grad)">RECIBO</text>
+        <text x="20" y="95" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff">JGM Studios ©</text>
+        <text x="20" y="130" class="sans-serif" font-size="12" fill="#d1d5db">Director Creativo: Jhoandri Gómez</text>
+        <text x="20" y="150" class="sans-serif" font-size="12" fill="#d1d5db">Cel.: 84521372 | Web: www.jgmstudiosnic.com</text>
+        <text x="20" y="170" class="sans-serif" font-size="12" fill="#d1d5db">Dirección: Del Rótulo de la Gasolinera Uno (Star Mark) 20 Vrs. Al Este</text>
+        <line x1="20" y1="190" x2="480" y2="190" stroke="#4b5563" />
+        <text x="20" y="215" class="sans-serif" font-size="12" fill="#9ca3af">CLIENTE</text>
+        <text x="20" y="235" class="sans-serif" font-size="18" fill="#e5e7eb" font-weight="bold">${client}</text>
+        <rect x="20" y="250" width="460" height="30" rx="8" ry="8" fill="#000000" />
+        <text x="250" y="271" class="sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Cita: ${fullDateText} - ${time}</text>
+        <rect x="20" y="290" width="460" height="${dynamicDetailsHeight}" rx="8" fill="#374151" />
+        <rect x="20" y="290" width="460" height="40" rx="8" ry="8" fill="url(#grad)" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" />
+        <text x="250" y="317" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">${service}</text>
+        ${detailItemsSVG}
+        <g transform="translate(0, ${detailY})">
+            <rect x="20" y="0" width="460" height="50" rx="5" fill="#000000" />
+            <text x="120" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Precio</text>
+            <text x="120" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#10b981">$${parseFloat(price || 0).toFixed(2)}</text>
+            <text x="250" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Anticipo</text>
+            <text x="250" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#f59e0b">$${parseFloat(advance || 0).toFixed(2)}</text>
+            <text x="380" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Saldo</text>
+            <text x="380" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#ef4444">$${balance}</text>
+        </g>
+        <rect x="20" y="${detailY + 60}" width="460" height="30" rx="8" ry="8" fill="#000000" />
+        <text x="250" y="${detailY + 81}" class="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Fotografía | Publicidad | Marketing | Música | Audiovisuales</text>
+        <line x1="150" y1="${detailY + 140}" x2="350" y2="${detailY + 140}" stroke="#9ca3af" />
+        <text x="250" y="${detailY + 160}" class="sans-serif" font-size="12" fill="#d1d5db" text-anchor="middle">Director Creativo</text>
+    </svg>`;
+    
+ const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+ const url = URL.createObjectURL(svgBlob);
+ const image = new window.Image();
+
+ image.onload = () => {
+   const canvas = document.createElement('canvas');
+   canvas.width = 500;
+   canvas.height = totalHeight;
+   const ctx = canvas.getContext('2d');
+   ctx.drawImage(image, 0, 0);
+   const link = document.createElement('a');
+   link.href = canvas.toDataURL('image/png');
+   link.download = `Horus Date - ${app.client} (Recibo).png`;
+   document.body.appendChild(link);
+   link.click();
+   document.body.removeChild(link);
+   URL.revokeObjectURL(url);
+ };
+
+ image.onerror = (err) => {
+     console.error("Error al cargar la imagen SVG:", err);
+     URL.revokeObjectURL(url);
+ };
+  
+ image.src = url;
+};
+
+
+// --- Componentes Reutilizables Definidos ---
+
+const FormInput = ({ label, name, type = 'text', value, onChange, children, ...props }) => (
+    <div>
+        <label htmlFor={name} className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+        {type === 'select' ? (
+            <select id={name} name={name} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props}>
+                {children}
+            </select>
+        ) : (
+            <input id={name} name={name} type={type} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props} />
+        )}
+    </div>
+);
+
+const DetailItem = ({ icon, value, condition = true }) => {
+    if (!condition) return null;
+    return (
+        <div className="flex items-center gap-2">
+            {icon}
+            <span className="text-gray-300">{value}</span>
+        </div>
+    );
+};
+
+const InfoWidget = ({ icon, title, value }) => (
+    <div className="bg-gray-800 p-3 rounded-lg flex items-center gap-3">
+        <div className="text-pink-400">{icon}</div>
+        <div>
+            <p className="text-gray-400 text-xs">{title}</p>
+            <p className="text-white font-semibold text-base">{value}</p>
+        </div>
+    </div>
+);
+
+// --- Componente: Item de Cita (Refactorizado) ---
+
+const AppointmentItem = ({ app, onToggleStatus, onDownloadInvoice, onDelete }) => {
+    const whatsAppMessage = useMemo(() => {
+        let message = `*Confirmación de Cita*\n\nHola, *${app.client}*.\n\n*Detalles de Cita:*\n- *Servicio:* ${app.service}\n- *Fecha:* ${new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { dateStyle: 'full' })}\n- *Hora:* ${app.time}\n- *Paquete:* ${app.packageNo} (${packageDetails[app.packageNo]})\n`;
+        if (app.balloonColor && app.balloonColor !== 'N/U') message += `- *Color Globos:* ${app.balloonColor}\n`;
+        if (app.birthdayNo && app.birthdayNo !== 'N/U') message += `- *No. Cumpleaños:* ${app.birthdayNo}\n`;
+        message += `- *Fondo(s):* ${app.backgroundColor1}${app.backgroundCount === '2' ? ', ' + app.backgroundColor2 : ''}\n\n*Detalles Financieros:*\n- *Precio Total:* $${parseFloat(app.price || 0).toFixed(2)}\n- *Anticipo:* $${parseFloat(app.advance || 0).toFixed(2)}\n- *Saldo Pendiente:* $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n\n*JGM Studios © ¡Tu Mejor Opción!*`;
+        return `https://wa.me/?text=${encodeURIComponent(message)}`;
+    }, [app]);
+
+    const googleCalendarLink = useMemo(() => {
+        const startTime = new Date(`${app.date} ${app.time.replace(/(am|pm)/i, ' $1')}`);
+        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
+        const formatDate = (date) => date.toISOString().replace(/-|:|\.\d{3}/g, '');
+        let details = `--- Detalles de la Sesión ---\nServicio: ${app.service}\nPaquete: ${app.packageNo} (${packageDetails[app.packageNo]})\n\n--- Personalización ---\n`;
+        if (app.balloonColor && app.balloonColor !== 'N/U') details += `Color de Globos: ${app.balloonColor}\n`;
+        if (app.birthdayNo && app.birthdayNo !== 'N/U') details += `Número de Cumpleaños: ${app.birthdayNo}\n`;
+        details += `Fondo 1: ${app.backgroundColor1}\n`;
+        if (app.backgroundCount === '2') details += `Fondo 2: ${app.backgroundColor2}\n`;
+        details += `\n--- Resumen Financiero ---\nPrecio Total: $${parseFloat(app.price || 0).toFixed(2)}\nAnticipo: $${parseFloat(app.advance || 0).toFixed(2)}\nSaldo Pendiente: $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n`;
+        const params = new URLSearchParams({ text: `${app.client} - ${app.service}`, dates: `${formatDate(startTime)}/${formatDate(endTime)}`, details, location: 'Horus Date, Estelí, Nicaragua' });
+        return `https://www.google.com/calendar/render?action=TEMPLATE&${params.toString()}`;
+    }, [app]);
+
+
+    return (
+        <div className={`bg-gray-700 rounded-lg p-4 transition-all duration-300 hover:shadow-pink-500/20 hover:shadow-lg ${app.isFinished ? 'opacity-60' : ''}`}>
+            <div className="flex justify-between items-start">
+                <div>
+                    <p className="font-bold text-xl text-white">{app.client}</p>
+                    <p className="text-md text-pink-400 font-semibold">{app.service}</p>
+                    <p className="text-sm text-yellow-300">{new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' })} - {app.time}</p>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                    <button onClick={() => onToggleStatus(app.id)} className="p-1 text-gray-400 hover:text-white" title={app.isFinished ? 'Marcar como Pendiente' : 'Marcar como Terminada'}>{app.isFinished ? <i className="fas fa-check-circle text-2xl text-green-500"></i> : <i className="fas fa-arrow-circle-right text-2xl text-blue-500"></i>}</button>
+                    <button onClick={() => onDownloadInvoice(app)} className="p-1 text-gray-400 hover:text-white" title="Generar Recibo"><i className="fas fa-file-alt text-xl text-purple-400"></i></button>
+                    <a href={whatsAppMessage} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Enviar por WhatsApp"><i className="fab fa-whatsapp text-xl text-green-400"></i></a>
+                    <a href={googleCalendarLink} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Añadir a Google Calendar"><i className="fas fa-calendar-plus text-xl text-blue-400"></i></a>
+                    <button onClick={() => onDelete(app.id)} className="p-1 text-gray-400 hover:text-white" title="Eliminar Cita"><i className="fas fa-trash-alt text-xl text-red-500"></i></button>
+                </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-gray-600 space-y-3">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                    <DetailItem icon={<i className="fas fa-box-open text-base text-gray-400"></i>} value={`${app.packageNo} (${packageDetails[app.packageNo]})`} />
+                    <DetailItem icon={<i className="fas fa-palette text-base text-gray-400"></i>} value={`Fondo 1: ${app.backgroundColor1}`} />
+                    <DetailItem icon={<i className="fas fa-layer-group text-base text-gray-400"></i>} value={`Fondo 2: ${app.backgroundColor2}`} condition={app.backgroundCount === '2'} />
+                    <DetailItem icon={<i className="fas fa-tint text-base text-gray-400"></i>} value={`Globos: ${app.balloonColor}`} condition={app.balloonColor !== 'N/U'} />
+                    <DetailItem icon={<i className="fas fa-gift text-base text-gray-400"></i>} value={`Cumple: ${app.birthdayNo}`} condition={app.birthdayNo !== 'N/U'} />
+                </div>
+                <div className="flex justify-around items-center bg-gray-600/50 p-3 rounded-md mt-2 text-center">
+                    <div className="font-semibold text-white text-base">Precio<span className="block text-green-400">${parseFloat(app.price || 0).toFixed(2)}</span></div>
+                    <div className="font-semibold text-white text-base">Anticipo<span className="block text-yellow-400">${parseFloat(app.advance || 0).toFixed(2)}</span></div>
+                    <div className="font-semibold text-white text-base">Saldo<span className="block text-red-400">${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}</span></div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+// --- Componente Principal de la Aplicación ---
+
+function HorusDateApp() {
+ const [appointments, setAppointments] = useState(() => {
+   try {
+     const savedAppointments = localStorage.getItem('horus-date-appointments');
+     return savedAppointments ? JSON.parse(savedAppointments) : [];
+   } catch (error) {
+     console.error("No se pudieron cargar las citas de localStorage", error);
+     return [];
+   }
+ });
+  
+ const [newAppointment, setNewAppointment] = useState(INITIAL_FORM_STATE);
+  
+ useEffect(() => {
+   try {
+     localStorage.setItem('horus-date-appointments', JSON.stringify(appointments));
+   } catch (error) {
+     console.error("Error al guardar las citas en localStorage", error);
+   }
+ }, [appointments]);
+
+ const sortedAppointments = useMemo(() => {
+   return [...appointments].sort((a, b) => b.id - a.id);
+ }, [appointments]);
+
+ const handleInputChange = (e) => setNewAppointment(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  
+ const handleAddAppointment = (e) => {
+   e.preventDefault();
+   if (newAppointment.client && newAppointment.time && newAppointment.date) {
+     const finalAppointmentData = { ...newAppointment, id: Date.now(), isFinished: false, balloonColor: newAppointment.balloonColor.trim() === '' ? 'N/U' : newAppointment.balloonColor, birthdayNo: newAppointment.birthdayNo.trim() === '' ? 'N/U' : newAppointment.birthdayNo };
+     setAppointments(prevApps => [...prevApps, finalAppointmentData]);
+     setNewAppointment(INITIAL_FORM_STATE);
+   }
+ };
+
+ const handleDeleteAppointment = (id) => setAppointments(appointments.filter(app => app.id !== id));
+ const handleToggleStatus = (id) => setAppointments(appointments.map(app => app.id === id ? { ...app, isFinished: !app.isFinished } : app));
+ const handleDownloadInvoice = (app) => {
+   downloadInvoiceAsPNG(app);
+ };
+
+ const currentDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+ const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+ return (
+   <div className="bg-gray-900 text-white min-h-screen font-sans p-4 sm:p-8">
+     <div className="max-w-7xl mx-auto">
+       <header className="mb-8 text-center">
+            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 inline-flex items-center gap-3">
+                <i className="fas fa-eye"></i>
+                Horus Date
+            </h1>
+            <p className="text-gray-400">El Ojo que todo lo Agenda</p>
+       </header>
+       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+           <InfoWidget icon={<i className="fas fa-calendar-alt text-2xl"></i>} title="Fecha del Sistema" value={currentDate} />
+           <InfoWidget icon={<i className="fas fa-clock text-2xl"></i>} title="Hora del Sistema" value={currentTime} />
+       </div>
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+         <div className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col">
+           <h2 className="text-2xl font-semibold mb-4 text-white flex-shrink-0">Próximas Citas</h2>
+           <div className="flex-grow">
+               <div className="space-y-4">
+                 {sortedAppointments.length > 0 ? (
+                   sortedAppointments.map(app => (
+                     <AppointmentItem
+                       key={app.id}
+                       app={app}
+                       onToggleStatus={handleToggleStatus}
+                       onDownloadInvoice={handleDownloadInvoice}
+                       onDelete={handleDeleteAppointment}
+                     />
+                   ))
+                 ) : (
+                   <p className="text-gray-400 text-center py-8">No hay citas programadas.</p>
+                 )}
+               </div>
+           </div>
+         </div>
+         <div className="bg-gray-800 p-6 rounded-xl shadow-lg h-fit">
+           <h2 className="text-2xl font-semibold mb-4 text-white">Nueva Cita</h2>
+           <form onSubmit={handleAddAppointment} className="space-y-4">
+             <FormInput label="Cliente" name="client" value={newAppointment.client} onChange={handleInputChange} placeholder="Nombre del cliente" required />
+             <div className="grid grid-cols-2 gap-4">
+               <FormInput label="Fecha" name="date" type="date" value={newAppointment.date} onChange={handleInputChange} required />
+               <FormInput label="Hora" name="time" type="select" value={newAppointment.time} onChange={handleInputChange} required>
+                   <option>10:30am</option><option>1:30pm</option><option>3:30pm</option><option>5:30pm</option><option>7:30pm</option>
+               </FormInput>
+             </div>
+             <FormInput label="Servicio" name="service" type="select" value={newAppointment.service} onChange={handleInputChange}>
+               <option>Cumpleaños Glamorous</option><option>Casual</option><option>Maternidad</option><option>15 Glamorous</option><option>Exteriores</option><option>Locales</option><option>Otro</option>
+             </FormInput>
+             <FormInput label="Paquete" name="packageNo" type="select" value={newAppointment.packageNo} onChange={handleInputChange}>
+               <option>Pack 1</option><option>Pack 2</option><option>Pack 3</option><option>Pack 4</option><option>Pack 5</option>
+             </FormInput>
+             {newAppointment.packageNo && (<div className="bg-gray-700 p-2 rounded-md text-center"><p className="text-sm font-medium text-pink-400 flex items-center justify-center gap-2"><i className="fas fa-image text-base"></i> {packageDetails[newAppointment.packageNo]}</p></div>)}
+             <FormInput label="Color de Globos" name="balloonColor" value={newAppointment.balloonColor} onChange={handleInputChange} placeholder="Ej: Rosa, Dorado" />
+             <FormInput label="No. Cumpleaños" name="birthdayNo" type="number" value={newAppointment.birthdayNo} onChange={handleInputChange} placeholder="Ej: 15" />
+             <div className="bg-gray-700/50 p-3 rounded-lg space-y-4">
+               <label className="text-sm font-medium text-gray-300 block">Detalles de Fondo</label>
+               <div className="flex items-center gap-x-4"><span className="text-sm text-gray-400">Cantidad:</span><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="1" checked={newAppointment.backgroundCount === '1'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 1 Fondo</label><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="2" checked={newAppointment.backgroundCount === '2'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 2 Fondos</label></div>
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                   <FormInput label="Color de Fondo 1" name="backgroundColor1" type="select" value={newAppointment.backgroundColor1} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>
+                   {newAppointment.backgroundCount === '2' && (<FormInput label="Color de Fondo 2" name="backgroundColor2" type="select" value={newAppointment.backgroundColor2} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>)}
+               </div>
+             </div>
+             <div className="grid grid-cols-2 gap-4">
+               <FormInput label="Precio ($)" name="price" type="number" value={newAppointment.price} onChange={handleInputChange} placeholder="0.00" />
+               <FormInput label="Anticipo ($)" name="advance" type="number" value={newAppointment.advance} onChange={handleInputChange} placeholder="0.00" />
+             </div>
+             <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 mt-2"><i className="fas fa-plus text-xl"></i><span>Agendar Cita</span></button>
+           </form>
+         </div>
+       </div>
+     </div>
+   </div>
+ );
+}
+
+// Attach the React component to the window object so it can be called from the module script
+window.HorusDateApp = HorusDateApp;
+
 </script>
 
 </body>
 </html>
-
