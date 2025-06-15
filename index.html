@@ -7,113 +7,142 @@
     <!-- Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <!-- Papa Parse for CSV handling -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <!-- Chart.js for creating charts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- SheetJS (XLSX) for Excel export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    
     <!-- React & Babel for Horus Date App -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
     <style>
         /* Custom styles for better UX */
-        body, html {
+        body,
+        html {
             height: 100%;
             overflow-x: hidden;
             margin: 0;
             padding: 0;
-        }
-        body {
+            scroll-behavior: smooth;
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9; /* bg-slate-100 */
         }
+
         .modal {
             transition: opacity 0.3s ease-in-out;
         }
+
         .modal .transform {
             transition: transform 0.3s ease-in-out;
         }
+
         .tab {
             transition: all 0.2s ease;
         }
+
         .tab-active {
-            border-bottom-color: #4f46e5; /* indigo-600 */
+            border-bottom-color: #4f46e5;
+            /* indigo-600 */
             color: #4f46e5;
             font-weight: 600;
         }
-        #login-screen, #landing-screen, #app-welcome, #horus-date-container {
-             min-height: 100vh;
-             width: 100vw;
+
+        #login-screen,
+        #landing-screen,
+        #app-welcome,
+        #horus-date-container,
+        #app {
+            min-height: 100vh;
+            width: 100vw;
         }
-         #horus-date-container, #horus-date-react-root {
+
+        #horus-date-container,
+        #horus-date-react-root {
             height: 100%;
             width: 100%;
             border: none;
         }
+
         /* Sync/Logout Button Animation */
-        #logoutBtn i, #syncDataBtn i {
-            transition: transform 0.4s ease-in-out, color 0.4s ease-in-out;
-        }
         #syncDataBtn.syncing i {
             animation: spin 1s linear infinite;
         }
+
         @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
         }
-        [data-table-search]::-webkit-search-cancel-button {
-            display: none;
-        }
+
         .option-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
+
         .option-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
+
         /* Animated Gradient Background */
         .animated-gradient {
-            background: linear-gradient(-45deg, #8b5cf6, #f97316, #ec4899, #14b8a6);
+            background: linear-gradient(-45deg, #1f2937, #3730a3, #ec4899, #7c3aed);
             background-size: 400% 400%;
             animation: gradient-wave 15s ease infinite;
         }
+
         @keyframes gradient-wave {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
-        
-       .icon-wrapper {
+
+        .icon-wrapper {
             width: 80px;
             height: 70px;
             margin: 0 auto 1.5rem auto;
             display: flex;
             align-items: center;
             justify-content: center;
-       }
+        }
 
         /* Anubis Scales Animation */
         .anubis-scales-wrapper {
-             animation: scales-tilt 3s ease-in-out infinite;
-             transform-origin: 50% 50%;
+            animation: scales-tilt 3s ease-in-out infinite;
+            transform-origin: 50% 50%;
         }
+
         @keyframes scales-tilt {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-7deg); }
-            75% { transform: rotate(7deg); }
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            25% {
+                transform: rotate(-7deg);
+            }
+            75% {
+                transform: rotate(7deg);
+            }
         }
 
         /* Horus Eye Pulse Animation */
         .horus-eye-wrapper {
             animation: pulse-eye 2.5s infinite;
         }
+
         @keyframes pulse-eye {
-            0%, 100% {
+            0%,
+            100% {
                 transform: scale(1);
                 filter: drop-shadow(0 0 0 #fff);
             }
@@ -124,21 +153,29 @@
         }
 
         /* Muse IA (Medusa) Icon Animation */
-         .muse-icon-wrapper .snake {
+        .muse-icon-wrapper .snake {
             transform-origin: 50% 50%;
             animation: snake-sway 3s infinite ease-in-out;
         }
+
         .muse-icon-wrapper .snake:nth-child(even) {
             animation-duration: 2.5s;
             animation-delay: 0.2s;
         }
-         .muse-icon-wrapper .snake:nth-child(3n) {
+
+        .muse-icon-wrapper .snake:nth-child(3n) {
             animation-duration: 3.5s;
             animation-delay: 0.5s;
         }
+
         @keyframes snake-sway {
-            0%, 100% { transform: rotate(0deg) translateX(0); }
-            50% { transform: rotate(5deg) translateX(5px); }
+            0%,
+            100% {
+                transform: rotate(0deg) translateX(0);
+            }
+            50% {
+                transform: rotate(5deg) translateX(5px);
+            }
         }
 
 
@@ -147,24 +184,34 @@
             animation: ship-rock 4s ease-in-out infinite;
             transform-origin: bottom center;
         }
+
         .wave {
             stroke-dasharray: 100;
             stroke-dashoffset: 0;
             animation: wave-flow 4s linear infinite;
         }
+
         @keyframes ship-rock {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(-8deg); }
-        }
-        @keyframes wave-flow {
-            from { stroke-dashoffset: 200; }
-            to { stroke-dashoffset: 0; }
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-8deg);
+            }
         }
 
+        @keyframes wave-flow {
+            from {
+                stroke-dashoffset: 200;
+            }
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 </head>
 <body class="bg-slate-100">
-
     <!-- Landing Screen -->
     <div id="landing-screen" class="animated-gradient relative flex flex-col p-4 items-center justify-center">
         <div class="flex-grow flex flex-col items-center justify-center py-8">
@@ -176,19 +223,19 @@
                 <!-- Inventory App Card -->
                 <div id="goToInventoryBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
                     <div class="icon-wrapper anubis-scales-wrapper">
-                         <svg viewBox="0 0 100 90" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M50 85 V 75" />
-                            <path d="M30 75 H 70" />
-                            <path d="M50 75 V 15" />
-                            <circle cx="50" cy="15" r="5" />
-                            <path d="M5 20 H 95" />
+                        <svg viewbox="0 0 100 90" fill="none" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M50 85 V 75"></path>
+                            <path d="M30 75 H 70"></path>
+                            <path d="M50 75 V 15"></path>
+                            <circle cx="50" cy="15" r="5"></circle>
+                            <path d="M5 20 H 95"></path>
                             <g class="left-scale">
-                                <path d="M25 20 L 15 35" />
-                                <path d="M5 55 C 5 40, 45 40, 45 55" />
+                                <path d="M25 20 L 15 35"></path>
+                                <path d="M5 55 C 5 40, 45 40, 45 55"></path>
                             </g>
-                             <g class="right-scale">
-                                <path d="M75 20 L 85 35" />
-                                <path d="M55 55 C 55 40, 95 40, 95 55" />
+                            <g class="right-scale">
+                                <path d="M75 20 L 85 35"></path>
+                                <path d="M55 55 C 55 40, 95 40, 95 55"></path>
                             </g>
                         </svg>
                     </div>
@@ -197,43 +244,43 @@
                 </div>
                 <!-- Appointments App Card -->
                 <div id="goToAppointmentsBtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                     <div class="icon-wrapper horus-eye-wrapper">
-                         <svg viewBox="0 0 100 65" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
-                           <g transform="translate(0, 5)">
-                             <path d="M5 30 C 20 5, 80 5, 95 30 C 80 55, 20 55, 5 30Z" />
-                             <circle cx="50" cy="30" r="12" fill="white"/>
-                             <path d="M50 42 C 55 55, 65 62, 75 58" />
-                             <path d="M75 58 L 70 65" />
-                            
-                            <g stroke-width="3">
-                                <path d="M50 12 L 50 5" />
-                                <path d="M25 20 L 18 13" />
-                                <path d="M75 20 L 82 13" />
-                                <path d="M8 30 L 0 30" />
-                                <path d="M92 30 L 100 30" />
-                                <path d="M25 40 L 18 47" />
-                                <path d="M75 40 L 82 47" />
+                    <div class="icon-wrapper horus-eye-wrapper">
+                        <svg viewbox="0 0 100 65" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+                            <g transform="translate(0, 5)">
+                                <path d="M5 30 C 20 5, 80 5, 95 30 C 80 55, 20 55, 5 30Z"></path>
+                                <circle cx="50" cy="30" r="12" fill="white"></circle>
+                                <path d="M50 42 C 55 55, 65 62, 75 58"></path>
+                                <path d="M75 58 L 70 65"></path>
+                                <g stroke-width="3">
+                                    <path d="M50 12 L 50 5"></path>
+                                    <path d="M25 20 L 18 13"></path>
+                                    <path d="M75 20 L 82 13"></path>
+                                    <path d="M8 30 L 0 30"></path>
+                                    <path d="M92 30 L 100 30"></path>
+                                    <path d="M25 40 L 18 47"></path>
+                                    <path d="M75 40 L 82 47"></path>
+                                </g>
                             </g>
                         </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-white">Horus Date</h2>
                     <p class="text-indigo-200 text-md mt-2">El Ojo que todo lo Agenda</p>
                 </div>
-                <!-- Muse IA Card -->
-                 <div id="goToMuseIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
+                 <!-- Muse IA Card -->
+                <div id="goToMuseIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
                     <div class="icon-wrapper muse-icon-wrapper">
-                        <svg viewBox="0 0 100 100" fill="white" stroke-linecap="round" stroke-linejoin="round">
-                             <g transform="scale(1.2) translate(-8, -10)">
-                                <path d="M49.5,75.5 C49.5,75.5 45.5,85.5 49.5,90.5 C53.5,85.5 49.5,75.5 49.5,75.5 M49.5,58.5 C49.5,58.5 41.5,58.5 41.5,66.5 C41.5,74.5 57.5,74.5 57.5,66.5 C57.5,58.5 49.5,58.5 49.5,58.5 " stroke="white" stroke-width="2.5" fill="none" />
-                                <path class="snake" d="M34.5,46.5 C19.5,41.5 28.5,19.5 40.5,19.5 C52.5,19.5 48.5,35.5 46.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M64.5,46.5 C79.5,41.5 70.5,19.5 58.5,19.5 C46.5,19.5 50.5,35.5 52.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M29.5,58.5 C14.5,53.5 14.5,30.5 28.5,27.5 C42.5,24.5 41.5,44.5 41.5,52.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M69.5,58.5 C84.5,53.5 84.5,30.5 70.5,27.5 C56.5,24.5 57.5,44.5 57.5,52.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 41.5,5.5 C33.5,0.5 24.5,12.5 32.5,24.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 57.5,5.5 C65.5,0.5 74.5,12.5 66.5,24.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M22.5,67.5 C2.5,67.5 10.5,46.5 25.5,44.5 C40.5,42.5 38.5,59.5 36.5,64.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M76.5,67.5 C96.5,67.5 88.5,46.5 73.5,44.5 C58.5,42.5 60.5,59.5 62.5,64.5 " stroke="white" stroke-width="3" fill="none"/>
-                                <path class="snake" d="M49.5,58.5 C34.5,53.5 29.5,41.5 29.5,41.5 " stroke="white" stroke-width="3" fill="none"/>
+                         <svg viewbox="0 0 100 100" fill="white" stroke-linecap="round" stroke-linejoin="round">
+                            <g transform="scale(1.2) translate(-8, -10)">
+                                <path d="M49.5,75.5 C49.5,75.5 45.5,85.5 49.5,90.5 C53.5,85.5 49.5,75.5 49.5,75.5 M49.5,58.5 C49.5,58.5 41.5,58.5 41.5,66.5 C41.5,74.5 57.5,74.5 57.5,66.5 C57.5,58.5 49.5,58.5 49.5,58.5 " stroke="white" fill="none" stroke-width="2.5"></path>
+                                <path class="snake" d="M34.5,46.5 C19.5,41.5 28.5,19.5 40.5,19.5 C52.5,19.5 48.5,35.5 46.5,41.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M64.5,46.5 C79.5,41.5 70.5,19.5 58.5,19.5 C46.5,19.5 50.5,35.5 52.5,41.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M29.5,58.5 C14.5,53.5 14.5,30.5 28.5,27.5 C42.5,24.5 41.5,44.5 41.5,52.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M69.5,58.5 C84.5,53.5 84.5,30.5 70.5,27.5 C56.5,24.5 57.5,44.5 57.5,52.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 41.5,5.5 C33.5,0.5 24.5,12.5 32.5,24.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M49.5,58.5 C49.5,58.5 49.5,10.5 57.5,5.5 C65.5,0.5 74.5,12.5 66.5,24.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M22.5,67.5 C2.5,67.5 10.5,46.5 25.5,44.5 C40.5,42.5 38.5,59.5 36.5,64.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M76.5,67.5 C96.5,67.5 88.5,46.5 73.5,44.5 C58.5,42.5 60.5,59.5 62.5,64.5 " stroke="white" fill="none" stroke-width="3"></path>
+                                <path class="snake" d="M49.5,58.5 C34.5,53.5 29.5,41.5 29.5,41.5 " stroke="white" fill="none" stroke-width="3"></path>
                             </g>
                         </svg>
                     </div>
@@ -242,16 +289,16 @@
                 </div>
                  <!-- Odisea IA Card -->
                 <div id="goToOdiseaIABtn" class="option-card cursor-pointer bg-white/10 backdrop-blur-lg rounded-xl shadow-2xl p-8 w-80 text-center">
-                     <div class="icon-wrapper">
-                        <svg class="greek-ship" viewBox="0 0 100 80">
-                           <g transform="scale(1.2) translate(-10, -10)">
-                            <path d="M 20 60 L 80 60 L 75 40 L 25 40 Z" fill="white" stroke="white" stroke-width="2" />
-                             <path d="M 20 60 C 10 60 10 40 20 40" stroke="white" stroke-width="2" fill="none" />
-                             <path d="M 80 60 C 90 60 90 40 80 40" stroke="white" stroke-width="2" fill="none" />
-                            <rect x="48" y="10" width="4" height="30" fill="white" />
-                            <path d="M 50 15 L 75 25 L 50 35 Z" fill="white" />
-                            <path class="wave" d="M -10 70 Q 15 60, 40 70 T 90 70 T 140 70" stroke="white" stroke-width="4" fill="none" />
-                           </g>
+                    <div class="icon-wrapper">
+                         <svg class="greek-ship" viewbox="0 0 100 80">
+                            <g transform="scale(1.2) translate(-10, -10)">
+                               <path d="M 20 60 L 80 60 L 75 40 L 25 40 Z" fill="white" stroke="white" stroke-width="2"></path>
+                               <path d="M 20 60 C 10 60 10 40 20 40" stroke="white" fill="none" stroke-width="2"></path>
+                               <path d="M 80 60 C 90 60 90 40 80 40" stroke="white" fill="none" stroke-width="2"></path>
+                               <rect x="48" y="10" width="4" height="30" fill="white"></rect>
+                               <path d="M 50 15 L 75 25 L 50 35 Z" fill="white"></path>
+                               <path class="wave" d="M -10 70 Q 15 60, 40 70 T 90 70 T 140 70" fill="none" stroke="white" stroke-width="4"></path>
+                            </g>
                         </svg>
                     </div>
                     <h2 class="text-3xl font-bold text-white">Odisea IA</h2>
@@ -259,11 +306,10 @@
                 </div>
             </div>
         </div>
-         <footer class="w-full text-center p-4 text-white text-sm shrink-0">
+        <footer class="w-full text-center p-4 text-white text-sm shrink-0">
             JGM Studios © 2025. Todos los derechos reservados.
         </footer>
     </div>
-
 
     <!-- Unified Login Screen -->
     <div id="login-screen" class="hidden relative items-center justify-center animated-gradient p-4">
@@ -283,22 +329,22 @@
                     <div class="mb-4">
                         <label for="email" class="sr-only">Email</label>
                         <div class="relative">
-                            <input id="email" type="email" class="w-full bg-white/20 text-white placeholder-indigo-200 border border-white/30 rounded-lg py-3 px-4 pl-12 focus:outline-none focus:ring-2 focus:ring-white/50" placeholder="Email" required>
-                             <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-indigo-200"></i>
+                            <input type="email" id="email" class="w-full bg-white/20 text-white placeholder-indigo-200 border border-white/30 rounded-lg py-3 px-4 pl-12 focus:outline-none focus:ring-2 focus:ring-white/50" placeholder="Email" required>
+                            <i class="fas fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-indigo-200"></i>
                         </div>
                     </div>
                     <div class="mb-6">
                         <label for="password" class="sr-only">Contraseña</label>
                         <div class="relative">
-                             <input id="password" type="password" class="w-full bg-white/20 text-white placeholder-indigo-200 border border-white/30 rounded-lg py-3 px-4 pl-12 pr-12 focus:outline-none focus:ring-2 focus:ring-white/50" placeholder="Contraseña" required>
-                             <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-indigo-200"></i>
-                             <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-200 hover:text-white">
+                            <input type="password" id="password" class="w-full bg-white/20 text-white placeholder-indigo-200 border border-white/30 rounded-lg py-3 px-4 pl-12 pr-12 focus:outline-none focus:ring-2 focus:ring-white/50" placeholder="Contraseña" required>
+                            <i class="fas fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-indigo-200"></i>
+                            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-indigo-200 hover:text-white">
                                 <i class="fas fa-eye"></i>
-                             </button>
+                            </button>
                         </div>
                     </div>
                     <button type="submit" class="w-full bg-white text-indigo-600 font-bold py-3 px-4 rounded-lg hover:bg-indigo-100 transition-colors duration-300 shadow-lg">Ingresar</button>
-                    <p id="loginError" class="text-red-300 text-center mt-4 text-sm font-semibold hidden"></p>
+                     <p id="loginError" class="text-red-300 text-center mt-4 text-sm font-semibold hidden"></p>
                 </form>
                 <div class="text-center mt-6">
                     <button id="showCreateUserModalBtn" class="text-indigo-200 hover:text-white text-sm">Crear nuevo usuario</button>
@@ -309,33 +355,20 @@
 
 
     <!-- Main App Container (NemeSync Stock) -->
-    <div id="app" class="p-4 md:p-8 max-w-7xl mx-auto hidden">
+    <div id="app" class="hidden p-4 md:p-8 max-w-7xl mx-auto">
         <!-- Main Header -->
         <header class="bg-white p-6 rounded-xl shadow-md mb-6">
             <div class="flex flex-col-reverse sm:flex-row justify-between items-start gap-4">
-                 <div class="text-left">
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent">NemeSync Stock</h1>
+                <div class="text-left">
+                     <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-orange-500 bg-clip-text text-transparent">NemeSync Stock</h1>
                     <p class="text-sm text-slate-500 mt-1">Gestione sus productos, entradas y salidas de forma eficiente.</p>
                 </div>
                 <div class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
-                     <button id="syncDataBtn" title="Estado de Sincronización" class="bg-purple-600 text-white font-bold p-2 px-3 rounded-lg disabled:opacity-50">
-                        <i class="fas fa-sync-alt fa-lg"></i>
-                    </button>
-                    <button id="viewArchivesBtn" title="Ver Archivos" class="bg-slate-700 text-white font-bold p-2 px-3 rounded-lg hover:bg-slate-800 transition-colors">
-                        <i class="fas fa-archive fa-lg"></i>
-                    </button>
-                    <button id="openEntryModalBtn" title="Registrar Entrada" class="bg-green-500 text-white font-bold p-2 px-3 rounded-lg hover:bg-green-600 transition-colors">
-                        <i class="fas fa-plus-circle fa-lg"></i>
-                    </button>
-                    <button id="openExitModalBtn" title="Registrar Salida" class="bg-red-500 text-white font-bold p-2 px-3 rounded-lg hover:bg-red-600 transition-colors">
-                        <i class="fas fa-minus-circle fa-lg"></i>
-                    </button>
-                    <button id="saveMonthBtn" title="Cierre Mensual" class="bg-indigo-500 text-white font-bold p-2 px-3 rounded-lg hover:bg-indigo-600 transition-colors">
-                        <i class="fas fa-calendar-check fa-lg"></i>
-                    </button>
-                    <button id="logoutBtn" title="Cerrar Sesión" class="bg-slate-200 text-slate-600 font-bold p-2 px-3 rounded-lg hover:bg-slate-300 transition-colors">
-                        <i class="fas fa-times fa-lg"></i>
-                    </button>
+                    <button id="openEntryModalBtn" class="bg-green-500 text-white font-bold w-10 h-10 rounded-lg hover:bg-green-600 transition-colors flex items-center justify-center" title="Registrar Entrada"><i class="fas fa-plus"></i></button>
+                    <button id="openExitModalBtn" class="bg-red-500 text-white font-bold w-10 h-10 rounded-lg hover:bg-red-600 transition-colors flex items-center justify-center" title="Registrar Salida"><i class="fas fa-minus"></i></button>
+                    <button id="openArchivesListBtn" class="bg-yellow-500 text-white font-bold w-10 h-10 rounded-lg hover:bg-yellow-600 transition-colors flex items-center justify-center" title="Ver Archivos"><i class="fas fa-folder-open"></i></button>
+                    <button id="openSaveMonthModalBtn" class="bg-indigo-500 text-white font-bold w-10 h-10 rounded-lg hover:bg-indigo-600 transition-colors flex items-center justify-center" title="Archivar Mes"><i class="fas fa-calendar-check"></i></button>
+                    <button id="logoutBtn" class="bg-slate-600 text-white font-bold w-10 h-10 rounded-lg hover:bg-slate-700 transition-colors flex items-center justify-center" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></button>
                 </div>
             </div>
         </header>
@@ -357,17 +390,17 @@
                  <div class="text-center py-10 text-slate-500">
                     <i class="fas fa-spinner fa-spin fa-3x"></i>
                     <p class="mt-4">Cargando datos...</p>
-                 </div>
+                </div>
             </div>
         </main>
         <footer class="text-center p-4 text-slate-500 text-sm mt-8">
             JGM Studios © 2025. Todos los derechos reservados.
         </footer>
     </div>
-
+    
     <!-- Hidden input for file uploads -->
     <input type="file" id="upload-csv-input" class="hidden" accept=".csv">
-    
+
     <!-- Horus Date App Container -->
     <div id="horus-date-container" class="hidden w-full h-screen relative">
         <button id="backToLandingFromHorus" class="absolute top-5 left-5 z-20 bg-white/20 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
@@ -375,7 +408,7 @@
         </button>
         <div id="horus-date-react-root" class="h-full w-full"></div>
     </div>
-
+    
     <!-- App Welcome Template for other apps -->
     <div id="app-welcome" class="hidden flex-col items-center justify-center text-white text-center p-8 animated-gradient">
         <button id="backToLandingFromWelcome" class="absolute top-5 left-5 text-white bg-white/20 rounded-full w-10 h-10 flex items-center justify-center hover:bg-white/30 transition">
@@ -387,16 +420,16 @@
             <p id="appWelcomeDesc" class="text-indigo-200 text-lg"></p>
         </div>
     </div>
-    
+
+
     <!-- MODALS SECTION for NemeSync Stock -->
-    
     <!-- Auth Code Modal -->
     <div id="authCodeModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transition-all">
             <h3 class="text-xl font-bold text-slate-800 mb-4">Código de Autenticación</h3>
             <p class="text-sm text-slate-500 mb-4">Ingrese el código de autorización para crear un nuevo usuario.</p>
             <form id="authCodeForm">
-                <input type="text" id="authCodeInput" placeholder="Código de Autorización" class="w-full p-2 border rounded-lg mb-4 uppercase text-center tracking-widest" required autocomplete="off">
+                <input type="text" id="authCodeInput" class="w-full p-2 border rounded-lg mb-4 uppercase text-center tracking-widest" placeholder="Código de Autorización" required autocomplete="off">
                 <p id="authCodeError" class="text-red-500 text-center mb-4 text-sm font-semibold hidden"></p>
                 <div class="flex justify-end gap-3">
                     <button type="button" id="cancelAuthCode" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
@@ -405,15 +438,18 @@
             </form>
         </div>
     </div>
-
+    
     <!-- Create User Modal -->
     <div id="createUserModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transition-all">
             <h3 class="text-xl font-bold text-slate-800 mb-4">Crear Nuevo Usuario</h3>
             <p class="text-sm text-slate-500 mb-4">Cree una cuenta para acceder al inventario.</p>
             <form id="createUserForm">
-                <input type="email" id="newUserEmail" placeholder="Email" class="w-full p-2 border rounded-lg mb-4" required>
-                <input type="password" id="newUserPassword" placeholder="Contraseña (mínimo 6 caracteres)" class="w-full p-2 border rounded-lg mb-4" required>
+                <input type="email" id="newUserEmail" class="w-full p-2 border rounded-lg mb-4" placeholder="Email" required>
+                <div class="relative">
+                     <input type="password" id="newUserPassword" class="w-full p-2 border rounded-lg mb-4" placeholder="Contraseña (mínimo 6 caracteres)" required>
+                     <button type="button" id="toggleNewUserPassword" class="absolute right-3 top-3 text-gray-400"><i class="fas fa-eye"></i></button>
+                </div>
                 <p id="createUserError" class="text-red-500 text-center mb-4 text-sm font-semibold hidden"></p>
                 <div class="flex justify-end gap-3">
                     <button type="button" id="cancelCreateUser" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
@@ -430,13 +466,13 @@
             <form id="stockForm">
                 <input type="hidden" id="stockDocId">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" id="stockCode" placeholder="Código" class="w-full p-2 border rounded-lg" required>
-                    <input type="text" id="stockCategory" placeholder="Categoría" class="w-full p-2 border rounded-lg" list="category-list" required>
+                    <input type="text" id="stockCode" placeholder="Código" required class="w-full p-2 border rounded-lg">
+                    <input type="text" id="stockCategory" list="category-list" placeholder="Categoría" required class="w-full p-2 border rounded-lg">
                     <datalist id="category-list"></datalist>
-                    <input type="text" id="stockProduct" placeholder="Nombre del Producto" class="md:col-span-2 w-full p-2 border rounded-lg" required>
-                    <input type="text" id="stockUnit" placeholder="Unidad de Medida (U/M)" class="w-full p-2 border rounded-lg" list="unit-list" required>
+                    <input type="text" id="stockProduct" placeholder="Nombre del Producto" required class="md:col-span-2 w-full p-2 border rounded-lg">
+                    <input type="text" id="stockUnit" list="unit-list" placeholder="Unidad de Medida (U/M)" required class="w-full p-2 border rounded-lg">
                     <datalist id="unit-list"></datalist>
-                    <input type="number" id="stockQuantity" placeholder="Cantidad Inicial" class="w-full p-2 border rounded-lg" min="0" required>
+                    <input type="number" id="stockQuantity" min="0" placeholder="Cantidad Inicial" required class="w-full p-2 border rounded-lg">
                 </div>
                 <div class="flex justify-end gap-3 mt-6">
                     <button type="button" id="cancelStock" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
@@ -452,12 +488,12 @@
             <h3 class="text-xl font-bold text-slate-800 mb-4">Registrar Entrada</h3>
             <form id="entryForm">
                 <div class="space-y-4">
-                    <input type="date" id="entryDate" class="w-full p-2 border rounded-lg" required>
+                    <input type="date" id="entryDate" required class="w-full p-2 border rounded-lg">
                     <div class="relative">
-                       <input type="text" id="entryProduct" placeholder="Buscar producto por nombre o código..." class="w-full p-2 border rounded-lg" autocomplete="off">
-                       <div id="entryProductSuggestions" class="absolute z-10 w-full bg-white border rounded-lg mt-1 max-h-60 overflow-y-auto hidden"></div>
+                        <input type="text" id="entryProduct" placeholder="Buscar producto por nombre o código..." autocomplete="off" class="w-full p-2 border rounded-lg">
+                        <div id="entryProductSuggestions" class="absolute z-10 w-full bg-white border rounded-lg mt-1 max-h-60 overflow-y-auto hidden"></div>
                     </div>
-                    <input type="number" id="entryQuantity" placeholder="Cantidad" class="w-full p-2 border rounded-lg" min="1" required>
+                    <input type="number" id="entryQuantity" min="1" placeholder="Cantidad" required class="w-full p-2 border rounded-lg">
                 </div>
                 <div class="flex justify-end gap-3 mt-6">
                     <button type="button" id="cancelEntry" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
@@ -472,16 +508,16 @@
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 transition-all">
             <h3 class="text-xl font-bold text-slate-800 mb-4">Registrar Salida</h3>
             <form id="exitForm">
-                 <div class="space-y-4">
-                    <input type="date" id="exitDate" class="w-full p-2 border rounded-lg" required>
-                    <select id="exitProductSelect" class="w-full p-2 border rounded-lg bg-white" required></select>
-                     <div class="grid grid-cols-2 gap-4 items-center">
-                         <input type="number" id="exitQuantity" placeholder="Cantidad" class="w-full p-2 border rounded-lg" min="0">
-                         <input type="text" id="exitQuantity2" placeholder="Ej: 5*2+3" class="w-full p-2 border rounded-lg text-center" title="Puede usar cálculos simples (suma, resta, multiplicación).">
-                     </div>
-                     <div class="text-center font-bold text-xl text-slate-700">
+                <div class="space-y-4">
+                    <input type="date" id="exitDate" required class="w-full p-2 border rounded-lg">
+                    <select id="exitProductSelect" required class="w-full p-2 border rounded-lg bg-white"></select>
+                    <div class="grid grid-cols-2 gap-4 items-center">
+                        <input type="number" id="exitQuantity" min="0" placeholder="Cantidad" class="w-full p-2 border rounded-lg">
+                         <input type="text" id="exitQuantity2" placeholder="Ej: 5*2+3" title="Puede usar cálculos simples (suma, resta, multiplicación)." class="w-full p-2 border rounded-lg text-center">
+                    </div>
+                    <div class="text-center font-bold text-xl text-slate-700">
                          Total a retirar: <span id="exitTotalDisplay" class="text-red-600">0</span>
-                     </div>
+                    </div>
                 </div>
                 <div class="flex justify-end gap-3 mt-6">
                     <button type="button" id="cancelExit" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold">Cancelar</button>
@@ -504,7 +540,7 @@
         </div>
     </div>
     
-    <!-- Save Month Modal -->
+     <!-- Save Month Modal -->
     <div id="saveMonthModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-6 transition-all">
             <h3 class="text-xl font-bold text-slate-800 mb-4">Archivar y Cerrar Mes</h3>
@@ -519,7 +555,7 @@
             </div>
         </div>
     </div>
-
+    
     <!-- Universal Confirmation / Notification Modal -->
     <div id="confirmModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-sm p-8 transition-all text-center">
@@ -532,852 +568,1306 @@
             </div>
         </div>
     </div>
-
-    <!-- Archives List Modal -->
+    
+     <!-- Archives List Modal -->
     <div id="archivesListModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-50 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-white rounded-xl shadow-2xl w-full max-w-lg p-6 transition-all">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-slate-800">Inventarios Archivados</h3>
-                <button id="closeArchivesList" class="text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
+                 <h3 class="text-xl font-bold text-slate-800">Inventarios Archivados</h3>
+                 <button id="closeArchivesList" class="text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
             </div>
             <div id="archivesListContainer" class="max-h-96 overflow-y-auto divide-y"></div>
         </div>
     </div>
-
-    <!-- Report Detail Modal -->
+    
+     <!-- Report Detail Modal -->
     <div id="reportDetailModal" class="modal fixed inset-0 z-50 bg-black bg-opacity-75 hidden opacity-0 flex items-center justify-center p-4">
         <div class="transform scale-95 bg-slate-50 rounded-xl shadow-2xl w-full max-w-6xl transition-all h-[90vh] flex flex-col">
-             <div class="flex justify-between items-center p-4 border-b">
-                <h3 id="reportDetailTitle" class="text-xl font-bold text-slate-800">Detalle de Reporte</h3>
-                <div class="flex items-center gap-4">
-                    <button data-action="export-report" class="bg-green-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-green-700"><i class="fas fa-file-excel mr-1"></i> Exportar</button>
+            <div class="flex justify-between items-center p-4 border-b">
+                 <h3 id="reportDetailTitle" class="text-xl font-bold text-slate-800">Detalle de Reporte</h3>
+                 <div class="flex items-center gap-4">
+                    <button class="bg-green-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-green-700" data-action="export-report"><i class="fas fa-file-excel mr-1"></i> Exportar</button>
                     <button id="closeReportDetailIcon" class="text-slate-500 hover:text-slate-800 text-3xl">&times;</button>
                 </div>
             </div>
             <div id="reportDetailContent" class="p-6 overflow-y-auto"></div>
             <div class="flex justify-end gap-4 p-4 mt-auto border-t">
                 <button id="closeReportDetailBtn" class="bg-slate-200 text-slate-800 px-4 py-2 rounded-lg font-semibold hover:bg-slate-300">Cerrar</button>
-           </div>
+            </div>
         </div>
     </div>
 
-<!-- Main App Logic (Vanilla JS) -->
-<script type="module">
-    // Import Firebase SDKs
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, writeBatch, getDocs, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    <!-- Main App Logic -->
+    <script type="module">
+        // Import Firebase SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, writeBatch, getDocs, query } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    // Firebase Configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDRAPx_THFmyDNagZgVuhtWhUZdB8LHKLE",
-        authDomain: "databasejgm-900ec.firebaseapp.com",
-        projectId: "databasejgm-900ec",
-        storageBucket: "databasejgm-900ec.firebasestorage.app",
-        messagingSenderId: "385826567780",
-        appId: "1:385826567780:web:89b41e6aa2b1a6a78e5171",
-        measurementId: "G-JFYRC53F07"
-    };
+        // --- IMPORTANT: Replace with your actual Firebase configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyDRAPx_THFmyDNagZgVuhtWhUZdB8LHKLE",
+            authDomain: "databasejgm-900ec.firebaseapp.com",
+            projectId: "databasejgm-900ec",
+            storageBucket: "databasejgm-900ec.firebasestorage.app",
+            messagingSenderId: "385826567780",
+            appId: "1:385826567780:web:89b41e6aa2b1a6a78e5171",
+            measurementId: "G-JFYRC53F07"
+        };
 
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+        // Initialize Firebase
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
 
-    // --- GLOBAL APP STATE & DOM Elements ---
-    let currentUser = null;
-    let targetApp = null;
-    let horusDateRoot = null;
-    let allInitial = [], allEntries = [], allExits = [], monthlyReports = [], currentStock = [];
-    let currentTab = 'stock', selectedProductForEntry = null, currentReportData = null, annualChart = null, confirmCallback = null;
-    let unsubInitial, unsubEntries, unsubExits, unsubReports;
-    
-    const landingScreen = document.getElementById('landing-screen');
-    const loginScreen = document.getElementById('login-screen');
-    const appContainer = document.getElementById('app');
-    const welcomeScreen = document.getElementById('app-welcome');
-    const horusDateContainer = document.getElementById('horus-date-container');
-    const syncBtn = document.getElementById('syncDataBtn');
-    const allScreens = [landingScreen, loginScreen, appContainer, welcomeScreen, horusDateContainer];
-
-    // --- FUNCTION DEFINITIONS (Moved to top level) ---
-
-    const showScreen = (screenToShow) => {
-        allScreens.forEach(screen => screen?.classList.add('hidden'));
-        screenToShow?.classList.remove('hidden');
-    };
-
-    const showWelcomeApp = ({ iconHTML, title, desc }) => {
-        document.getElementById('appWelcomeIcon').innerHTML = iconHTML;
-        document.getElementById('appWelcomeTitle').textContent = title;
-        document.getElementById('appWelcomeDesc').textContent = desc;
-        showScreen(welcomeScreen);
-    };
-
-    const toggleModal = (modal, show) => {
-        if (!modal) return;
-        const transformTarget = modal.querySelector('.transform');
-        if (show) {
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                transformTarget?.classList.remove('scale-95');
-            }, 10);
-        } else {
-            modal.classList.add('opacity-0');
-            transformTarget?.classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-    };
-    
-    const showNotification = ({ title, message, isError = false, duration = 3000 }) => {
-        const confirmModal = document.getElementById('confirmModal');
-        if (!confirmModal) return;
-        document.getElementById('confirmModalTitle').textContent = title;
-        document.getElementById('confirmModalMessage').textContent = message;
-        document.getElementById('confirmModalIcon').innerHTML = isError 
-            ? `<i class="fas fa-times-circle fa-3x text-red-500"></i>` 
-            : `<i class="fas fa-check-circle fa-3x text-green-500"></i>`;
-        document.getElementById('confirmModalButtons').style.display = 'none';
-        toggleModal(confirmModal, true);
-        setTimeout(() => {
-            toggleModal(confirmModal, false);
-            setTimeout(()=> document.getElementById('confirmModalButtons').style.display = 'flex', 300);
-        }, duration);
-    };
-
-    const showConfirmModal = ({ title, message, onConfirm }) => {
-        const confirmModal = document.getElementById('confirmModal');
-        if (!confirmModal) return;
-        document.getElementById('confirmModalTitle').textContent = title;
-        document.getElementById('confirmModalMessage').textContent = message;
-        document.getElementById('confirmModalIcon').innerHTML = `<i class="fas fa-exclamation-triangle fa-3x text-yellow-500"></i>`;
-        document.getElementById('confirmModalButtons').style.display = 'flex';
-        confirmCallback = onConfirm;
-        toggleModal(confirmModal, true);
-    };
-    
-    const updateSyncStatus = (isSyncing) => {
-        if (syncBtn) {
-            if (isSyncing) {
-                syncBtn.classList.add('syncing');
-                syncBtn.title = 'Sincronizando...';
-            } else {
-                syncBtn.classList.remove('syncing');
-                syncBtn.title = 'Sincronizado';
-            }
-        }
-    };
-    
-    const sortProductsByCode = (a, b) => (a.code || '').localeCompare(b.code || '');
-    const safeCalculate = (expression) => {
-        if (typeof expression !== 'string' || !expression.trim()) return 0;
-        let sanitized = expression.trim().replace(/x/gi, '*').replace(/[^0-9\.\+\-\*\/]/g, '');
-        if (!sanitized) return 0;
-        const lastChar = sanitized.slice(-1);
-        if (['+', '-', '*', '/'].includes(lastChar)) sanitized = sanitized.slice(0, -1);
-        if (!sanitized) return 0;
-        try {
-            const result = new Function('return ' + sanitized)();
-            return isNaN(result) || !isFinite(result) ? 0 : result;
-        } catch (e) { return 0; }
-    };
-    
-    const calculateCurrentStock = () => {
-        const stockMap = new Map();
-        allInitial.forEach(item => {
-            stockMap.set(item.code, { ...item, quantity: Number(item.quantity) });
-        });
-        allEntries.forEach(entry => {
-            if (stockMap.has(entry.code)) {
-                stockMap.get(entry.code).quantity += Number(entry.quantity);
-            }
-        });
-        allExits.forEach(exit => {
-            if (stockMap.has(exit.code)) {
-                stockMap.get(exit.code).quantity -= Number(exit.quantity);
-            }
-        });
-        currentStock = Array.from(stockMap.values());
-    };
-
-    const calculateFinalInventory = () => {
-        const inventoryMap = new Map();
-        allInitial.forEach(item => {
-            inventoryMap.set(item.code, {
-                ...item,
-                initial: Number(item.quantity),
-                entries: 0,
-                exits: 0,
-                final: Number(item.quantity)
-            });
-        });
-        allEntries.forEach(entry => {
-            if (inventoryMap.has(entry.code)) {
-                const item = inventoryMap.get(entry.code);
-                item.entries += Number(entry.quantity);
-                item.final += Number(entry.quantity);
-            }
-        });
-        allExits.forEach(exit => {
-            if (inventoryMap.has(exit.code)) {
-                const item = inventoryMap.get(exit.code);
-                item.exits += Number(exit.quantity);
-                item.final -= Number(exit.quantity);
-            }
-        });
-        return Array.from(inventoryMap.values());
-    };
-    
-    const renderTable = (title, headers, data, rowTemplate, options = {}) => {
-        const tableHeaders = headers.map(h => `<th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">${h}</th>`).join('');
-        const tableRows = data.map(item => `<tr class="hover:bg-slate-50 even:bg-white">${rowTemplate(item).replace(/<td>/g, '<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">')}</tr>`).join('');
+        // --- GLOBAL APP STATE & DOM Elements ---
+        let currentUser = null;
+        let targetApp = null;
+        let horusDateRoot = null;
+        let allInitial = [], allEntries = [], allExits = [], monthlyReports = [], currentStock = [];
+        let currentTab = 'stock', selectedProductForEntry = null, currentReportData = null, annualChart = null, confirmCallback = null;
+        let unsubInitial, unsubEntries, unsubExits, unsubReports;
         
-        const importExportButtons = options.showImportExport ? `
-            <button data-action="download-template" class="bg-slate-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-slate-700"><i class="fas fa-download mr-1"></i> Descargar</button>
-            <button data-action="upload-template" class="bg-green-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-green-700"><i class="fas fa-upload mr-1"></i> Cargar</button>
-            <button data-action="paste-template" class="bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-blue-700"><i class="fas fa-paste mr-1"></i> Pegar</button>
-        ` : '';
+        const landingScreen = document.getElementById('landing-screen');
+        const loginScreen = document.getElementById('login-screen');
+        const appContainer = document.getElementById('app');
+        const welcomeScreen = document.getElementById('app-welcome');
+        const horusDateContainer = document.getElementById('horus-date-container');
+        const allScreens = [landingScreen, loginScreen, appContainer, welcomeScreen, horusDateContainer];
 
-        let headerButtons = `<h2 class="text-xl font-semibold text-slate-800">${title}</h2>`;
-        if(options.showAdd || options.showClear || options.showImportExport) {
-                headerButtons = `<div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                    <h2 class="text-xl font-semibold text-slate-800">${title}</h2>
-                    <div class="flex flex-wrap gap-2">
-                        ${importExportButtons}
-                        ${options.showAdd ? `<button data-action="add-stock" class="bg-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-indigo-600"><i class="fas fa-plus mr-1"></i> Añadir Producto</button>` : ''}
-                        ${options.showClear ? `<button data-action="clear-collection" data-collection="${options.collectionId}" data-name="${options.collectionName}" class="text-sm text-red-500 hover:text-red-700 font-semibold"><i class="fas fa-eraser mr-1"></i> Limpiar Todo</button>` : ''}
+        // --- CORE UI FUNCTIONS ---
+
+        function showScreen(screenToShow) {
+            allScreens.forEach(screen => screen?.classList.add('hidden'));
+            screenToShow?.classList.remove('hidden');
+            if (['landing-screen', 'login-screen', 'app-welcome'].includes(screenToShow?.id)) {
+                screenToShow.classList.add('flex');
+            } else {
+                 screenToShow?.classList.remove('flex');
+            }
+        };
+
+        function toggleModal(modal, show) {
+            if (!modal) return;
+            const transformTarget = modal.querySelector('.transform');
+            if (show) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    transformTarget?.classList.remove('scale-95');
+                }, 10);
+            } else {
+                modal.classList.add('opacity-0');
+                transformTarget?.classList.add('scale-95');
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+            }
+        };
+        
+        function showNotification({ title, message, isError = false, duration = 3000 }) {
+            const confirmModal = document.getElementById('confirmModal');
+            if (!confirmModal) return;
+            document.getElementById('confirmModalTitle').textContent = title;
+            document.getElementById('confirmModalMessage').textContent = message;
+            document.getElementById('confirmModalIcon').innerHTML = isError 
+                ? `<i class="fas fa-times-circle fa-3x text-red-500"></i>` 
+                : `<i class="fas fa-check-circle fa-3x text-green-500"></i>`;
+            document.getElementById('confirmModalButtons').style.display = 'none';
+            toggleModal(confirmModal, true);
+            setTimeout(() => {
+                toggleModal(confirmModal, false);
+                setTimeout(() => document.getElementById('confirmModalButtons').style.display = 'flex', 300);
+            }, duration);
+        };
+
+        function showConfirmModal({ title, message, onConfirm }) {
+            const confirmModal = document.getElementById('confirmModal');
+            if (!confirmModal) return;
+            document.getElementById('confirmModalTitle').textContent = title;
+            document.getElementById('confirmModalMessage').textContent = message;
+            document.getElementById('confirmModalIcon').innerHTML = `<i class="fas fa-exclamation-triangle fa-3x text-yellow-500"></i>`;
+            document.getElementById('confirmModalButtons').style.display = 'flex';
+            confirmCallback = onConfirm;
+            toggleModal(confirmModal, true);
+        };
+        
+        // --- APP ROUTING & NAVIGATION ---
+        function showWelcomeApp({ iconHTML, title, desc }) {
+            document.getElementById('appWelcomeIcon').innerHTML = iconHTML;
+            document.getElementById('appWelcomeTitle').textContent = title;
+            document.getElementById('appWelcomeDesc').textContent = desc;
+            showScreen(welcomeScreen);
+        };
+
+        function showLoginScreenFor(appName) {
+            const iconWrapperEl = document.getElementById('loginIconWrapper');
+            const titleEl = document.getElementById('loginTitle');
+            iconWrapperEl.className = 'icon-wrapper mb-4';
+            targetApp = appName;
+
+            if (appName === 'horus') {
+                iconWrapperEl.innerHTML = document.querySelector('#goToAppointmentsBtn .icon-wrapper').innerHTML;
+                iconWrapperEl.classList.add('horus-eye-wrapper');
+                titleEl.textContent = 'Horus Date';
+            } else {
+                iconWrapperEl.innerHTML = document.querySelector('#goToInventoryBtn .icon-wrapper').innerHTML;
+                iconWrapperEl.classList.add('anubis-scales-wrapper');
+                titleEl.textContent = 'NemeSync Stock';
+            }
+            showScreen(loginScreen);
+        };
+        
+        function routeToApp(appName, user) {
+            currentUser = user;
+            localStorage.setItem('lastApp', appName);
+            if (appName === 'horus') {
+                showScreen(horusDateContainer);
+                if (!horusDateRoot) {
+                    horusDateRoot = ReactDOM.createRoot(document.getElementById('horus-date-react-root'));
+                }
+                horusDateRoot.render(React.createElement(window.HorusDateApp, { db, auth, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc }));
+            } else {
+                showScreen(appContainer);
+                initializeAppState();
+            }
+        };
+        
+        function handleLogout() {
+            signOut(auth);
+            localStorage.removeItem('lastApp');
+            targetApp = null;
+        };
+        
+        // --- NEMESYNC STOCK: DATA & STATE MANAGEMENT ---
+
+        function safeCalculate(expression) {
+            if (typeof expression !== 'string' || !expression.trim()) return 0;
+            let sanitized = expression.trim().replace(/x/gi, '*').replace(/[^0-9\.\+\-\*\/]/g, '');
+            if (!sanitized) return 0;
+            const lastChar = sanitized.slice(-1);
+            if (['+', '-', '*', '/'].includes(lastChar)) {
+                 sanitized = sanitized.slice(0, -1);
+            }
+            if (!sanitized) return 0;
+            try {
+                const result = new Function('return ' + sanitized)();
+                return isNaN(result) || !isFinite(result) ? 0 : result;
+            } catch (e) {
+                console.error("Calculation Error:", e);
+                return 0;
+            }
+        };
+        
+        function calculateCurrentStock() {
+            const stockMap = new Map();
+            allInitial.forEach(item => {
+                stockMap.set(item.code, { ...item, quantity: Number(item.quantity) || 0 });
+            });
+            allEntries.forEach(entry => {
+                if (stockMap.has(entry.code)) {
+                     stockMap.get(entry.code).quantity += Number(entry.quantity) || 0;
+                }
+            });
+            allExits.forEach(exit => {
+                if (stockMap.has(exit.code)) {
+                    stockMap.get(exit.code).quantity -= Number(exit.quantity) || 0;
+                }
+            });
+            currentStock = Array.from(stockMap.values());
+        };
+        
+        function calculateFinalInventory() {
+            const inventoryMap = new Map();
+            allInitial.forEach(item => {
+                inventoryMap.set(item.code, { ...item, initial: Number(item.quantity), entries: 0, exits: 0, final: Number(item.quantity) });
+            });
+            allEntries.forEach(entry => {
+                if (inventoryMap.has(entry.code)) {
+                    const item = inventoryMap.get(entry.code);
+                    item.entries += Number(entry.quantity);
+                    item.final += Number(entry.quantity);
+                }
+            });
+            allExits.forEach(exit => {
+                if (inventoryMap.has(exit.code)) {
+                    const item = inventoryMap.get(exit.code);
+                    item.exits += Number(exit.quantity);
+                    item.final -= Number(exit.quantity);
+                }
+            });
+            return Array.from(inventoryMap.values());
+        };
+        
+        function calculateAndRenderAll() {
+            calculateCurrentStock();
+            updateExitModalProductList();
+            renderCurrentTab();
+        };
+
+        function cleanupListeners() {
+            if (unsubInitial) unsubInitial();
+            if (unsubEntries) unsubEntries();
+            if (unsubExits) unsubExits();
+            if (unsubReports) unsubReports();
+            unsubInitial = unsubEntries = unsubExits = unsubReports = null;
+        };
+
+        function initializeAppState() {
+            if (!currentUser || unsubInitial) return; 
+            
+            const onDataChange = (snapshot, targetArray, sortFn = null) => {
+                targetArray.length = 0; 
+                snapshot.docs.forEach(doc => targetArray.push({ id: doc.id, ...doc.data() }));
+                if (sortFn) targetArray.sort(sortFn);
+                calculateAndRenderAll();
+            };
+            
+            const initialSort = (a, b) => a.code.localeCompare(b.code, undefined, { numeric: true });
+            
+            unsubInitial = onSnapshot(collection(db, "users", currentUser.uid, "initial_inventory"), s => onDataChange(s, allInitial, initialSort));
+            unsubEntries = onSnapshot(collection(db, "users", currentUser.uid, "entries"), s => onDataChange(s, allEntries));
+            unsubExits = onSnapshot(collection(db, "users", currentUser.uid, "exits"), s => onDataChange(s, allExits));
+            unsubReports = onSnapshot(query(collection(db, "users", currentUser.uid, "monthly_reports")), s => onDataChange(s, monthlyReports));
+        };
+        
+        // --- NEMESYNC STOCK: UI RENDERING ---
+
+        function renderDetailTable(title, headers, data, rowTemplate) {
+            const tableHeaders = headers.map(h => `<th class="px-4 py-2 text-left text-xs font-bold text-slate-500 uppercase">${h}</th>`).join('');
+            const tableRows = data.map(item => `<tr class="hover:bg-slate-100">${rowTemplate(item).replace(/<td>/g, '<td class="px-4 py-2 whitespace-nowrap text-sm text-slate-600">')}</tr>`).join('');
+
+            return `
+                <div class="mb-8">
+                    <h4 class="text-lg font-semibold text-slate-700 mb-2">${title}</h4>
+                    <div class="border border-slate-200 rounded-lg overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-100"><tr>${tableHeaders}</tr></thead>
+                            <tbody class="bg-white divide-y divide-slate-200">
+                                ${tableRows || `<tr><td colspan="${headers.length}" class="text-center py-5 text-slate-500">No hay datos para esta sección.</td></tr>`}
+                            </tbody>
+                        </table>
                     </div>
-                </div>`;
+                </div>
+            `;
         }
 
-        const searchBar = options.showSearch ? `
-            <div class="relative mb-4">
+        function showReportDetail(reportId) {
+            currentReportData = monthlyReports.find(r => r.id === reportId);
+            if (!currentReportData) {
+                showNotification({ title: 'Error', message: 'No se encontró el reporte seleccionado.', isError: true });
+                return;
+            }
+
+            const modal = document.getElementById('reportDetailModal');
+            const titleEl = document.getElementById('reportDetailTitle');
+            const contentEl = document.getElementById('reportDetailContent');
+
+            titleEl.textContent = `Detalle de Reporte - ${currentReportData.id}`;
+
+            const headers = {
+                movements: ['Fecha', 'Código', 'Producto', 'Cantidad'],
+                final: ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final']
+            };
+
+            const templates = {
+                entries: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.product}</td><td class="text-green-600 font-bold">+${item.quantity}</td>`,
+                exits: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.product}</td><td class="text-red-600 font-bold">-${item.quantity}</td>`,
+                final: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600 font-bold">+${item.entries}</td><td class="text-red-600 font-bold">-${item.exits}</td><td class="font-bold">${item.final}</td>`
+            };
+            
+            // Corrected order: Final, Entries, Exits
+            contentEl.innerHTML = `
+                ${renderDetailTable('Inventario Final', headers.final, currentReportData.finalInventory, templates.final)}
+                ${renderDetailTable('Entradas', headers.movements, currentReportData.entries, templates.entries)}
+                ${renderDetailTable('Salidas', headers.movements, currentReportData.exits, templates.exits)}
+            `;
+            
+            toggleModal(modal, true);
+        }
+
+        function exportReportToExcel() {
+            if (!currentReportData) {
+                showNotification({ title: 'Error', message: 'No hay datos de reporte para exportar.', isError: true });
+                return;
+            }
+            
+            // Prepare data for sheets
+            const entriesData = currentReportData.entries.map(item => ({
+                'Fecha': item.date, 'Código': item.code, 'Producto': item.product, 'Cantidad': item.quantity
+            }));
+             const exitsData = currentReportData.exits.map(item => ({
+                'Fecha': item.date, 'Código': item.code, 'Producto': item.product, 'Cantidad': item.quantity
+            }));
+            const finalData = currentReportData.finalInventory.map(item => ({
+                'Código': item.code, 'Categoría': item.category, 'Producto': item.product, 'U/M': item.unit, 'Inv. Inicial': item.initial, 'Entradas': item.entries, 'Salidas': item.exits, 'Stock Final': item.final
+            }));
+
+            // Create workbook and worksheets
+            const wb = XLSX.utils.book_new();
+            const wsFinal = XLSX.utils.json_to_sheet(finalData);
+            const wsEntries = XLSX.utils.json_to_sheet(entriesData);
+            const wsExits = XLSX.utils.json_to_sheet(exitsData);
+            
+            // Append worksheets to the workbook in the correct order
+            XLSX.utils.book_append_sheet(wb, wsFinal, "Inv. Final");
+            XLSX.utils.book_append_sheet(wb, wsEntries, "Entradas");
+            XLSX.utils.book_append_sheet(wb, wsExits, "Salidas");
+
+            // Write the file
+            XLSX.writeFile(wb, `Reporte-${currentReportData.id}.xlsx`);
+        }
+        
+        function renderTable(title, headers, data, rowTemplate, options = {}) {
+            const tableHeaders = headers.map(h => `<th class="px-6 py-3 text-left text-xs font-bold text-slate-500 uppercase">${h}</th>`).join('');
+            const tableRows = data.map(item => `<tr class="hover:bg-slate-50 even:bg-white">${rowTemplate(item).replace(/<td>/g, '<td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600">')}</tr>`).join('');
+            
+            const importExportButtons = options.showImportExport ? `
+                <button data-action="download-template" class="bg-slate-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-slate-700"><i class="fas fa-download mr-1"></i> Plantilla</button>
+                <button data-action="upload-template" class="bg-green-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-green-700"><i class="fas fa-upload mr-1"></i> Cargar</button>
+                 <button data-action="paste-template" class="bg-blue-600 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-blue-700"><i class="fas fa-paste mr-1"></i> Pegar</button>
+            ` : '';
+
+            const headerButtons = `<div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                <h2 class="text-xl font-semibold text-slate-800">${title}</h2>
+                <div class="flex flex-wrap gap-2">
+                    ${importExportButtons}
+                    ${options.showAdd ? `<button data-action="add-stock" class="bg-indigo-500 text-white font-bold py-2 px-3 rounded-lg text-sm hover:bg-indigo-600"><i class="fas fa-plus mr-1"></i> Añadir</button>` : ''}
+                    ${options.showClear ? `<button data-action="clear-collection" data-collection="${options.collectionId}" data-name="${options.collectionName}" class="text-sm text-red-500 hover:text-red-700 font-semibold"><i class="fas fa-eraser mr-1"></i> Limpiar</button>` : ''}
+                </div>
+            </div>`;
+
+            const searchBar = options.showSearch ? `<div class="relative mb-4">
                 <input type="search" data-table-search class="w-full pl-10 pr-4 py-2 border rounded-lg" placeholder="Buscar en la tabla...">
                 <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-            </div>
-        ` : '';
+            </div>` : '';
 
-        document.getElementById('tab-content').innerHTML = `
-            ${headerButtons}
-            ${searchBar}
-            <div class="border border-slate-200 rounded-lg overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-200"><thead class="bg-slate-50 sticky top-0 z-10"><tr>${tableHeaders}</tr></thead>
-                    <tbody class="bg-white divide-y divide-slate-200">${tableRows || `<tr><td colspan="${headers.length}" class="text-center py-10 text-slate-500">No hay datos para mostrar.</td></tr>`}</tbody>
-                </table>
-            </div>`;
-        
-        const searchInput = document.querySelector('[data-table-search]');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const searchTerm = e.target.value.toLowerCase();
-                const tableRows = document.querySelectorAll('#tab-content tbody tr');
-                tableRows.forEach(row => {
-                    row.style.display = row.textContent.toLowerCase().includes(searchTerm) ? '' : 'none';
+            const tabContent = document.getElementById('tab-content');
+            if(tabContent){
+                tabContent.innerHTML = `
+                    ${headerButtons}
+                    ${searchBar}
+                    <div class="border border-slate-200 rounded-lg overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-200"><thead class="bg-slate-50 sticky top-0 z-10"><tr>${tableHeaders}</tr></thead>
+                            <tbody class="bg-white divide-y divide-slate-200">${tableRows || `<tr><td colspan="${headers.length}" class="text-center py-10 text-slate-500">No hay datos.</td></tr>`}</tbody>
+                        </table>
+                    </div>`;
+            }
+
+            const searchInput = document.querySelector('[data-table-search]');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('#tab-content tbody tr');
+                    tableRows.forEach(row => {
+                        row.style.display = row.textContent.toLowerCase().includes(searchTerm) ? '' : 'none';
+                    });
                 });
-            });
-        }
-    };
-    
-    const renderAnnualReport = () => {
-        const tabContent = document.getElementById('tab-content');
-        const categories = ['Todas', ...new Set(allInitial.map(p => p.category).sort())];
-        
-        tabContent.innerHTML = `
-            <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                <h2 class="text-xl font-semibold text-slate-800">Reporte Anual</h2>
-                <div class="flex gap-4">
-                    <select id="reportCategory" class="p-2 border border-slate-300 rounded-lg bg-white">
-                        ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
-                    </select>
-                    <input type="number" id="reportYear" class="w-28 p-2 border border-slate-300 rounded-lg" value="${new Date().getFullYear()}">
-                </div>
-            </div>
-            <div class="h-96 w-full"><canvas id="annualChart"></canvas></div>`;
-        
-        const renderChart = () => {
-            const year = document.getElementById('reportYear').value;
-            const category = document.getElementById('reportCategory').value;
-            if (!year) return;
-
-            const monthlyData = Object.fromEntries(Array.from({length: 12}, (_, i) => [i, { entries: 0, exits: 0 }]));
-
-            monthlyReports.forEach(report => {
-                if (report.year == year) {
-                    const reportMonthIndex = report.month - 1;
-                    const filterCategory = (item) => category === 'Todas' || item.category === category;
-                    const totalEntries = report.entries?.filter(filterCategory).reduce((sum, item) => sum + Number(item.quantity), 0) || 0;
-                    const totalExits = report.exits?.filter(filterCategory).reduce((sum, item) => sum + Number(item.quantity), 0) || 0;
-                    monthlyData[reportMonthIndex] = { entries: totalEntries, exits: totalExits };
-                }
-            });
-
-            const chartData = {
-                labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
-                datasets: [
-                    { label: 'Entradas', data: Object.values(monthlyData).map(d => d.entries), backgroundColor: 'rgba(75, 192, 192, 0.6)' },
-                    { label: 'Salidas', data: Object.values(monthlyData).map(d => d.exits), backgroundColor: 'rgba(255, 99, 132, 0.6)' }
-                ]
-            };
-            const ctx = document.getElementById('annualChart').getContext('2d');
-            if (annualChart) annualChart.destroy();
-            annualChart = new Chart(ctx, {
-                type: 'bar', data: chartData,
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-            });
-        };
-
-        document.getElementById('reportYear').addEventListener('change', renderChart);
-        document.getElementById('reportCategory').addEventListener('change', renderChart);
-        renderChart();
-    };
-
-    const renderCurrentTab = () => {
-        if (appContainer.classList.contains('hidden')) return;
-
-        if (currentTab === 'annual_report') {
-            renderAnnualReport();
-            return;
-        }
-
-        const headers = {
-            stock: ['Código', 'Categoría', 'Producto', 'U/M', 'Stock'],
-            movements: ['Fecha', 'Código', 'Categoría', 'Producto', 'U/M', 'Cantidad', 'Acciones'],
-            initial: ['Código', 'Categoría', 'Producto', 'U/M', 'Cantidad Inicial', 'Acciones'],
-            final: ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final']
-        };
-        const rowTemplates = {
-            stock: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="font-bold">${item.quantity}</td>`,
-            entries: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-green-600 font-bold">+${item.quantity}</td><td><button data-action="delete-row" data-collection="entries" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            exits: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="text-red-600 font-bold">-${item.quantity}</td><td><button data-action="delete-row" data-collection="exits" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            initial: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.quantity}</td><td class="flex gap-2"><button data-action="edit-stock" data-id="${item.id}" class="action-btn text-gray-400 hover:text-indigo-600 p-2"><i class="fas fa-pencil-alt"></i></button><button data-action="delete-row" data-collection="initial_inventory" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
-            final: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600">+${item.entries}</td><td class="text-red-600">-${item.exits}</td><td class="font-bold">${item.final}</td>`
-        };
-        
-        const dataMap = {
-            stock: [...currentStock].sort(sortProductsByCode),
-            entries: [...allEntries].sort((a,b) => b.date.localeCompare(a.date)),
-            exits: [...allExits].sort((a,b) => b.date.localeCompare(a.date)),
-            initial: [...allInitial].sort(sortProductsByCode),
-            final: calculateFinalInventory().sort(sortProductsByCode),
-        };
-
-        const optionsMap = {
-            stock: { showSearch: true },
-            entries: { showClear: true, collectionName: "Entradas", collectionId: "entries" },
-            exits: { showClear: true, collectionName: "Salidas", collectionId: "exits" },
-            initial: { showClear: true, showAdd: true, showImportExport: true, collectionName: "Inventario Inicial", collectionId: "initial_inventory" },
-            final: { showSearch: true },
-        };
-        
-        const tabKey = currentTab in headers ? currentTab : 'stock';
-        const titleMap = { stock: 'Stock Actual', entries: 'Entradas', exits: 'Salidas', initial: 'Inventario Inicial', final: 'Inventario Final' };
-
-        renderTable(titleMap[tabKey], headers[tabKey] || headers.movements, dataMap[tabKey], rowTemplates[tabKey], optionsMap[tabKey]);
-    };
-    
-    const updateExitModalProductList = () => {
-        const select = document.getElementById('exitProductSelect');
-        if (!select) return;
-        const sortedProducts = [...currentStock].filter(p => p.quantity > 0).sort(sortProductsByCode);
-        select.innerHTML = '<option value="" disabled selected>Seleccione un producto</option>';
-        sortedProducts.forEach(item => {
-            select.innerHTML += `<option value="${item.code}">${item.product} - ${item.code} (Stock: ${item.quantity})</option>`;
-        });
-    };
-
-    const calculateAndRenderAll = () => {
-        calculateCurrentStock();
-        updateExitModalProductList();
-        renderCurrentTab();
-    };
-
-    const cleanupListeners = () => {
-        if (unsubInitial) unsubInitial();
-        if (unsubEntries) unsubEntries();
-        if (unsubExits) unsubExits();
-        if (unsubReports) unsubReports();
-        unsubInitial = null;
-    };
-
-    const initializeAppState = () => {
-        if (!currentUser || (unsubInitial && !unsubInitial.closed)) return;
-        updateSyncStatus(true);
-        const onDataChange = (snapshot, targetArray) => {
-            targetArray.length = 0;
-            snapshot.docs.forEach(doc => targetArray.push({ id: doc.id, ...doc.data() }));
-            if (typeof calculateAndRenderAll === 'function') {
-                 calculateAndRenderAll();
             }
         };
 
-        unsubInitial = onSnapshot(collection(db, "users", currentUser.uid, "initial_inventory"), s => onDataChange(s, allInitial), console.error);
-        unsubEntries = onSnapshot(collection(db, "users", currentUser.uid, "entries"), s => onDataChange(s, allEntries), console.error);
-        unsubExits = onSnapshot(collection(db, "users", currentUser.uid, "exits"), s => onDataChange(s, allExits), console.error);
-        unsubReports = onSnapshot(query(collection(db, "users", currentUser.uid, "monthly_reports")), s => onDataChange(s, monthlyReports), console.error);
+        function renderAnnualReport() {
+            const tabContent = document.getElementById('tab-content');
+            if(!tabContent) return;
+
+            const categories = ['Todas', ...new Set(allInitial.map(p => p.category).sort())];
+            
+            tabContent.innerHTML = `
+                <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                    <h2 class="text-xl font-semibold text-slate-800">Reporte Anual</h2>
+                    <div class="flex gap-4">
+                        <select id="reportCategory" class="p-2 border border-slate-300 rounded-lg bg-white">
+                            ${categories.map(c => `<option value="${c}">${c}</option>`).join('')}
+                        </select>
+                        <input type="number" id="reportYear" class="w-28 p-2 border border-slate-300 rounded-lg" value="${new Date().getFullYear()}">
+                    </div>
+                </div>
+                <div class="h-96 w-full"><canvas id="annualChart"></canvas></div>`;
+            
+            const renderChart = () => {
+                const year = document.getElementById('reportYear').value;
+                const category = document.getElementById('reportCategory').value;
+                if (!year) return;
+
+                const monthlyData = Object.fromEntries(Array.from({length: 12}, (_, i) => [i, { entries: 0, exits: 0 }]));
+
+                monthlyReports.forEach(report => {
+                    if (report.year == year) {
+                        const reportMonthIndex = report.month - 1;
+                        const filterCategory = (item) => category === 'Todas' || item.category === category;
+                        const totalEntries = report.entries?.filter(filterCategory).reduce((sum, item) => sum + Number(item.quantity), 0) || 0;
+                        const totalExits = report.exits?.filter(filterCategory).reduce((sum, item) => sum + Number(item.quantity), 0) || 0;
+                        monthlyData[reportMonthIndex] = { entries: totalEntries, exits: totalExits };
+                    }
+                });
+
+                const chartData = {
+                    labels: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                    datasets: [
+                        { label: 'Entradas', data: Object.values(monthlyData).map(d => d.entries), backgroundColor: 'rgba(75, 192, 192, 0.6)' },
+                        { label: 'Salidas', data: Object.values(monthlyData).map(d => d.exits), backgroundColor: 'rgba(255, 99, 132, 0.6)' }
+                    ]
+                };
+                const ctx = document.getElementById('annualChart')?.getContext('2d');
+                if(!ctx) return;
+                if (annualChart) annualChart.destroy();
+                annualChart = new Chart(ctx, {
+                    type: 'bar', data: chartData,
+                    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+                });
+            };
+
+            document.getElementById('reportYear').addEventListener('change', renderChart);
+            document.getElementById('reportCategory').addEventListener('change', renderChart);
+            renderChart();
+        };
         
-        updateSyncStatus(false);
-    };
-    
-    // --- ROUTING & AUTH ---
-    const handleLogout = () => {
-        signOut(auth);
-        localStorage.removeItem('lastApp');
-        targetApp = null;
-    };
-    
-    const showLoginScreenFor = (appName) => {
-        const iconWrapperEl = document.getElementById('loginIconWrapper');
-        const titleEl = document.getElementById('loginTitle');
-        iconWrapperEl.className = 'icon-wrapper mb-4';
+        function renderCurrentTab() {
+            const headers = {
+                stock: ['Código', 'Categoría', 'Producto', 'U/M', 'Stock'],
+                movements: ['Fecha', 'Código', 'Producto', 'Cantidad', 'Acciones'],
+                initial: ['Código', 'Categoría', 'Producto', 'U/M', 'Cantidad Inicial', 'Acciones'],
+                final: ['Código', 'Categoría', 'Producto', 'U/M', 'Inv. Inicial', 'Entradas', 'Salidas', 'Stock Final']
+            };
+            const rowTemplates = {
+                stock: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td class="font-bold">${item.quantity}</td>`,
+                entries: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.product}</td><td class="text-green-600 font-bold">+${item.quantity}</td><td><button data-action="delete-row" data-collection="entries" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+                exits: item => `<td>${item.date}</td><td>${item.code}</td><td>${item.product}</td><td class="text-red-600 font-bold">-${item.quantity}</td><td><button data-action="delete-row" data-collection="exits" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+                initial: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.quantity}</td><td class="flex gap-2"><button data-action="edit-stock" data-id="${item.id}" class="action-btn text-gray-400 hover:text-indigo-600 p-2"><i class="fas fa-pencil-alt"></i></button><button data-action="delete-row" data-collection="initial_inventory" data-id="${item.id}" class="delete-btn text-gray-400 hover:text-red-500 p-2"><i class="fas fa-trash-alt"></i></button></td>`,
+                final: item => `<td>${item.code}</td><td>${item.category}</td><td>${item.product}</td><td>${item.unit}</td><td>${item.initial}</td><td class="text-green-600 font-bold">+${item.entries}</td><td class="text-red-600 font-bold">-${item.exits}</td><td class="font-bold">${item.final}</td>`
+            };
+            
+            if (currentTab === 'annual_report') { renderAnnualReport(); return; }
+            switch (currentTab) {
+                case 'stock': renderTable('Stock Actual', headers.stock, [...currentStock].sort((a,b)=>a.code.localeCompare(b.code, undefined, { numeric: true })), rowTemplates.stock, { showSearch: true }); break;
+                case 'entries': renderTable('Entradas', headers.movements, [...allEntries].sort((a,b) => new Date(b.date) - new Date(a.date)), rowTemplates.entries, { showClear: true, collectionName: "Entradas", collectionId: "entries" }); break;
+                case 'exits': renderTable('Salidas', headers.movements, [...allExits].sort((a,b) => new Date(b.date) - new Date(a.date)), rowTemplates.exits, { showClear: true, collectionName: "Salidas", collectionId: "exits" }); break;
+                case 'initial': renderTable('Inventario Inicial', headers.initial, [...allInitial].sort((a,b)=>a.code.localeCompare(b.code, undefined, { numeric: true })), rowTemplates.initial, { showClear: true, showAdd: true, showImportExport: true, collectionName: "Inventario Inicial", collectionId: "initial_inventory" }); break;
+                case 'final': renderTable('Inventario Final', headers.final, calculateFinalInventory().sort((a,b)=>a.code.localeCompare(b.code, undefined, { numeric: true })), rowTemplates.final, { showSearch: true }); break;
+            }
+        };
+        
+        function openStockModal(docId = null) {
+            const form = document.getElementById('stockForm');
+            form.reset();
+            document.getElementById('stockDocId').value = '';
+            document.getElementById('category-list').innerHTML = [...new Set(allInitial.map(p => p.category))].map(c => `<option value="${c}">`).join('');
+            document.getElementById('unit-list').innerHTML = [...new Set(allInitial.map(p => p.unit))].map(u => `<option value="${u}">`).join('');
 
-        if (appName === 'horus') {
-            const horusIconHTML = document.querySelector('#goToAppointmentsBtn .icon-wrapper').innerHTML;
-            iconWrapperEl.innerHTML = horusIconHTML;
-            iconWrapperEl.classList.add('horus-eye-wrapper');
-            titleEl.textContent = 'Horus Date';
-        } else {
-            const nemeSyncIconHTML = document.querySelector('#goToInventoryBtn .icon-wrapper').innerHTML;
-            iconWrapperEl.innerHTML = nemeSyncIconHTML;
-            iconWrapperEl.classList.add('anubis-scales-wrapper');
-            titleEl.textContent = 'NemeSync Stock';
-        }
-        showScreen(loginScreen);
-    };
-
-    const showNemeSyncApp = () => {
-        showScreen(appContainer);
-        initializeAppState();
-    };
-
-    const showHorusDateApp = () => {
-        showScreen(horusDateContainer);
-        if (!horusDateRoot) {
-            horusDateRoot = ReactDOM.createRoot(document.getElementById('horus-date-react-root'));
-        }
-        horusDateRoot.render(React.createElement(window.HorusDateApp));
-    };
-
-    const routeToApp = (appName, user) => {
-        currentUser = user;
-        localStorage.setItem('lastApp', appName);
-        if (appName === 'horus') {
-            showHorusDateApp();
-        } else {
-            showNemeSyncApp();
-        }
-    };
-    
-    const handleAppSelection = (appName) => {
-        targetApp = appName;
-        if (auth.currentUser) {
-            routeToApp(appName, auth.currentUser);
-        } else {
-            showLoginScreenFor(appName);
-        }
-    };
-    
-    // --- EVENT LISTENER SETUP ---
-    document.addEventListener('DOMContentLoaded', () => {
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                const appToRoute = targetApp || localStorage.getItem('lastApp');
-                if (appToRoute) {
-                    routeToApp(appToRoute, user);
-                } else {
-                    showScreen(landingScreen);
+            if(docId) {
+                const product = allInitial.find(p => p.id === docId);
+                if(product) {
+                    document.getElementById('stockModalTitle').textContent = 'Editar Producto';
+                    document.getElementById('stockDocId').value = product.id || '';
+                    document.getElementById('stockCode').value = product.code || '';
+                    document.getElementById('stockCategory').value = product.category || '';
+                    document.getElementById('stockProduct').value = product.product || '';
+                    document.getElementById('stockUnit').value = product.unit || '';
+                    document.getElementById('stockQuantity').value = product.quantity || 0;
                 }
             } else {
-                currentUser = null;
-                cleanupListeners();
-                showScreen(landingScreen);
+                document.getElementById('stockModalTitle').textContent = 'Añadir Nuevo Producto';
+                const numericCodes = allInitial.map(p => parseInt(p.code)).filter(n => !isNaN(n));
+                const nextCode = numericCodes.length > 0 ? Math.max(...numericCodes) + 1 : 1;
+                document.getElementById('stockCode').value = nextCode;
             }
-        });
+            toggleModal(document.getElementById('stockModal'), true);
+        }
+        
+        function updateExitModalProductList() {
+            const select = document.getElementById('exitProductSelect');
+            if(!select) return;
+            const sortedProducts = [...currentStock].filter(p => p.quantity > 0).sort((a,b)=>a.code.localeCompare(b.code));
+            select.innerHTML = '<option value="" disabled selected>Seleccione un producto</option>';
+            sortedProducts.forEach(item => {
+                select.innerHTML += `<option value="${item.code}">${item.product} - ${item.code} (Stock: ${item.quantity})</option>`;
+            });
+        }
+        
+        // --- NEMESYNC STOCK: DATA PERSISTENCE & HANDLING ---
 
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorEl = document.getElementById('loginError');
+        async function processAndSaveProducts(products) {
+            if (!currentUser) return;
+            const validProducts = [];
+            const errors = [];
+
+            for (const row of products) {
+                const isRowEmpty = Object.values(row).every(val => typeof val !== 'string' || !val.trim());
+                if (isRowEmpty) continue;
+                
+                const code = (row.CODIGO || row.code)?.trim().toUpperCase();
+                const category = (row.CATEGORIA || row.category)?.trim();
+                const prodName = (row.PRODUCTO || row.product)?.trim();
+                const unit = (row['U/M'] || row.unit)?.trim();
+                const quantity = Number((row.INICIAL || row.quantity)?.toString().trim());
+                
+                if (code && category && prodName && unit && !isNaN(quantity) && quantity >= 0) {
+                    validProducts.push({ code, category, product: prodName, unit, quantity });
+                } else {
+                    errors.push(prodName || `Fila #${products.indexOf(row) + 1}`);
+                }
+            }
+
+            if (errors.length > 0) {
+                showNotification({ title: 'Errores de Validación', message: `Se ignoraron ${errors.length} filas por datos incompletos.`, isError: true, duration: 5000 });
+            }
+
+            if (validProducts.length > 0) {
+                const batch = writeBatch(db);
+                validProducts.forEach(product => {
+                    const docRef = doc(collection(db, "users", currentUser.uid, "initial_inventory"));
+                    batch.set(docRef, { ...product, id: docRef.id }); 
+                });
+                await batch.commit();
+                showNotification({ title: 'Éxito', message: `${validProducts.length} productos importados correctamente.` });
+            }
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                delimiter: ";", 
+                complete: (results) => {
+                    if (results.errors.length > 0) {
+                        showNotification({ title: 'Error de Lectura', message: 'El archivo CSV tiene un formato incorrecto o no usa ; como delimitador.', isError: true });
+                        return;
+                    }
+                    processAndSaveProducts(results.data);
+                }
+            });
+            event.target.value = ''; 
+        }
+        
+        async function addOrUpdateDoc(collectionName, data, docId) {
+            if (!currentUser) return;
+            const id = docId || doc(collection(db, "users", currentUser.uid, collectionName)).id;
+            const docRef = doc(db, "users", currentUser.uid, collectionName, id);
+            await setDoc(docRef, { ...data, id }); 
+            return id;
+        }
+
+        async function archiveAndResetMonth(month, year) {
+            if (!currentUser) return;
+
+            // 1. Calculate Final Inventory for the period
+            const finalInventory = calculateFinalInventory();
+
+            // 2. Create the report object
+            const reportId = `${year}-${String(month).padStart(2, '0')}`;
+            const reportData = {
+                id: reportId,
+                month: month,
+                year: year,
+                createdAt: new Date().toISOString(),
+                initialInventory: [...allInitial],
+                entries: [...allEntries],
+                exits: [...allExits],
+                finalInventory: finalInventory
+            };
+            
+            // 3. Start a Firestore batched write
+            const batch = writeBatch(db);
+
+            // 3a. Save the new monthly report
+            const reportRef = doc(db, "users", currentUser.uid, "monthly_reports", reportId);
+            batch.set(reportRef, reportData);
+
+            // 3b. Delete all documents from entries and exits collections
+            allEntries.forEach(entry => batch.delete(doc(db, "users", currentUser.uid, "entries", entry.id)));
+            allExits.forEach(exit => batch.delete(doc(db, "users", currentUser.uid, "exits", exit.id)));
+            
+            // 3c. Delete all documents from the old initial_inventory
+            allInitial.forEach(item => batch.delete(doc(db, "users", currentUser.uid, "initial_inventory", item.id)));
+
+            // 3d. Create new initial_inventory from the calculated final stock
+            finalInventory.forEach(item => {
+                const newInitialDocRef = doc(collection(db, "users", currentUser.uid, "initial_inventory"));
+                const newInitialData = {
+                    id: newInitialDocRef.id,
+                    code: item.code,
+                    category: item.category,
+                    product: item.product,
+                    unit: item.unit,
+                    quantity: item.final // The final stock becomes the new initial quantity
+                };
+                batch.set(newInitialDocRef, newInitialData);
+            });
+
+            // 4. Commit all the changes at once
             try {
-                errorEl.classList.add('hidden');
-                await signInWithEmailAndPassword(auth, email, password);
+                await batch.commit();
+                toggleModal(document.getElementById('saveMonthModal'), false);
+                showNotification({ title: "Mes Archivado", message: `El inventario ha sido cerrado y reiniciado para el próximo período.` });
             } catch (error) {
-                errorEl.textContent = 'Email o contraseña incorrectos.';
-                errorEl.classList.remove('hidden');
+                console.error("Error archiving month:", error);
+                showNotification({ title: "Error", message: "No se pudo archivar el mes. Inténtelo de nuevo.", isError: true });
             }
-        });
+        }
 
-        document.getElementById('goToInventoryBtn').addEventListener('click', () => handleAppSelection('nemesync'));
-        document.getElementById('goToAppointmentsBtn').addEventListener('click', () => handleAppSelection('horus'));
-        
-        document.getElementById('goToMuseIABtn').addEventListener('click', () => {
-             showWelcomeApp({
-                iconHTML: document.querySelector('#goToMuseIABtn .icon-wrapper').innerHTML,
-                title: 'Muse IA',
-                desc: 'Inspiracion de las 9 Musas'
+
+        // --- MAIN INITIALIZATION & EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthStateChanged(auth, user => {
+                if (user) {
+                    const lastApp = localStorage.getItem('lastApp');
+                    if (targetApp || lastApp) {
+                        routeToApp(targetApp || lastApp, user);
+                    } else {
+                        showScreen(landingScreen); 
+                    }
+                } else {
+                    currentUser = null;
+                    cleanupListeners();
+                    if (horusDateRoot) { horusDateRoot.unmount(); horusDateRoot = null; }
+                    showScreen(landingScreen);
+                }
             });
-        });
-        
-        document.getElementById('goToOdiseaIABtn').addEventListener('click', () => {
-            showWelcomeApp({
-                iconHTML: document.querySelector('#goToOdiseaIABtn .icon-wrapper').innerHTML,
-                title: 'Odisea IA',
-                desc: 'Crea y Viaja Sin Límites'
+
+            // App Navigation & Back Buttons
+            document.getElementById('goToInventoryBtn').addEventListener('click', () => showLoginScreenFor('nemesync'));
+            document.getElementById('goToAppointmentsBtn').addEventListener('click', () => showLoginScreenFor('horus'));
+            document.getElementById('goToMuseIABtn').addEventListener('click', () => showWelcomeApp({ iconHTML: document.querySelector('#goToMuseIABtn .icon-wrapper').innerHTML, title: 'Muse IA', desc: 'Inspiracion de las 9 Musas' }));
+            document.getElementById('goToOdiseaIABtn').addEventListener('click', () => showWelcomeApp({ iconHTML: document.querySelector('#goToOdiseaIABtn .icon-wrapper').innerHTML, title: 'Odisea IA', desc: 'Crea y Viaja Sin Límites' }));
+            document.getElementById('backToLandingBtn').addEventListener('click', () => { targetApp = null; showScreen(landingScreen); });
+            document.getElementById('backToLandingFromWelcome').addEventListener('click', () => showScreen(landingScreen));
+            document.getElementById('backToLandingFromHorus').addEventListener('click', handleLogout);
+
+            // Login & User Creation
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const errorEl = document.getElementById('loginError');
+                errorEl.classList.add('hidden');
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                } catch (error) {
+                    errorEl.textContent = 'Email o contraseña incorrectos.';
+                    errorEl.classList.remove('hidden');
+                }
             });
+            document.getElementById('togglePassword').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                const passwordInput = document.getElementById('password');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                btn.querySelector('i').classList.toggle('fa-eye');
+                btn.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+            document.getElementById('toggleNewUserPassword').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                const passwordInput = document.getElementById('newUserPassword');
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                btn.querySelector('i').classList.toggle('fa-eye');
+                btn.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+
+            // --- NEMESYNC STOCK UI LISTENERS ---
+            
+            document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
+            document.getElementById('openEntryModalBtn')?.addEventListener('click', () => {
+                document.getElementById('entryForm').reset();
+                document.getElementById('entryDate').valueAsDate = new Date();
+                toggleModal(document.getElementById('entryModal'), true);
+            });
+            document.getElementById('openExitModalBtn')?.addEventListener('click', () => {
+                document.getElementById('exitForm').reset();
+                document.getElementById('exitDate').valueAsDate = new Date();
+                document.getElementById('exitTotalDisplay').textContent = '0';
+                toggleModal(document.getElementById('exitModal'), true);
+            });
+            
+            document.getElementById('entryForm').addEventListener('submit', (e) => {
+                 e.preventDefault();
+                 if (!selectedProductForEntry) { 
+                     showNotification({title: "Error", message: "Por favor, seleccione un producto de la lista.", isError: true}); 
+                     return; 
+                 }
+                 const newEntry = {
+                     date: document.getElementById('entryDate').value,
+                     quantity: Number(document.getElementById('entryQuantity').value),
+                     code: selectedProductForEntry.code,
+                     product: selectedProductForEntry.product,
+                     category: selectedProductForEntry.category,
+                     unit: selectedProductForEntry.unit
+                 };
+                 addOrUpdateDoc('entries', newEntry);
+                 toggleModal(document.getElementById('entryModal'), false);
+                 e.target.reset();
+                 selectedProductForEntry = null; 
+            });
+
+            document.getElementById('exitForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const productCode = document.getElementById('exitProductSelect').value;
+                const date = document.getElementById('exitDate').value;
+                const totalQuantity = Number(document.getElementById('exitTotalDisplay').textContent);
+                const productInStock = currentStock.find(p => p.code === productCode);
+
+                if (!date || !productInStock || totalQuantity <= 0) {
+                    showNotification({title:"Error de Salida", message: "Asegúrese de seleccionar un producto y una cantidad válida.", isError: true});
+                    return;
+                }
+                if (totalQuantity > productInStock.quantity) {
+                    showNotification({title:"Stock Insuficiente", message: `Solo hay ${productInStock.quantity} en stock de ${productInStock.product}.`, isError: true});
+                    return;
+                }
+                const exitData = { date, quantity: totalQuantity, code: productInStock.code, product: productInStock.product, category: productInStock.category, unit: productInStock.unit };
+                addOrUpdateDoc('exits', exitData);
+                toggleModal(document.getElementById('exitModal'), false);
+                e.target.reset();
+            });
+
+            document.getElementById('stockForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const docId = document.getElementById('stockDocId').value;
+                const productData = {
+                    code: document.getElementById('stockCode').value.trim().toUpperCase(),
+                    category: document.getElementById('stockCategory').value.trim(),
+                    product: document.getElementById('stockProduct').value.trim(),
+                    unit: document.getElementById('stockUnit').value.trim(),
+                    quantity: Number(document.getElementById('stockQuantity').value)
+                };
+
+                if (!productData.code || !productData.category || !productData.product || !productData.unit || isNaN(productData.quantity)) {
+                     showNotification({title: "Error de Validación", message: "Todos los campos son requeridos y la cantidad debe ser un número.", isError: true});
+                     return;
+                }
+
+                try {
+                    await addOrUpdateDoc('initial_inventory', productData, docId || null);
+                    toggleModal(document.getElementById('stockModal'), false);
+                    showNotification({ title: 'Éxito', message: `Producto ${docId ? 'actualizado' : 'guardado'} correctamente.` });
+                } catch (error) {
+                    console.error("Error saving product:", error);
+                    showNotification({ title: 'Error', message: 'No se pudo guardar el producto.', isError: true });
+                }
+            });
+            
+            ['cancelEntry', 'cancelExit', 'cancelStock', 'cancelCreateUser', 'cancelAuthCode', 'cancelPaste', 'cancelSaveMonth', 'closeArchivesList', 'closeReportDetailBtn', 'closeReportDetailIcon'].forEach(id => {
+                 document.getElementById(id)?.addEventListener('click', (e) => {
+                    const modal = e.target.closest('.modal');
+                    if (modal) toggleModal(modal, false);
+                 });
+            });
+
+            document.getElementById('tabs')?.addEventListener('click', e => {
+                const tabLink = e.target.closest('a.tab');
+                if (tabLink) {
+                    e.preventDefault();
+                    currentTab = tabLink.dataset.tab;
+                    document.querySelectorAll('#tabs .tab').forEach(t => t.classList.remove('tab-active'));
+                    tabLink.classList.add('tab-active');
+                    renderCurrentTab();
+                }
+            });
+            
+            document.body.addEventListener('click', (e) => {
+                const target = e.target.closest('button[data-action]');
+                if (!target) return;
+
+                const action = target.dataset.action;
+                const id = target.dataset.id;
+                
+                switch(action) {
+                    case 'add-stock': openStockModal(); break;
+                    case 'edit-stock': openStockModal(id); break;
+                    case 'delete-row':
+                        showConfirmModal({
+                            title: '¿Eliminar Registro?', message: 'Esta acción es irreversible y afectará el stock.',
+                            onConfirm: () => deleteDoc(doc(db, "users", currentUser.uid, target.dataset.collection, id))
+                        });
+                        break;
+                    case 'clear-collection':
+                        showConfirmModal({
+                            title: `¿Limpiar ${target.dataset.name}?`, message: `Se borrarán TODOS los registros de ${target.dataset.name}. Esta acción es irreversible.`,
+                            onConfirm: async () => {
+                                const collRef = collection(db, "users", currentUser.uid, target.dataset.collection);
+                                const snapshot = await getDocs(collRef);
+                                const batch = writeBatch(db);
+                                snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                                await batch.commit();
+                                showNotification({title: "Limpieza Completa", message: `Todos los datos de ${target.dataset.name} han sido borrados.`});
+                            }
+                        });
+                        break;
+                    case 'download-template': 
+                        const headers = "CODIGO;CATEGORIA;PRODUCTO;U/M;INICIAL";
+                        const blob = new Blob(["\uFEFF" + headers], { type: 'text/csv;charset=utf-8;' });
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = "plantilla_inventario.csv";
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        break;
+                    case 'upload-template': document.getElementById('upload-csv-input').click(); break;
+                    case 'paste-template': toggleModal(document.getElementById('pasteModal'), true); break;
+                    case 'view-report': 
+                        showReportDetail(id);
+                        break;
+                    case 'export-report':
+                        exportReportToExcel();
+                        break;
+                }
+            });
+
+            document.getElementById('upload-csv-input').addEventListener('change', handleFileUpload);
+            document.getElementById('processPasteBtn').addEventListener('click', () => {
+                const pasteData = document.getElementById('pasteData').value;
+                if (!pasteData.trim()) {
+                    showNotification({ title: 'Error', message: 'El área de texto está vacía.', isError: true });
+                    return;
+                }
+                Papa.parse(pasteData, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        if (results.errors.length > 0) {
+                            showNotification({ title: 'Error de Parseo', message: 'Los datos pegados tienen un formato incorrecto.', isError: true });
+                            return;
+                        }
+                        processAndSaveProducts(results.data);
+                        toggleModal(document.getElementById('pasteModal'), false);
+                    }
+                });
+            });
+
+            document.getElementById('confirmAcceptBtn').addEventListener('click', () => {
+                if (confirmCallback) confirmCallback();
+                toggleModal(document.getElementById('confirmModal'), false);
+                confirmCallback = null;
+            });
+            document.getElementById('confirmCancelBtn').addEventListener('click', () => {
+                toggleModal(document.getElementById('confirmModal'), false);
+                confirmCallback = null;
+            });
+            
+            document.getElementById('entryProduct').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const suggestionsContainer = document.getElementById('entryProductSuggestions');
+                selectedProductForEntry = null; 
+                if (searchTerm.length < 1) {
+                    suggestionsContainer.classList.add('hidden');
+                    return;
+                }
+                const suggestions = [...allInitial]
+                    .filter(item => item.product.toLowerCase().includes(searchTerm) || item.code.toLowerCase().includes(searchTerm))
+                    .sort((a,b)=>a.code.localeCompare(b.code));
+                
+                if (suggestions.length > 0) {
+                    suggestionsContainer.innerHTML = suggestions.map(item => 
+                        `<div class="p-3 hover:bg-indigo-100 cursor-pointer" data-product-id="${item.id}">
+                            ${item.product} <span class="text-xs text-gray-500">(${item.code})</span>
+                           </div>`
+                    ).join('');
+                    suggestionsContainer.classList.remove('hidden');
+                } else {
+                    suggestionsContainer.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('entryProductSuggestions').addEventListener('click', (e) => {
+                const target = e.target.closest('[data-product-id]');
+                if (target) {
+                    selectedProductForEntry = allInitial.find(p => p.id === target.dataset.productId);
+                    if (selectedProductForEntry) {
+                        document.getElementById('entryProduct').value = selectedProductForEntry.product;
+                    }
+                    document.getElementById('entryProductSuggestions').classList.add('hidden');
+                }
+            });
+
+            const updateTotalExitDisplay = () => {
+                const qty1 = Number(document.getElementById('exitQuantity').value) || 0;
+                const qty2 = safeCalculate(document.getElementById('exitQuantity2').value || '0');
+                document.getElementById('exitTotalDisplay').textContent = qty1 + qty2;
+            };
+            document.getElementById('exitQuantity').addEventListener('input', updateTotalExitDisplay);
+            document.getElementById('exitQuantity2').addEventListener('input', updateTotalExitDisplay);
+            
+            //--- Archiving Logic ---//
+            document.getElementById('openSaveMonthModalBtn').addEventListener('click', () => {
+                const monthSelect = document.getElementById('saveMonthSelect');
+                const yearInput = document.getElementById('saveYearInput');
+                const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+                
+                if(monthSelect.children.length === 0) {
+                    monthSelect.innerHTML = meses.map((mes, i) => `<option value="${i + 1}">${mes}</option>`).join('');
+                }
+                
+                const now = new Date();
+                monthSelect.value = now.getMonth() + 1;
+                yearInput.value = now.getFullYear();
+
+                toggleModal(document.getElementById('saveMonthModal'), true);
+            });
+
+            document.getElementById('archiveAndFinalizeBtn').addEventListener('click', () => {
+                const month = document.getElementById('saveMonthSelect').value;
+                const year = document.getElementById('saveYearInput').value;
+                const monthName = document.querySelector('#saveMonthSelect option:checked').textContent;
+
+                showConfirmModal({
+                    title: '¿Archivar y Reiniciar?',
+                    message: `Está a punto de cerrar el mes de ${monthName} de ${year}. Esta acción es irreversible. ¿Desea continuar?`,
+                    onConfirm: () => archiveAndResetMonth(month, year)
+                });
+            });
+
+            document.getElementById('openArchivesListBtn').addEventListener("click", () => {
+                const container = document.getElementById("archivesListContainer");
+                const modal = document.getElementById("archivesListModal");
+                if (!monthlyReports || monthlyReports.length === 0) {
+                    container.innerHTML = '<p class="text-center text-slate-500 py-6">No hay inventarios archivados.</p>';
+                } else {
+                    const sorted = [...monthlyReports].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+                    container.innerHTML = sorted.map(r => `
+                        <div class="py-3 px-2 flex justify-between items-center hover:bg-slate-50">
+                            <div>
+                                <strong class="text-indigo-600">${r.id}</strong>
+                                <br>
+                                <small class="text-slate-500">Archivado el: ${new Date(r.createdAt).toLocaleString()}</small>
+                            </div>
+                            <button class="bg-indigo-500 text-white px-3 py-1 rounded text-sm font-semibold hover:bg-indigo-600" data-action="view-report" data-id="${r.id}">
+                                Ver Detalle
+                            </button>
+                        </div>
+                    `).join('');
+                }
+                toggleModal(modal, true);
+            });
+
         });
 
-        document.getElementById('backToLandingBtn').addEventListener('click', () => showScreen(landingScreen));
-        document.getElementById('backToLandingFromWelcome').addEventListener('click', () => showScreen(landingScreen));
-        document.getElementById('backToLandingFromHorus').addEventListener('click', handleLogout);
-        document.getElementById('logoutBtn')?.addEventListener('click', handleLogout);
-    });
-</script>
+    </script>
 
-<!-- Horus Date React App (Transpiled by Babel) -->
-<script type="text/babel">
-const { useState, useEffect, useMemo } = React;
+    <!-- Horus Date React App -->
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useCallback } = React;
 
-// --- Constantes y Tipos ---
+        // --- Constants & Types ---
+        const packageDetails = {
+            'Pack 1': '7 Digitales', 'Pack 2': '10 Digitales', 'Pack 3': '15 Digitales',
+            'Pack 4': '24 Digitales', 'Pack 5': '36 Digitales',
+        };
 
-const packageDetails = {
- 'Pack 1': '7 Digitales', 'Pack 2': '10 Digitales', 'Pack 3': '15 Digitales',
- 'Pack 4': '24 Digitales', 'Pack 5': '36 Digitales',
-};
+        const iconPaths = {
+            package: `<path d="M16.5 9.4a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"/><path d="M19 12.2l-7-4-7 4"/><path d="M19 16.2l-7-4-7 4"/><path d="m12 22 7-4-7-4-7 4 7 4Z"/>`,
+            palette: `<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><path d="M2 16.5A4.5 4.5 0 0 1 6.5 12H8c2.5 0 4.5-2.5 4.5-5.5a4.5 4.5 0 1 1 3.5 8.5L2 22Z"/>`,
+            layers: `<polygon points="12 2 2 7 12 12 22 7 12 2"/><polygon points="2 17 12 22 22 17"/><polygon points="2 12 12 17 22 12"/>`,
+            droplets: `<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-3.5-4-1.5 2.5-3.5 4-3 3.5-3 5.5a7 7 0 0 0 7 7z"/>`,
+            gift: `<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 5a4.8 8 0 0 1 4.5-2 2.5 2.5 0 0 1 0 5"/>`,
+        };
 
-// SVG Paths para inyección directa
-const iconPaths = {
- package: `<path d="M16.5 9.4a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Z"/><path d="M19 12.2l-7-4-7 4"/><path d="M19 16.2l-7-4-7 4"/><path d="m12 22 7-4-7-4-7 4 7 4Z"/>`,
- palette: `<circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><path d="M2 16.5A4.5 4.5 0 0 1 6.5 12H8c2.5 0 4.5-2.5 4.5-5.5a4.5 4.5 0 1 1 3.5 8.5L2 22Z"/>`,
- layers: `<polygon points="12 2 2 7 12 12 22 7 12 2"/><polygon points="2 17 12 22 22 17"/><polygon points="2 12 12 17 22 12"/>`,
- droplets: `<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-3.5-4-1.5 2.5-3.5 4-3 3.5-3 5.5a7 7 0 0 0 7 7z"/>`,
- gift: `<rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5A4.8 8 0 0 1 12 5a4.8 8 0 0 1 4.5-2 2.5 2.5 0 0 1 0 5"/>`,
-};
-
-const INITIAL_FORM_STATE = {
-    client: '', service: 'Cumpleaños Glamorous', time: '10:30am',
-    date: new Date().toISOString().split('T')[0], packageNo: 'Pack 1',
-    balloonColor: '', birthdayNo: '', price: '', advance: '',
-    backgroundCount: '1', backgroundColor1: 'Blanco', backgroundColor2: 'Blanco',
-};
+        const INITIAL_FORM_STATE = {
+            client: '', service: 'Cumpleaños Glamorous', time: '10:30am',
+            date: new Date().toISOString().split('T')[0], packageNo: 'Pack 1',
+            balloonColor: '', birthdayNo: '', price: '', advance: '',
+            backgroundCount: '1', backgroundColor1: 'Blanco', backgroundColor2: 'Blanco',
+        };
 
 
-// --- Función de Utilidad: Generación de Recibo ---
+        // --- Utility Function: PNG Invoice Generation ---
+        const downloadInvoiceAsPNG = (app) => {
+            const { client, service, packageNo, price, advance, date, time, balloonColor, birthdayNo, backgroundColor1, backgroundColor2, backgroundCount } = app;
+            const balance = (parseFloat(price || 0) - parseFloat(advance || 0)).toFixed(2);
+            const fullDateText = new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
 
-const downloadInvoiceAsPNG = (app) => {
- const { client, service, packageNo, price, advance, date, time, balloonColor, birthdayNo, backgroundColor1, backgroundColor2, backgroundCount } = app;
- const balance = (parseFloat(price || 0) - parseFloat(advance || 0)).toFixed(2);
- const fullDateText = new Date(date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const details = [
+                { icon: iconPaths.package, text: `${packageNo} (${packageDetails[packageNo]})`, condition: true },
+                { icon: iconPaths.palette, text: `Fondo 1: ${backgroundColor1}`, condition: true },
+                { icon: iconPaths.layers, text: `Fondo 2: ${backgroundColor2}`, condition: backgroundCount === '2' },
+                { icon: iconPaths.droplets, text: `Globos: ${balloonColor}`, condition: balloonColor && balloonColor !== 'N/U' },
+                { icon: iconPaths.gift, text: `Cumple: ${birthdayNo}`, condition: birthdayNo && birthdayNo !== 'N/U' },
+            ].filter(item => item.condition);
 
- const details = [
-   { icon: iconPaths.package, text: `${packageNo} (${packageDetails[packageNo]})`, condition: true },
-   { icon: iconPaths.palette, text: `Fondo 1: ${backgroundColor1}`, condition: true },
-   { icon: iconPaths.layers, text: `Fondo 2: ${backgroundColor2}`, condition: backgroundCount === '2' },
-   { icon: iconPaths.droplets, text: `Globos: ${balloonColor}`, condition: balloonColor !== 'N/U' },
-   { icon: iconPaths.gift, text: `Cumple: ${birthdayNo}`, condition: birthdayNo !== 'N/U' },
- ].filter(item => item.condition);
+            let detailY = 350;
+            const detailItemsSVG = details.map(item => {
+                const svg = `<g transform="translate(40, ${detailY - 12})">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>
+                                </g>
+                                <text x="65" y="${detailY}" font-family="sans-serif" font-size="12" fill="#d1d5db">${item.text}</text>`;
+                detailY += 25;
+                return svg;
+            }).join('');
 
- let detailY = 380;
- const detailItemsSVG = details.map(item => {
-   const svg = `<g transform="translate(40, ${detailY - 12})">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${item.icon}</svg>
+            const dynamicDetailsHeight = detailY - 325;
+            const totalHeight = 440 + dynamicDetailsHeight;
+
+            const svgString = `
+                <svg width="500" height="${totalHeight}" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#a855f7;" />
+                            <stop offset="100%" style="stop-color:#ec4899;" />
+                        </linearGradient>
+                    </defs>
+                    <style>.sans-serif { font-family: sans-serif; }</style>
+                    <rect width="100%" height="100%" fill="#1f2937"/>
+                    <text x="20" y="75" class="sans-serif" font-size="52" font-weight="bold" fill="url(#grad)">RECIBO</text>
+                    <text x="20" y="95" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff">JGM Studios ©</text>
+                    <text x="20" y="130" class="sans-serif" font-size="12" fill="#d1d5db">Director Creativo: Jhoandri Gómez</text>
+                    <text x="20" y="150" class="sans-serif" font-size="12" fill="#d1d5db">Cel.: 84521372 | Web: www.jgmstudiosnic.com</text>
+                    <text x="20" y="170" class="sans-serif" font-size="12" fill="#d1d5db">Dirección: Del Rótulo de la Gasolinera Uno (Star Mark) 20 Vrs. Al Este</text>
+                    <line x1="20" y1="190" x2="480" y2="190" stroke="#4b5563" />
+                    <text x="20" y="215" class="sans-serif" font-size="12" fill="#9ca3af">CLIENTE</text>
+                    <text x="20" y="235" class="sans-serif" font-size="18" fill="#e5e7eb" font-weight="bold">${client}</text>
+                    <rect x="20" y="250" width="460" height="30" rx="8" ry="8" fill="#000000" />
+                    <text x="250" y="271" class="sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Cita: ${fullDateText} - ${time}</text>
+                    <rect x="20" y="290" width="460" height="${dynamicDetailsHeight}" rx="8" fill="#374151" />
+                    <rect x="20" y="290" width="460" height="40" rx="8" ry="8" fill="url(#grad)" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" />
+                    <text x="250" y="317" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">${service}</text>
+                    ${detailItemsSVG}
+                    <g transform="translate(0, ${detailY})">
+                        <rect x="20" y="0" width="460" height="50" rx="5" fill="#000000" />
+                        <text x="120" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Precio</text>
+                        <text x="120" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#10b981">$${parseFloat(price || 0).toFixed(2)}</text>
+                        <text x="250" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Anticipo</text>
+                        <text x="250" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#f59e0b">$${parseFloat(advance || 0).toFixed(2)}</text>
+                        <text x="380" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Saldo</text>
+                        <text x="380" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#ef4444">$${balance}</text>
                     </g>
-                    <text x="65" y="${detailY}" font-family="sans-serif" font-size="12" fill="#d1d5db">${item.text}</text>`;
-   detailY += 25;
-   return svg;
- }).join('');
+                    <rect x="20" y="${detailY + 60}" width="460" height="30" rx="8" ry="8" fill="#000000" />
+                    <text x="250" y="${detailY + 81}" class="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Fotografía | Publicidad | Marketing | Música | Audiovisuales</text>
+                </svg>`;
+            
+            const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            const image = new window.Image();
 
- const dynamicDetailsHeight = detailY - 350 + 95;
- const totalHeight = 540 + dynamicDetailsHeight;
+            image.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = 500;
+                canvas.height = totalHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(image, 0, 0);
+                const link = document.createElement('a');
+                link.href = canvas.toDataURL('image/png');
+                link.download = `Recibo - ${app.client}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            };
+            image.src = url;
+        };
 
- const svgString = `
-    <svg width="500" height="${totalHeight}" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" style="stop-color:#a855f7;" />
-                <stop offset="100%" style="stop-color:#ec4899;" />
-            </linearGradient>
-        </defs>
-        <style>.sans-serif { font-family: sans-serif; }</style>
-        <rect width="100%" height="100%" fill="#1f2937"/>
-        <text x="20" y="75" class="sans-serif" font-size="52" font-weight="bold" fill="url(#grad)">RECIBO</text>
-        <text x="20" y="95" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff">JGM Studios ©</text>
-        <text x="20" y="130" class="sans-serif" font-size="12" fill="#d1d5db">Director Creativo: Jhoandri Gómez</text>
-        <text x="20" y="150" class="sans-serif" font-size="12" fill="#d1d5db">Cel.: 84521372 | Web: www.jgmstudiosnic.com</text>
-        <text x="20" y="170" class="sans-serif" font-size="12" fill="#d1d5db">Dirección: Del Rótulo de la Gasolinera Uno (Star Mark) 20 Vrs. Al Este</text>
-        <line x1="20" y1="190" x2="480" y2="190" stroke="#4b5563" />
-        <text x="20" y="215" class="sans-serif" font-size="12" fill="#9ca3af">CLIENTE</text>
-        <text x="20" y="235" class="sans-serif" font-size="18" fill="#e5e7eb" font-weight="bold">${client}</text>
-        <rect x="20" y="250" width="460" height="30" rx="8" ry="8" fill="#000000" />
-        <text x="250" y="271" class="sans-serif" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">Cita: ${fullDateText} - ${time}</text>
-        <rect x="20" y="290" width="460" height="${dynamicDetailsHeight}" rx="8" fill="#374151" />
-        <rect x="20" y="290" width="460" height="40" rx="8" ry="8" fill="url(#grad)" style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" />
-        <text x="250" y="317" class="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">${service}</text>
-        ${detailItemsSVG}
-        <g transform="translate(0, ${detailY})">
-            <rect x="20" y="0" width="460" height="50" rx="5" fill="#000000" />
-            <text x="120" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Precio</text>
-            <text x="120" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#10b981">$${parseFloat(price || 0).toFixed(2)}</text>
-            <text x="250" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Anticipo</text>
-            <text x="250" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#f59e0b">$${parseFloat(advance || 0).toFixed(2)}</text>
-            <text x="380" y="20" text-anchor="middle" class="sans-serif" font-size="14" fill="#d1d5db">Saldo</text>
-            <text x="380" y="40" text-anchor="middle" class="sans-serif" font-size="16" font-weight="bold" fill="#ef4444">$${balance}</text>
-        </g>
-        <rect x="20" y="${detailY + 60}" width="460" height="30" rx="8" ry="8" fill="#000000" />
-        <text x="250" y="${detailY + 81}" class="sans-serif" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Fotografía | Publicidad | Marketing | Música | Audiovisuales</text>
-        <line x1="150" y1="${detailY + 140}" x2="350" y2="${detailY + 140}" stroke="#9ca3af" />
-        <text x="250" y="${detailY + 160}" class="sans-serif" font-size="12" fill="#d1d5db" text-anchor="middle">Director Creativo</text>
-    </svg>`;
-    
- const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
- const url = URL.createObjectURL(svgBlob);
- const image = new window.Image();
+        // --- React Components ---
+        const FormInput = React.memo(({ label, name, type = 'text', value, onChange, children, ...props }) => (
+            <div>
+                <label htmlFor={name} className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
+                {type === 'select' ? (
+                    <select id={name} name={name} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props}>
+                        {children}
+                    </select>
+                ) : (
+                    <input id={name} name={name} type={type} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props} />
+                )}
+            </div>
+        ));
 
- image.onload = () => {
-   const canvas = document.createElement('canvas');
-   canvas.width = 500;
-   canvas.height = totalHeight;
-   const ctx = canvas.getContext('2d');
-   ctx.drawImage(image, 0, 0);
-   const link = document.createElement('a');
-   link.href = canvas.toDataURL('image/png');
-   link.download = `Horus Date - ${app.client} (Recibo).png`;
-   document.body.appendChild(link);
-   link.click();
-   document.body.removeChild(link);
-   URL.revokeObjectURL(url);
- };
+        const DetailItem = React.memo(({ icon, value, condition = true }) => {
+            if (!condition) return null;
+            return <div className="flex items-center gap-2" dangerouslySetInnerHTML={{ __html: `${icon} <span class="text-gray-300">${value}</span>` }} />;
+        });
 
- image.onerror = (err) => {
-     console.error("Error al cargar la imagen SVG:", err);
-     URL.revokeObjectURL(url);
- };
-  
- image.src = url;
-};
+        const InfoWidget = React.memo(({ icon, title, value }) => (
+            <div className="bg-gray-800 p-3 rounded-lg flex items-center gap-3">
+                <div className="text-pink-400">{icon}</div>
+                <div><p className="text-gray-400 text-xs">{title}</p><p className="text-white font-semibold text-base">{value}</p></div>
+            </div>
+        ));
 
+        const AppointmentItem = React.memo(({ app, onToggleStatus, onDownloadInvoice, onDelete }) => {
+            const whatsAppMessage = useMemo(() => {
+                let message = `*Confirmación de Cita*\n\nHola, *${app.client}*.\n\n*Detalles de Cita:*\n- *Servicio:* ${app.service}\n- *Fecha:* ${new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { dateStyle: 'full' })}\n- *Hora:* ${app.time}\n- *Paquete:* ${app.packageNo} (${packageDetails[app.packageNo]})\n`;
+                if (app.balloonColor && app.balloonColor !== 'N/U') message += `- *Color Globos:* ${app.balloonColor}\n`;
+                if (app.birthdayNo && app.birthdayNo !== 'N/U') message += `- *No. Cumpleaños:* ${app.birthdayNo}\n`;
+                message += `- *Fondo(s):* ${app.backgroundColor1}${app.backgroundCount === '2' ? ', ' + app.backgroundColor2 : ''}\n\n*Detalles Financieros:*\n- *Precio Total:* $${parseFloat(app.price || 0).toFixed(2)}\n- *Anticipo:* $${parseFloat(app.advance || 0).toFixed(2)}\n- *Saldo Pendiente:* $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n\n*JGM Studios © ¡Tu Mejor Opción!*`;
+                return `https://wa.me/?text=${encodeURIComponent(message)}`;
+            }, [app]);
 
-// --- Componentes Reutilizables Definidos ---
+            const googleCalendarLink = useMemo(() => {
+                const startTime = new Date(`${app.date} ${app.time.replace(/(am|pm)/i, ' $1')}`);
+                const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); // Assume 1 hour duration
+                const formatDate = (date) => date.toISOString().replace(/-|:|\.\d{3}/g, '');
+                let details = `--- Detalles de la Sesión ---\nServicio: ${app.service}\nPaquete: ${app.packageNo} (${packageDetails[app.packageNo]})\n\n--- Personalización ---\n`;
+                if (app.balloonColor && app.balloonColor !== 'N/U') details += `Color de Globos: ${app.balloonColor}\n`;
+                if (app.birthdayNo && app.birthdayNo !== 'N/U') details += `Número de Cumpleaños: ${app.birthdayNo}\n`;
+                details += `Fondo 1: ${app.backgroundColor1}\n`;
+                if (app.backgroundCount === '2') details += `Fondo 2: ${app.backgroundColor2}\n`;
+                details += `\n--- Resumen Financiero ---\nPrecio Total: $${parseFloat(app.price || 0).toFixed(2)}\nAnticipo: $${parseFloat(app.advance || 0).toFixed(2)}\nSaldo Pendiente: $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n`;
+                const params = new URLSearchParams({ text: `${app.client} - ${app.service}`, dates: `${formatDate(startTime)}/${formatDate(endTime)}`, details, location: 'JGM Studios, Estelí, Nicaragua' });
+                return `https://www.google.com/calendar/render?action=TEMPLATE&${params.toString()}`;
+            }, [app]);
 
-const FormInput = ({ label, name, type = 'text', value, onChange, children, ...props }) => (
-    <div>
-        <label htmlFor={name} className="block text-sm font-medium text-gray-300 mb-1">{label}</label>
-        {type === 'select' ? (
-            <select id={name} name={name} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props}>
-                {children}
-            </select>
-        ) : (
-            <input id={name} name={name} type={type} value={value} onChange={onChange} className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5" {...props} />
-        )}
-    </div>
-);
-
-const DetailItem = ({ icon, value, condition = true }) => {
-    if (!condition) return null;
-    return (
-        <div className="flex items-center gap-2">
-            {icon}
-            <span className="text-gray-300">{value}</span>
-        </div>
-    );
-};
-
-const InfoWidget = ({ icon, title, value }) => (
-    <div className="bg-gray-800 p-3 rounded-lg flex items-center gap-3">
-        <div className="text-pink-400">{icon}</div>
-        <div>
-            <p className="text-gray-400 text-xs">{title}</p>
-            <p className="text-white font-semibold text-base">{value}</p>
-        </div>
-    </div>
-);
-
-// --- Componente: Item de Cita (Refactorizado) ---
-
-const AppointmentItem = ({ app, onToggleStatus, onDownloadInvoice, onDelete }) => {
-    const whatsAppMessage = useMemo(() => {
-        let message = `*Confirmación de Cita*\n\nHola, *${app.client}*.\n\n*Detalles de Cita:*\n- *Servicio:* ${app.service}\n- *Fecha:* ${new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { dateStyle: 'full' })}\n- *Hora:* ${app.time}\n- *Paquete:* ${app.packageNo} (${packageDetails[app.packageNo]})\n`;
-        if (app.balloonColor && app.balloonColor !== 'N/U') message += `- *Color Globos:* ${app.balloonColor}\n`;
-        if (app.birthdayNo && app.birthdayNo !== 'N/U') message += `- *No. Cumpleaños:* ${app.birthdayNo}\n`;
-        message += `- *Fondo(s):* ${app.backgroundColor1}${app.backgroundCount === '2' ? ', ' + app.backgroundColor2 : ''}\n\n*Detalles Financieros:*\n- *Precio Total:* $${parseFloat(app.price || 0).toFixed(2)}\n- *Anticipo:* $${parseFloat(app.advance || 0).toFixed(2)}\n- *Saldo Pendiente:* $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n\n*JGM Studios © ¡Tu Mejor Opción!*`;
-        return `https://wa.me/?text=${encodeURIComponent(message)}`;
-    }, [app]);
-
-    const googleCalendarLink = useMemo(() => {
-        const startTime = new Date(`${app.date} ${app.time.replace(/(am|pm)/i, ' $1')}`);
-        const endTime = new Date(startTime.getTime() + 60 * 60 * 1000);
-        const formatDate = (date) => date.toISOString().replace(/-|:|\.\d{3}/g, '');
-        let details = `--- Detalles de la Sesión ---\nServicio: ${app.service}\nPaquete: ${app.packageNo} (${packageDetails[app.packageNo]})\n\n--- Personalización ---\n`;
-        if (app.balloonColor && app.balloonColor !== 'N/U') details += `Color de Globos: ${app.balloonColor}\n`;
-        if (app.birthdayNo && app.birthdayNo !== 'N/U') details += `Número de Cumpleaños: ${app.birthdayNo}\n`;
-        details += `Fondo 1: ${app.backgroundColor1}\n`;
-        if (app.backgroundCount === '2') details += `Fondo 2: ${app.backgroundColor2}\n`;
-        details += `\n--- Resumen Financiero ---\nPrecio Total: $${parseFloat(app.price || 0).toFixed(2)}\nAnticipo: $${parseFloat(app.advance || 0).toFixed(2)}\nSaldo Pendiente: $${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}\n`;
-        const params = new URLSearchParams({ text: `${app.client} - ${app.service}`, dates: `${formatDate(startTime)}/${formatDate(endTime)}`, details, location: 'Horus Date, Estelí, Nicaragua' });
-        return `https://www.google.com/calendar/render?action=TEMPLATE&${params.toString()}`;
-    }, [app]);
-
-
-    return (
-        <div className={`bg-gray-700 rounded-lg p-4 transition-all duration-300 hover:shadow-pink-500/20 hover:shadow-lg ${app.isFinished ? 'opacity-60' : ''}`}>
-            <div className="flex justify-between items-start">
-                <div>
-                    <p className="font-bold text-xl text-white">{app.client}</p>
-                    <p className="text-md text-pink-400 font-semibold">{app.service}</p>
-                    <p className="text-sm text-yellow-300">{new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' })} - {app.time}</p>
+            return (
+                <div className={`bg-gray-700 rounded-lg p-4 transition-all duration-300 hover:shadow-pink-500/20 hover:shadow-lg ${app.isFinished ? 'opacity-60' : ''}`}>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <p className="font-bold text-xl text-white">{app.client}</p>
+                            <p className="text-md text-pink-400 font-semibold">{app.service}</p>
+                            <p className="text-sm text-yellow-300">{new Date(app.date + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', month: 'long', day: 'numeric' })} - {app.time}</p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                            <button onClick={() => onToggleStatus(app.id, !app.isFinished)} className="p-1 text-gray-400 hover:text-white" title={app.isFinished ? 'Marcar como Pendiente' : 'Marcar como Terminada'}>{app.isFinished ? <i className="fas fa-check-circle text-2xl text-green-500"></i> : <i className="fas fa-arrow-circle-right text-2xl text-blue-500"></i>}</button>
+                            <button onClick={() => onDownloadInvoice(app)} className="p-1 text-gray-400 hover:text-white" title="Generar Recibo"><i className="fas fa-file-alt text-xl text-purple-400"></i></button>
+                            <a href={whatsAppMessage} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Enviar por WhatsApp"><i className="fab fa-whatsapp text-xl text-green-400"></i></a>
+                            <a href={googleCalendarLink} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Añadir a Google Calendar"><i className="fas fa-calendar-plus text-xl text-blue-400"></i></a>
+                            <button onClick={() => onDelete(app.id)} className="p-1 text-gray-400 hover:text-white" title="Eliminar Cita"><i className="fas fa-trash-alt text-xl text-red-500"></i></button>
+                        </div>
+                    </div>
+                    <div className="mt-4 pt-4 border-t border-gray-600 space-y-3">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
+                            <DetailItem icon={`<i class="fas fa-box-open text-base text-gray-400"></i>`} value={`${app.packageNo} (${packageDetails[app.packageNo]})`} />
+                            <DetailItem icon={`<i class="fas fa-palette text-base text-gray-400"></i>`} value={`Fondo 1: ${app.backgroundColor1}`} />
+                            <DetailItem icon={`<i class="fas fa-layer-group text-base text-gray-400"></i>`} value={`Fondo 2: ${app.backgroundColor2}`} condition={app.backgroundCount === '2'} />
+                            <DetailItem icon={`<i class="fas fa-tint text-base text-gray-400"></i>`} value={`Globos: ${app.balloonColor}`} condition={app.balloonColor && app.balloonColor !== 'N/U'} />
+                            <DetailItem icon={`<i class="fas fa-gift text-base text-gray-400"></i>`} value={`Cumple: ${app.birthdayNo}`} condition={app.birthdayNo && app.birthdayNo !== 'N/U'} />
+                        </div>
+                        <div className="flex justify-around items-center bg-gray-600/50 p-3 rounded-md mt-2 text-center">
+                            <div className="font-semibold text-white text-base">Precio<span className="block text-green-400">${parseFloat(app.price || 0).toFixed(2)}</span></div>
+                            <div className="font-semibold text-white text-base">Anticipo<span className="block text-yellow-400">${parseFloat(app.advance || 0).toFixed(2)}</span></div>
+                            <div className="font-semibold text-white text-base">Saldo<span className="block text-red-400">${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}</span></div>
+                        </div>
+                    </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0 ml-4">
-                    <button onClick={() => onToggleStatus(app.id)} className="p-1 text-gray-400 hover:text-white" title={app.isFinished ? 'Marcar como Pendiente' : 'Marcar como Terminada'}>{app.isFinished ? <i className="fas fa-check-circle text-2xl text-green-500"></i> : <i className="fas fa-arrow-circle-right text-2xl text-blue-500"></i>}</button>
-                    <button onClick={() => onDownloadInvoice(app)} className="p-1 text-gray-400 hover:text-white" title="Generar Recibo"><i className="fas fa-file-alt text-xl text-purple-400"></i></button>
-                    <a href={whatsAppMessage} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Enviar por WhatsApp"><i className="fab fa-whatsapp text-xl text-green-400"></i></a>
-                    <a href={googleCalendarLink} target="_blank" rel="noopener noreferrer" className="p-1 text-gray-400 hover:text-white" title="Añadir a Google Calendar"><i className="fas fa-calendar-plus text-xl text-blue-400"></i></a>
-                    <button onClick={() => onDelete(app.id)} className="p-1 text-gray-400 hover:text-white" title="Eliminar Cita"><i className="fas fa-trash-alt text-xl text-red-500"></i></button>
+            );
+        });
+
+        // --- Main App Component ---
+        function HorusDateApp({ db, auth, collection, doc, setDoc, deleteDoc, onSnapshot, updateDoc }) {
+            const [appointments, setAppointments] = useState([]);
+            const [newAppointment, setNewAppointment] = useState(INITIAL_FORM_STATE);
+            const [searchTerm, setSearchTerm] = useState('');
+            const currentUser = auth.currentUser;
+
+            useEffect(() => {
+                if (!currentUser) return;
+                const appointmentsCol = collection(db, 'users', currentUser.uid, 'appointments');
+                const unsubscribe = onSnapshot(appointmentsCol, (snapshot) => {
+                    const apps = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    setAppointments(apps);
+                });
+                return () => unsubscribe();
+            }, [currentUser, db, collection, onSnapshot]);
+
+            const filteredAndSortedAppointments = useMemo(() => {
+                return [...appointments]
+                    .filter(app => app.client.toLowerCase().includes(searchTerm.toLowerCase()))
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+            }, [appointments, searchTerm]);
+
+            const handleInputChange = useCallback((e) => {
+                setNewAppointment(prev => ({ ...prev, [e.target.name]: e.target.value }));
+            }, []);
+            
+            const handleAddAppointment = useCallback(async (e) => {
+                e.preventDefault();
+                if (newAppointment.client && newAppointment.time && newAppointment.date && currentUser) {
+                    const id = Date.now().toString();
+                    const finalData = { ...newAppointment, id, isFinished: false, balloonColor: newAppointment.balloonColor.trim() || 'N/U', birthdayNo: newAppointment.birthdayNo.trim() || 'N/U' };
+                    await setDoc(doc(db, 'users', currentUser.uid, 'appointments', id), finalData);
+                    setNewAppointment(INITIAL_FORM_STATE);
+                }
+            }, [newAppointment, currentUser, db, doc, setDoc]);
+
+            const handleDeleteAppointment = useCallback(async (id) => {
+                if (currentUser && window.confirm('¿Está seguro de que desea eliminar esta cita?')) {
+                     await deleteDoc(doc(db, 'users', currentUser.uid, 'appointments', id));
+                }
+            }, [currentUser, db, doc, deleteDoc]);
+
+            const handleToggleStatus = useCallback(async (id, newStatus) => {
+                if (currentUser) {
+                    await updateDoc(doc(db, 'users', currentUser.uid, 'appointments', id), { isFinished: newStatus });
+                }
+            }, [currentUser, db, doc, updateDoc]);
+
+            const handleDownloadInvoice = useCallback((app) => downloadInvoiceAsPNG(app), []);
+
+            const currentDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+            return (
+            <div className="bg-gray-900 text-white min-h-screen font-sans p-4 sm:p-8">
+                <div className="max-w-7xl mx-auto">
+                    <header className="mb-8 text-center">
+                        <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 inline-flex items-center gap-3">
+                            <i className="fas fa-eye"></i>
+                            Horus Date
+                        </h1>
+                        <p className="text-gray-400">El Ojo que todo lo Agenda</p>
+                    </header>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                        <InfoWidget icon={<i className="fas fa-calendar-alt text-2xl"></i>} title="Fecha del Sistema" value={currentDate} />
+                        <InfoWidget icon={<i className="fas fa-clock text-2xl"></i>} title="Hora del Sistema" value={currentTime} />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col">
+                            <h2 className="text-2xl font-semibold mb-4 text-white flex-shrink-0">Lista de Citas</h2>
+                            <div className="mb-4">
+                                <input type="text" placeholder="Buscar cliente..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg focus:ring-pink-500 focus:border-pink-500 block w-full p-2.5"/>
+                            </div>
+                            <div className="flex-grow overflow-y-auto max-h-[70vh] pr-2">
+                                <div className="space-y-4">
+                                    {filteredAndSortedAppointments.length > 0 ? (
+                                    filteredAndSortedAppointments.map(app => (
+                                        <AppointmentItem key={app.id} app={app} onToggleStatus={handleToggleStatus} onDownloadInvoice={handleDownloadInvoice} onDelete={handleDeleteAppointment} />
+                                    ))
+                                    ) : ( <p className="text-gray-400 text-center py-8">No hay citas que coincidan con la búsqueda.</p> )}
+                                </div>
+                            </div>
+                        </div>
+                        <div className="bg-gray-800 p-6 rounded-xl shadow-lg h-fit">
+                            <h2 className="text-2xl font-semibold mb-4 text-white">Nueva Cita</h2>
+                            <form onSubmit={handleAddAppointment} className="space-y-4">
+                                <FormInput label="Cliente" name="client" value={newAppointment.client} onChange={handleInputChange} placeholder="Nombre del cliente" required />
+                                <div className="grid grid-cols-2 gap-4">
+                                <FormInput label="Fecha" name="date" type="date" value={newAppointment.date} onChange={handleInputChange} required />
+                                <FormInput label="Hora" name="time" type="select" value={newAppointment.time} onChange={handleInputChange} required>
+                                    <option>10:30am</option><option>1:30pm</option><option>3:30pm</option><option>5:30pm</option><option>7:30pm</option>
+                                </FormInput>
+                                </div>
+                                <FormInput label="Servicio" name="service" type="select" value={newAppointment.service} onChange={handleInputChange}>
+                                <option>Cumpleaños Glamorous</option><option>Casual</option><option>Maternidad</option><option>15 Glamorous</option><option>Exteriores</option><option>Locales</option><option>Otro</option>
+                                </FormInput>
+                                <FormInput label="Paquete" name="packageNo" type="select" value={newAppointment.packageNo} onChange={handleInputChange}>
+                                <option>Pack 1</option><option>Pack 2</option><option>Pack 3</option><option>Pack 4</option><option>Pack 5</option>
+                                </FormInput>
+                                {newAppointment.packageNo && (<div className="bg-gray-700 p-2 rounded-md text-center"><p className="text-sm font-medium text-pink-400 flex items-center justify-center gap-2"><i className="fas fa-image text-base"></i> {packageDetails[newAppointment.packageNo]}</p></div>)}
+                                <FormInput label="Color de Globos" name="balloonColor" value={newAppointment.balloonColor} onChange={handleInputChange} placeholder="Ej: Rosa, Dorado" />
+                                <FormInput label="No. Cumpleaños" name="birthdayNo" type="number" value={newAppointment.birthdayNo} onChange={handleInputChange} placeholder="Ej: 15" />
+                                <div className="bg-gray-700/50 p-3 rounded-lg space-y-4">
+                                <label className="text-sm font-medium text-gray-300 block">Detalles de Fondo</label>
+                                <div className="flex items-center gap-x-4"><span className="text-sm text-gray-400">Cantidad:</span><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="1" checked={newAppointment.backgroundCount === '1'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 1 Fondo</label><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="2" checked={newAppointment.backgroundCount === '2'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 2 Fondos</label></div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <FormInput label="Color de Fondo 1" name="backgroundColor1" type="select" value={newAppointment.backgroundColor1} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>
+                                    {newAppointment.backgroundCount === '2' && (<FormInput label="Color de Fondo 2" name="backgroundColor2" type="select" value={newAppointment.backgroundColor2} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>)}
+                                </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                <FormInput label="Precio ($)" name="price" type="number" step="0.01" value={newAppointment.price} onChange={handleInputChange} placeholder="0.00" required />
+                                <FormInput label="Anticipo ($)" name="advance" type="number" step="0.01" value={newAppointment.advance} onChange={handleInputChange} placeholder="0.00" required />
+                                </div>
+                                <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 mt-2"><i className="fas fa-plus text-xl"></i><span>Agendar Cita</span></button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-600 space-y-3">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-                    <DetailItem icon={<i className="fas fa-box-open text-base text-gray-400"></i>} value={`${app.packageNo} (${packageDetails[app.packageNo]})`} />
-                    <DetailItem icon={<i className="fas fa-palette text-base text-gray-400"></i>} value={`Fondo 1: ${app.backgroundColor1}`} />
-                    <DetailItem icon={<i className="fas fa-layer-group text-base text-gray-400"></i>} value={`Fondo 2: ${app.backgroundColor2}`} condition={app.backgroundCount === '2'} />
-                    <DetailItem icon={<i className="fas fa-tint text-base text-gray-400"></i>} value={`Globos: ${app.balloonColor}`} condition={app.balloonColor !== 'N/U'} />
-                    <DetailItem icon={<i className="fas fa-gift text-base text-gray-400"></i>} value={`Cumple: ${app.birthdayNo}`} condition={app.birthdayNo !== 'N/U'} />
-                </div>
-                <div className="flex justify-around items-center bg-gray-600/50 p-3 rounded-md mt-2 text-center">
-                    <div className="font-semibold text-white text-base">Precio<span className="block text-green-400">${parseFloat(app.price || 0).toFixed(2)}</span></div>
-                    <div className="font-semibold text-white text-base">Anticipo<span className="block text-yellow-400">${parseFloat(app.advance || 0).toFixed(2)}</span></div>
-                    <div className="font-semibold text-white text-base">Saldo<span className="block text-red-400">${(parseFloat(app.price || 0) - parseFloat(app.advance || 0)).toFixed(2)}</span></div>
-                </div>
-            </div>
-        </div>
-    );
-};
+            );
+        }
 
-// --- Componente Principal de la Aplicación ---
-
-function HorusDateApp() {
- const [appointments, setAppointments] = useState(() => {
-   try {
-     const savedAppointments = localStorage.getItem('horus-date-appointments');
-     return savedAppointments ? JSON.parse(savedAppointments) : [];
-   } catch (error) {
-     console.error("No se pudieron cargar las citas de localStorage", error);
-     return [];
-   }
- });
-  
- const [newAppointment, setNewAppointment] = useState(INITIAL_FORM_STATE);
-  
- useEffect(() => {
-   try {
-     localStorage.setItem('horus-date-appointments', JSON.stringify(appointments));
-   } catch (error) {
-     console.error("Error al guardar las citas en localStorage", error);
-   }
- }, [appointments]);
-
- const sortedAppointments = useMemo(() => {
-   return [...appointments].sort((a, b) => b.id - a.id);
- }, [appointments]);
-
- const handleInputChange = (e) => setNewAppointment(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  
- const handleAddAppointment = (e) => {
-   e.preventDefault();
-   if (newAppointment.client && newAppointment.time && newAppointment.date) {
-     const finalAppointmentData = { ...newAppointment, id: Date.now(), isFinished: false, balloonColor: newAppointment.balloonColor.trim() === '' ? 'N/U' : newAppointment.balloonColor, birthdayNo: newAppointment.birthdayNo.trim() === '' ? 'N/U' : newAppointment.birthdayNo };
-     setAppointments(prevApps => [...prevApps, finalAppointmentData]);
-     setNewAppointment(INITIAL_FORM_STATE);
-   }
- };
-
- const handleDeleteAppointment = (id) => setAppointments(appointments.filter(app => app.id !== id));
- const handleToggleStatus = (id) => setAppointments(appointments.map(app => app.id === id ? { ...app, isFinished: !app.isFinished } : app));
- const handleDownloadInvoice = (app) => {
-   downloadInvoiceAsPNG(app);
- };
-
- const currentDate = new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
- const currentTime = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-
- return (
-   <div className="bg-gray-900 text-white min-h-screen font-sans p-4 sm:p-8">
-     <div className="max-w-7xl mx-auto">
-       <header className="mb-8 text-center">
-            <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 inline-flex items-center gap-3">
-                <i className="fas fa-eye"></i>
-                Horus Date
-            </h1>
-            <p className="text-gray-400">El Ojo que todo lo Agenda</p>
-       </header>
-       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-           <InfoWidget icon={<i className="fas fa-calendar-alt text-2xl"></i>} title="Fecha del Sistema" value={currentDate} />
-           <InfoWidget icon={<i className="fas fa-clock text-2xl"></i>} title="Hora del Sistema" value={currentTime} />
-       </div>
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-         <div className="bg-gray-800 p-6 rounded-xl shadow-lg flex flex-col">
-           <h2 className="text-2xl font-semibold mb-4 text-white flex-shrink-0">Próximas Citas</h2>
-           <div className="flex-grow">
-               <div className="space-y-4">
-                 {sortedAppointments.length > 0 ? (
-                   sortedAppointments.map(app => (
-                     <AppointmentItem
-                       key={app.id}
-                       app={app}
-                       onToggleStatus={handleToggleStatus}
-                       onDownloadInvoice={handleDownloadInvoice}
-                       onDelete={handleDeleteAppointment}
-                     />
-                   ))
-                 ) : (
-                   <p className="text-gray-400 text-center py-8">No hay citas programadas.</p>
-                 )}
-               </div>
-           </div>
-         </div>
-         <div className="bg-gray-800 p-6 rounded-xl shadow-lg h-fit">
-           <h2 className="text-2xl font-semibold mb-4 text-white">Nueva Cita</h2>
-           <form onSubmit={handleAddAppointment} className="space-y-4">
-             <FormInput label="Cliente" name="client" value={newAppointment.client} onChange={handleInputChange} placeholder="Nombre del cliente" required />
-             <div className="grid grid-cols-2 gap-4">
-               <FormInput label="Fecha" name="date" type="date" value={newAppointment.date} onChange={handleInputChange} required />
-               <FormInput label="Hora" name="time" type="select" value={newAppointment.time} onChange={handleInputChange} required>
-                   <option>10:30am</option><option>1:30pm</option><option>3:30pm</option><option>5:30pm</option><option>7:30pm</option>
-               </FormInput>
-             </div>
-             <FormInput label="Servicio" name="service" type="select" value={newAppointment.service} onChange={handleInputChange}>
-               <option>Cumpleaños Glamorous</option><option>Casual</option><option>Maternidad</option><option>15 Glamorous</option><option>Exteriores</option><option>Locales</option><option>Otro</option>
-             </FormInput>
-             <FormInput label="Paquete" name="packageNo" type="select" value={newAppointment.packageNo} onChange={handleInputChange}>
-               <option>Pack 1</option><option>Pack 2</option><option>Pack 3</option><option>Pack 4</option><option>Pack 5</option>
-             </FormInput>
-             {newAppointment.packageNo && (<div className="bg-gray-700 p-2 rounded-md text-center"><p className="text-sm font-medium text-pink-400 flex items-center justify-center gap-2"><i className="fas fa-image text-base"></i> {packageDetails[newAppointment.packageNo]}</p></div>)}
-             <FormInput label="Color de Globos" name="balloonColor" value={newAppointment.balloonColor} onChange={handleInputChange} placeholder="Ej: Rosa, Dorado" />
-             <FormInput label="No. Cumpleaños" name="birthdayNo" type="number" value={newAppointment.birthdayNo} onChange={handleInputChange} placeholder="Ej: 15" />
-             <div className="bg-gray-700/50 p-3 rounded-lg space-y-4">
-               <label className="text-sm font-medium text-gray-300 block">Detalles de Fondo</label>
-               <div className="flex items-center gap-x-4"><span className="text-sm text-gray-400">Cantidad:</span><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="1" checked={newAppointment.backgroundCount === '1'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 1 Fondo</label><label className="flex items-center gap-2"><input type="radio" name="backgroundCount" value="2" checked={newAppointment.backgroundCount === '2'} onChange={handleInputChange} className="form-radio bg-gray-600 text-pink-500" /> 2 Fondos</label></div>
-               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                   <FormInput label="Color de Fondo 1" name="backgroundColor1" type="select" value={newAppointment.backgroundColor1} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>
-                   {newAppointment.backgroundCount === '2' && (<FormInput label="Color de Fondo 2" name="backgroundColor2" type="select" value={newAppointment.backgroundColor2} onChange={handleInputChange}><option>Blanco</option><option>Negro</option><option>Beige</option><option>Rosado</option><option>Beige Painted</option><option>Gris Painted</option></FormInput>)}
-               </div>
-             </div>
-             <div className="grid grid-cols-2 gap-4">
-               <FormInput label="Precio ($)" name="price" type="number" value={newAppointment.price} onChange={handleInputChange} placeholder="0.00" />
-               <FormInput label="Anticipo ($)" name="advance" type="number" value={newAppointment.advance} onChange={handleInputChange} placeholder="0.00" />
-             </div>
-             <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 rounded-lg shadow-lg flex items-center justify-center gap-2 transition-transform hover:scale-105 mt-2"><i className="fas fa-plus text-xl"></i><span>Agendar Cita</span></button>
-           </form>
-         </div>
-       </div>
-     </div>
-   </div>
- );
-}
-
-// Attach the React component to the window object so it can be called from the module script
-window.HorusDateApp = HorusDateApp;
-
-</script>
-
+        // Attach the React component to the window object so it can be called from the module script
+        window.HorusDateApp = HorusDateApp;
+    </script>
 </body>
 </html>
